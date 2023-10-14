@@ -24,16 +24,18 @@ import AddNotice from "./pages/Notice/admin/AddNotice/AddNotice";
 import Info_S from "./pages/Info/staff/Info_S";
 import Info_A from "./pages/Info/admin/Info_A";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!isLogin) navigate("/");
+    else if (isLogin && location.pathname === "/") navigate("/dashboard");
   }, []);
 
   return (
