@@ -1,0 +1,15 @@
+#root {
+  width: var(--main-width);
+  height: 100vh;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.main {
+  flex-grow: 1;
+  padding: 1rem 2rem;
+  overflow: auto;
+}
