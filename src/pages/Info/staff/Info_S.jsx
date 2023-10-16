@@ -1,9 +1,12 @@
 import * as style from "./Info_S.style";
+import { useUserStore } from "../../../stores/useUserStore";
 
 const Info_S = () => {
+  const userData = useUserStore((state) => state.user);
+  console.log(userData);
   return (
     <style.InfoWrap>
-      <h1>info_s</h1>
+      <h1>{userData.name}</h1>
     </style.InfoWrap>
   );
 };
