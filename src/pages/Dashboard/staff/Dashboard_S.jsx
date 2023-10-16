@@ -3,15 +3,16 @@ import { Button } from "@chakra-ui/react";
 import { useFireFetch } from "../../../hooks/useFireFetch";
 
 const Dashboard_S = () => {
-  const fetch = useFireFetch();
-  const user = fetch.getData("users", "isAdmin", false);
+  const fireFetch = useFireFetch();
+
+  const users = fireFetch.getData("users", "isAdmin", false);
 
   const handleGetClick = () => {
-    console.log(user);
+    console.log(users);
   };
 
   const handleSetClick = () => {
-    fetch.postData("users", "1234", {
+    fireFetch.postData("users", "1234", {
       id: "1234",
       isAdmin: false,
       name: "유저test",
@@ -31,7 +32,7 @@ const Dashboard_S = () => {
           set
         </Button>
       </div>
-      {user.map((v, i) => {
+      {users.map((v, i) => {
         return <div key={i}>{v.name}</div>;
       })}
     </style.DashboardWrap>
