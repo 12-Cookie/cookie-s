@@ -1,6 +1,7 @@
 import * as style from "./AssignRole.style";
 import AssignHeader from "../../../../components/Schedule/admin/assignRole/AssignHeader";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
+import { Heading } from "@chakra-ui/react";
 
 const AssignRole = () => {
   const fireFetch = useFireFetch();
@@ -13,7 +14,9 @@ const AssignRole = () => {
 
   return (
     <style.AssignRoleWrap>
-      <h1 style={{ marginBottom: "1rem" }}>역할배정</h1>
+      <Heading as="h2" size="md" mb="1rem">
+        역할배정
+      </Heading>
       {schedule && <AssignHeader schedule={schedule} />}
     </style.AssignRoleWrap>
   );
