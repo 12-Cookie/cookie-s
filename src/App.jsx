@@ -1,41 +1,41 @@
-import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import NotFound from "./pages/NotFound/NotFound";
-import BottomNav from "./components/common/BottomNav/BottomNav";
-import Login from "./pages/Login/Login";
-import Login_A from "./pages/Login/admin/login/Login_A";
-import InfoForm_A from "./pages/Login/admin/infoForm/InfoForm_A";
-import InfoForm_S from "./pages/Login/staff/infoForm/InfoForm_S";
-import SubmitCode from "./pages/Login/staff/SubmitCode/SubmitCode";
-import Dashboard_S from "./pages/Dashboard/staff/Dashboard_S";
-import Dashboard_A from "./pages/Dashboard/admin/Dashboard_A";
-import Schedule_S from "./pages/Schedule/staff/schedule/Schedule_S";
-import Schedule_A from "./pages/Schedule/admin/schedule/Schedule_A";
-import ManageSchedule_A from "./pages/Schedule/admin/manageSchedule/ManageSchedule_A";
-import ManageSchedule_S from "./pages/Schedule/staff/manageSchedule/ManageSchedule_S";
-import AssignRole from "./pages/Schedule/admin/assignRole/AssignRole";
-import AddSchedule from "./pages/Schedule/admin/addSchedule/AddSchedule";
-import Salary_S from "./pages/Salary/Salary_S";
-import ViewStaff from "./pages/UserInfo/ViewStaff/ViewStaff";
-import StaffInfo from "./pages/UserInfo/StaffInfo/StaffInfo";
-import Notice_S from "./pages/Notice/staff/Notice_S";
-import Notice_A from "./pages/Notice/admin/Notice_A";
-import AddNotice from "./pages/Notice/admin/AddNotice/AddNotice";
-import Info_S from "./pages/Info/staff/Info_S";
-import Info_A from "./pages/Info/admin/Info_A";
-import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import NotFound from './pages/NotFound/NotFound';
+import BottomNav from './components/common/BottomNav/BottomNav';
+import Login from './pages/Login/Login';
+import Login_A from './pages/Login/admin/login/Login_A';
+import InfoForm_A from './pages/Login/admin/infoForm/InfoForm_A';
+import InfoForm_S from './pages/Login/staff/infoForm/InfoForm_S';
+import SubmitCode from './pages/Login/staff/SubmitCode/SubmitCode';
+import Dashboard_S from './pages/Dashboard/staff/Dashboard_S';
+import Dashboard_A from './pages/Dashboard/admin/Dashboard_A';
+import Schedule_S from './pages/Schedule/staff/schedule/Schedule_S';
+import Schedule_A from './pages/Schedule/admin/schedule/Schedule_A';
+import ManageSchedule_A from './pages/Schedule/admin/manageSchedule/ManageSchedule_A';
+import ManageSchedule_S from './pages/Schedule/staff/manageSchedule/ManageSchedule_S';
+import AssignRole from './pages/Schedule/admin/assignRole/AssignRole';
+import AddSchedule from './pages/Schedule/admin/addSchedule/AddSchedule';
+import Salary_S from './pages/Salary/Salary_S';
+import ViewStaff from './pages/UserInfo/ViewStaff/ViewStaff';
+import StaffInfo from './pages/UserInfo/StaffInfo/StaffInfo';
+import Notice_S from './pages/Notice/staff/Notice_S';
+import Notice_A from './pages/Notice/admin/Notice_A';
+import AddNotice from './pages/Notice/admin/AddNotice/AddNotice';
+import Info_S from './pages/Info/staff/Info_S';
+import Info_A from './pages/Info/admin/Info_A';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!isLogin) navigate("/");
-    else if (isLogin && location.pathname === "/") navigate("/dashboard");
+    if (!isLogin) navigate('/');
+    else if (isLogin && location.pathname === '/') navigate('/dashboard');
   }, []);
 
   return (

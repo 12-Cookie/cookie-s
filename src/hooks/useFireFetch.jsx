@@ -6,9 +6,9 @@ import {
   where,
   doc,
   setDoc,
-} from "firebase/firestore";
-import { app } from "../firebase/firebase";
-import { useEffect, useState } from "react";
+} from 'firebase/firestore';
+import { app } from '../firebase/firebase';
+import { useEffect, useState } from 'react';
 
 const db = getFirestore(app);
 
@@ -21,7 +21,7 @@ export const useFireFetch = () => {
         try {
           if (key) {
             const Ref = collection(db, initialCollection);
-            const q = query(Ref, where(key, "==", value));
+            const q = query(Ref, where(key, '==', value));
             const querySnapshot = await getDocs(q);
             const userData = [];
 
@@ -57,7 +57,7 @@ export const useFireFetch = () => {
         await setDoc(doc(db, initialCollection, id), data);
 
         setData((prev) => [data, ...prev]);
-        console.log("성공");
+        console.log('성공');
       } catch (error) {
         console.error(error);
       }
