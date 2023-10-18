@@ -51,7 +51,13 @@ export const useFireFetch = () => {
               userData.push(doc.data());
             });
 
-            setData(userData);
+            if (initialCollection === "bookedShifts") setBookedShifts(userData);
+            else if (initialCollection === "bookingShifts")
+              setBookingShifts(userData);
+            else if (initialCollection === "company") setCompany(userData);
+            else if (initialCollection === "notice") setNotice(userData);
+            else if (initialCollection === "schedule") setSchedule(userData);
+            else if (initialCollection === "users") setUsers(userData);
           }
         } catch (error) {
           console.error(error);
