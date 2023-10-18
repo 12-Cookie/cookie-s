@@ -2,9 +2,13 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
+import { useState } from "react";
 
 const Div = styled.div`
   position: relative;
+  .react-calendar {
+    width: 100%;
+  }
   .react-calendar__tile--now {
     background-color: white;
   }
@@ -41,6 +45,8 @@ const Div = styled.div`
 `;
 
 const AdminCalendar = ({ onChange, value, mark }) => {
+  console.log(mark);
+
   return (
     <Div>
       <Calendar

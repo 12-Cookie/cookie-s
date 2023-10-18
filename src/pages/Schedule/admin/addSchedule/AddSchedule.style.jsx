@@ -7,3 +7,14 @@ export const Header = styled.div`
   font-weight: 700;
   font-size: 1.2rem;
 `;
+export const Form = styled.div`
+  font-weight: 700;
+  font-size: 1rem;
+  > div {
+    display: flex;
+    justify-content: space-between;
+    > div:first-child {
+      width: 40%;
+    }
+  }
+`;

@@ -2,17 +2,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-
-const theme = extendTheme({
-  styles: {
-    global: () => ({
-      body: {
-        bg: "",
-      },
-    }),
-  },
-});
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./theme/index.js";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -20,6 +11,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </ChakraProvider>
+  </ChakraProvider>,
   // </React.StrictMode>
 );

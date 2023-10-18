@@ -8,7 +8,8 @@ import AdminCalendar from "../../../../components/Schedule/AdminCalendar";
 
 const Schedule_A = () => {
   const [value, onChange] = useState(new Date());
-  const [mark, setMark] = useState(["2022-10-01", "2023-10-18", "2023-10-10"]);
+  const initialMark = ["2023-10-02", "2023-10-12", "2023-10-10"];
+  const [mark, setMark] = useState(initialMark);
   return (
     <style.ScheduleWrap>
       <style.Header>스케줄</style.Header>
@@ -27,7 +28,7 @@ const Schedule_A = () => {
         </Link>
       </div>
 
-      <AdminCalendar onChange={onChange} value={value} mark={mark} />
+      <AdminCalendar value={value} mark={mark} />
       <div>{moment(value).format("YYYY년 MM월 DD일")}</div>
 
       <Link to="/schedule/add">
