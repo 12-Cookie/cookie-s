@@ -7,6 +7,7 @@ const ScheduleItem = () => {
 
   const handleClick = () => {
     console.log(schedules);
+    console.log(schedules);
   };
 
   const renderStatus = (data) => {
