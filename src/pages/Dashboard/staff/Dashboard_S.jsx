@@ -1,40 +1,52 @@
 import * as style from "./Dashboard_S.style";
-import { Button } from "@chakra-ui/react";
-import { useFireFetch } from "../../../hooks/useFireFetch";
+import React, { useState, useEffect } from "react";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { app } from "../../../firebase/firebase";
+import { useNavigate, useLocation } from "react-router-dom";
+
+const initailUserdata = localStorage.getItem("userData")
+  ? JSON.parse(localStorage.getItem("userData"))
+  : {};
 
 const Dashboard_S = () => {
-  const fireFetch = useFireFetch();
+  const [userData, setUserData] = useState(initailUserdata);
 
-  const users = fireFetch.getData("users", "isAdmin", false);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const handleGetClick = () => {
-    console.log(users);
+  const auth = getAuth(app);
+
+  const handleLogOut = () => {
+    signOut(auth)
+      .then(() => {
+        setUserData({});
+        localStorage.removeItem("userData");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  const handleSetClick = () => {
-    fireFetch.postData("users", "1234", {
-      id: "1234",
-      isAdmin: false,
-      name: "유저test",
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        console.log(user);
+        setUserData(user);
+        navigate("/");
+      } else if (user && pathname === "/") {
+        navigate("/dashboard");
+      }
     });
-  };
+
+    return () => {
+      unsubscribe();
+    };
+  }, [auth, navigate]);
 
   return (
     <style.DashboardWrap>
       <h1>Dashboard_S</h1>
-      <div style={{ marginBottom: "30px" }}>
-        <Button colorScheme="teal" size="md" onClick={handleGetClick}>
-          get
-        </Button>
-      </div>
-      <div>
-        <Button colorScheme="teal" size="md" onClick={handleSetClick}>
-          set
-        </Button>
-      </div>
-      {users.map((v, i) => {
-        return <div key={i}>{v.name}</div>;
-      })}
+      <button onClick={handleLogOut}>로그아웃</button>
     </style.DashboardWrap>
   );
 };
