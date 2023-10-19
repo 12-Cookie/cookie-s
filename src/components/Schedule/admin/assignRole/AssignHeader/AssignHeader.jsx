@@ -1,6 +1,6 @@
 import * as style from "./AssignHeader.style";
-import getDayOfWeek from "../../../../utils/getDayOfWeek";
-import amOrPm from "../../../../utils/amOrPm";
+import getDayOfWeek from "../../../../../utils/getDayOfWeek";
+import amOrPm from "../../../../../utils/amOrPm";
 
 const AssignHeader = ({ schedule }) => {
   const dayText = getDayOfWeek(
