@@ -2,15 +2,16 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
-import { useState } from "react";
 
 const Div = styled.div`
   position: relative;
   .react-calendar {
     width: 100%;
+    border: none;
   }
   .react-calendar__tile--now {
-    background-color: white;
+    background: yellow;
+    border-radius: 50%;
   }
   .react-calendar__tile--active {
     background-color: white;
@@ -36,17 +37,18 @@ const Div = styled.div`
     transform: translateX(-50%);
   }
   .dot {
-    height: 9px;
-    width: 9px;
-    background-color: #f87171;
+    height: 7px;
+    width: 7px;
+    background-color: red;
     border-radius: 50%;
     display: flex;
+  }
+  .react-calendar__navigation {
+    margin-bottom: 0;
   }
 `;
 
 const AdminCalendar = ({ onChange, value, mark }) => {
-  console.log(mark);
-
   return (
     <Div>
       <Calendar
@@ -54,7 +56,7 @@ const AdminCalendar = ({ onChange, value, mark }) => {
         formatDay={(locale, date) => moment(date).format("DD")}
         value={value}
         navigationLabel={null}
-        showNeighboringMonth={false}
+        showNeighboringMonth={true}
         tileContent={({ date }) => {
           let html = [];
           if (mark.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
