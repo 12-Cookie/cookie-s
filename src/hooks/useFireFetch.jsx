@@ -15,6 +15,8 @@ const db = getFirestore(app);
 export const useFireFetch = () => {
   const [data, setData] = useState([]);
 
+  const [join, setJoin] = useState([]);
+
   const [bookedShifts, setBookedShifts] = useState([]);
   const [bookingShifts, setBookingShifts] = useState([]);
   const [company, setCompany] = useState([]);
@@ -100,5 +102,33 @@ export const useFireFetch = () => {
     set();
   };
 
-  return { getData, postData };
+  const bookedUser = (id) => {
+    useEffect(() => {
+      const dataJoin = async () => {
+        const dataRef = collection(db, "bookedShifts");
+        const dataQ = query(dataRef, where("scheduleId", "==", id));
+        const usersRef = collection(db, "users");
+
+        const dataSnapshot = await getDocs(dataQ);
+
+        const data = [];
+
+        dataSnapshot.forEach(async (doc, i) => {
+          const usersQ = query(usersRef, where("id", "==", doc.data().userId));
+
+          const userSnapshot = await getDocs(usersQ);
+
+          userSnapshot.forEach((doc2) => {
+            data.push(doc2.data());
+          });
+          setJoin(data);
+        });
+      };
+      dataJoin();
+    }, [id]);
+
+    return join;
+  };
+
+  return { getData, postData, bookedUser };
 };

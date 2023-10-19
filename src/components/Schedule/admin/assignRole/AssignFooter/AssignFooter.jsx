@@ -5,18 +5,14 @@ import { Tag } from "@chakra-ui/react";
 const AssignFooter = ({ schedule }) => {
   const fireFetch = useFireFetch();
 
-  const bookedShifts = fireFetch.getData(
-    "bookedShifts",
-    "scheduleId",
-    schedule.id,
-  );
-
+  const users = fireFetch.bookedUser(schedule.id);
+  console.log(users);
   return (
     <style.AssignFooterWrap>
-      {bookedShifts.map((v, i) => {
+      {users.map((v, i) => {
         return (
           <Tag key={i} mr="1rem">
-            {v.userName}
+            {v.name}
           </Tag>
         );
       })}
