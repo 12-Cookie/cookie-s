@@ -27,14 +27,14 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
   const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!isLogin) navigate("/");
+    if (!isLogin) navigate("/dashboard");
     else if (isLogin && location.pathname === "/") navigate("/dashboard");
   }, []);
 
