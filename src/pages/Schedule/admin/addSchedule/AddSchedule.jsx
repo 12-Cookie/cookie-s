@@ -10,6 +10,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import moment from "moment";
+import { useFireFetch } from "../../../../hooks/useFireFetch";
 
 const AddSchedule = () => {
   const [value, onChange] = useState(new Date());
@@ -46,7 +47,10 @@ const AddSchedule = () => {
   const handleSubmit = (e) => {
     console.log("a");
   };
+  console.log(endTimeValue);
+  const fireFetch = useFireFetch();
 
+  const schedule = fireFetch.postData("schedule", "1", { a: "b" })[0];
   return (
     <style.AddScheduleWrap>
       <Heading as="h2" size="md" mb="1rem">
@@ -72,10 +76,12 @@ const AddSchedule = () => {
             onChange={onChange}
             value={oneScheduleValue}
             placeholder="0"
+            disabled
           />
         ) : (
           <div>
             <input
+              required
               type="month"
               value={monthValue}
               onChange={handleMonthValue}

@@ -25,6 +25,11 @@ export const Form = styled.form`
     border: 1px solid #f1f3f5;
     padding: 1px;
   }
+
+  input:focus-visible {
+    outline: none !important;
+    border: 2px solid #2b6cb0 !important;
+  }
   .react-calendar__tile {
     padding-top: 0;
     height: 2.5rem;

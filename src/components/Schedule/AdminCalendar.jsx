@@ -10,8 +10,12 @@ const Div = styled.div`
     border: none;
   }
   .react-calendar__tile--now {
-    background: yellow;
-    border-radius: 50%;
+    background: #f0f0f0;
+    color: white;
+  }
+  .react-calendar__tile--now:hover {
+    background: #f0f0f0;
+    color: white;
   }
   .react-calendar__tile--active {
     background-color: white;
@@ -45,6 +49,9 @@ const Div = styled.div`
   }
   .react-calendar__navigation {
     margin-bottom: 0;
+  }
+  .react-calendar__month-view__days__day--neighboringMonth {
+    color: #f0f0f0;
   }
 `;
 
