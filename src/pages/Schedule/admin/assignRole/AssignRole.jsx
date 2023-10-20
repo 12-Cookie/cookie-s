@@ -1,7 +1,7 @@
 import * as style from "./AssignRole.style";
 import { useState } from "react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
-import { Heading } from "@chakra-ui/react";
+import { Heading, Button, Stack } from "@chakra-ui/react";
 import AssignHeader from "../../../../components/Schedule/admin/assignRole/AssignHeader/AssignHeader";
 import AssignBody from "../../../../components/Schedule/admin/assignRole/AssignBody/AssignBody";
 import AssignFooter from "../../../../components/Schedule/admin/assignRole/AssignFooter/AssignFooter";
@@ -56,6 +56,11 @@ const AssignRole = () => {
             />
           )
         : null}
+      <Stack mt="3rem">
+        <Button>
+          역할 배정 완료
+        </Button>
+      </Stack>
     </style.AssignRoleWrap>
   );
 };
