@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import { app } from "../../../firebase/firebase";
 import { useNavigate, useLocation } from "react-router-dom";
+import Notice from "../admin/notice/Notice";
+import { useFireFetch } from "../../../hooks/useFireFetch";
+import { ScheduleItem } from "../../../components/common/ScheduleItem/ScheduleItem.style";
 
 const initailUserdata = localStorage.getItem("userData")
   ? JSON.parse(localStorage.getItem("userData"))
@@ -13,6 +16,12 @@ const Dashboard_S = () => {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const fetch = useFireFetch();
+  const noticeData = fetch.getData("notice");
+  const scheduleData = fetch.getData("schedule");
+  const bookedShiftsData = fetch.getData("bookedShifts");
+  const filteredScheduleData = [...scheduleData].slice(0, 3);
 
   const auth = getAuth(app);
 
@@ -27,25 +36,29 @@ const Dashboard_S = () => {
       });
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        console.log(user);
-        setUserData(user);
-        navigate("/");
-      } else if (user && pathname === "/") {
-        navigate("/dashboard");
-      }
-    });
+  // useEffect(() => {
+  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
+  //     if (!user) {
+  //       console.log(user);
+  //       setUserData(user);
+  //       navigate("/");
+  //     } else if (user && pathname === "/") {
+  //       navigate("/dashboard");
+  //     }
+  //   });
 
-    return () => {
-      unsubscribe();
-    };
-  }, [auth, navigate]);
+  //   return () => {
+  //     unsubscribe();
+  //   };
+  // }, [auth, navigate]);
 
   return (
     <style.DashboardWrap>
-      <h1>Dashboard_S</h1>
+      <Notice noticeData={noticeData} />
+      <ScheduleItem
+        scheduleData={filteredScheduleData}
+        bookedShiftsData={bookedShiftsData}
+      />
       <button onClick={handleLogOut}>로그아웃</button>
     </style.DashboardWrap>
   );

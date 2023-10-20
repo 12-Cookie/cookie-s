@@ -1,5 +1,6 @@
 import { Tag, TagLabel } from "@chakra-ui/react";
 import PropTypes from "prop-types";
+import * as style from "./StaffManagement.style";
 
 const StaffManagement = ({ userData }) => {
   const handleClick = (userData) => {
@@ -27,13 +28,13 @@ const StaffManagement = ({ userData }) => {
   return (
     <>
       <h1 onClick={handleClick}>직원관리</h1>
-      <ul>
+      <style.StaffManagementWrap>
         {userData.map((userData) => (
           <li key={userData.id} onClick={() => handleClick(userData)}>
             {renderUserTag(userData)}
           </li>
         ))}
-      </ul>
+      </style.StaffManagementWrap>
     </>
   );
 };

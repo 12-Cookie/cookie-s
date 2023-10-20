@@ -3,13 +3,10 @@ import { Badge } from "@chakra-ui/react";
 import ScheduleRoleItem from "../ScheduleRoleItem/ScheduleRoleItem";
 import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
 import PropTypes from "prop-types";
+import * as style from "./ScheduleItem.style";
 
 const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
   const [isAdmin, setIsAdmin] = useState(true);
-
-  const handleClick = () => {
-    console.log(bookedShiftsData.length);
-  };
 
   const getDayOfWeekFromDate = (date) => {
     const { year, month, day } = date;
@@ -54,26 +51,33 @@ const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
   };
 
   return (
-    <>
+    <style.ScheduleItemWrap>
       {scheduleData.map((scheduleData) => (
-        <div className="time" key={scheduleData.id}>
-          <span onClick={handleClick}>
-            {`${scheduleData.date.month}월 ${scheduleData.date.day}일`}
-          </span>
-          <span>({getDayOfWeekFromDate(scheduleData.date)})</span>
-          <span>{`${scheduleData.time.start} ~ ${scheduleData.time.end}`}</span>
-          <div>
-            {isAdmin
-              ? renderStatusToAdmin(scheduleData)
-              : renderStatusToStaff(scheduleData)}
-          </div>
-          <div>
-            {isAdmin ? "" : <ScheduleRoleItem />}
-            {isAdmin ? <ScheduleUtilItem scheduleData={scheduleData} /> : ""}
-          </div>
-        </div>
+        <style.ScheduleItem key={scheduleData.id}>
+          <style.ScheduleInfo>
+            <style.ScheduleDate>
+              {`${scheduleData.date.month}월`}
+              {`${scheduleData.date.day}일`}
+              <style.ScheduleDay>
+                ({getDayOfWeekFromDate(scheduleData.date)})
+              </style.ScheduleDay>
+            </style.ScheduleDate>
+            <style.ScheduleTime>
+              {`${scheduleData.time.start} ~ ${scheduleData.time.end}`}
+            </style.ScheduleTime>
+            <style.ScheduleStatus>
+              <div>
+                {isAdmin
+                  ? renderStatusToAdmin(scheduleData)
+                  : renderStatusToStaff(scheduleData)}
+              </div>
+            </style.ScheduleStatus>
+          </style.ScheduleInfo>
+          {isAdmin ? "" : <ScheduleRoleItem />}
+          {isAdmin ? <ScheduleUtilItem scheduleData={scheduleData} /> : ""}
+        </style.ScheduleItem>
       ))}
-    </>
+    </style.ScheduleItemWrap>
   );
 };
 
