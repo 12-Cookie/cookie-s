@@ -85,7 +85,7 @@ const AssignBody = ({
                           }}
                         >
                           {v}
-                          {config === roleV ? " X" : ""}
+                          {config === roleV ? " ✕" : ""}
                         </Tag>
                       );
                     })}
