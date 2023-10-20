@@ -34,7 +34,7 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if (!isLogin) navigate("/dashboard");
+    if (!isLogin) navigate("/");
     else if (isLogin && location.pathname === "/") navigate("/dashboard");
   }, []);
 
