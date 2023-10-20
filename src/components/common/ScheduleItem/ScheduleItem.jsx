@@ -47,6 +47,7 @@ const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
         return <Badge colorScheme="red">취소됨</Badge>;
       default:
         console.log("일치하는 양식이 없습니다.");
+        console.log("일치하는 양식이 없습니다.");
     }
   };
 
