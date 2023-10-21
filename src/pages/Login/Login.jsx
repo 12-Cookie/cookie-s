@@ -33,21 +33,21 @@ const Login = () => {
       });
   };
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (!user) {
-  //       console.log(user);
-  //       setUserData(user);
-  //       navigate("/");
-  //     } else if (user && pathname === "/") {
-  //       navigate("/dashboard");
-  //     }
-  //   });
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        console.log(user);
+        setUserData(user);
+        navigate("/");
+      } else if (user && pathname === "/") {
+        navigate("/info/staff");
+      }
+    });
 
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [auth, navigate]);
+    return () => {
+      unsubscribe();
+    };
+  }, [auth, navigate]);
 
   return (
     <style.LoginWrap>

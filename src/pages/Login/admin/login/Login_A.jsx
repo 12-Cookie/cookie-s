@@ -1,5 +1,5 @@
 import * as style from "./Login_A.style";
-import LoginForm from "./LoginForm";
+import LoginForm from "../../../../components/Login/LoginForm";
 import {
   getAuth,
   signInWithEmailAndPassword,

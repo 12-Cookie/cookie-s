@@ -1,4 +1,4 @@
-import * as style from "./Login_A.style";
+import * as style from "../../pages/Login/admin/login/Login_A.style";
 import { useForm } from "react-hook-form";
 
 const userEmail = {
