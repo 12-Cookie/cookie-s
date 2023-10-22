@@ -22,6 +22,13 @@ const theme = extendTheme(
     },
     components: ["Tag"],
   }),
+  withDefaultProps({
+    defaultProps: {
+      colorScheme: "teal",
+      size: "md",
+    },
+    components: ["Button"],
+  }),
 );
 
 export default theme;
