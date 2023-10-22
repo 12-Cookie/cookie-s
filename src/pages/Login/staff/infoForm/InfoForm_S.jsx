@@ -44,6 +44,7 @@ const InfoForm_S = () => {
 
   return (
     <style.InfoFormWrap>
+      <h1>필수 정보 입력</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="name">이름: </label>

@@ -39,7 +39,8 @@ const Login_A = () => {
         setUserData(user); // 상태관리 필요
         navigate("/login/admin");
       } else if (user && pathname === "/login/admin") {
-        navigate("/dashboard");
+        console.log(user);
+        navigate("/info/admin");
       }
     });
 
