@@ -7,10 +7,10 @@ import {
   doc,
   setDoc,
 } from "firebase/firestore";
-import { app } from "../firebase/firebase";
+import { app, db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
 
-const db = getFirestore(app);
+// const db = getFirestore(app);
 
 export const useFireFetch = () => {
   const [data, setData] = useState([]);

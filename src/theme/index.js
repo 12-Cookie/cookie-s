@@ -12,7 +12,7 @@ const theme = extendTheme(
   },
   withDefaultColorScheme({
     colorScheme: "blue",
-    components: ["Tag"],
+    components: ["Tag", "Button"],
   }),
 );
 
