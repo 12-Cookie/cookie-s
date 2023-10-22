@@ -1,4 +1,8 @@
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import {
+  extendTheme,
+  withDefaultColorScheme,
+  withDefaultProps,
+} from "@chakra-ui/react";
 
 const theme = extendTheme(
   {
@@ -10,9 +14,20 @@ const theme = extendTheme(
       }),
     },
   },
-  withDefaultColorScheme({
-    colorScheme: "blue",
-    components: ["Tag", "Button"],
+  withDefaultProps({
+    defaultProps: {
+      variant: "outline",
+      colorScheme: "blue",
+      size: "md",
+    },
+    components: ["Tag"],
+  }),
+  withDefaultProps({
+    defaultProps: {
+      colorScheme: "teal",
+      size: "md",
+    },
+    components: ["Button"],
   }),
 );
 

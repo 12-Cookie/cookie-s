@@ -15,6 +15,15 @@ import { useEffect, useState } from "react";
 export const useFireFetch = () => {
   const [data, setData] = useState([]);
 
+  const [join, setJoin] = useState([]);
+
+  const [bookedShifts, setBookedShifts] = useState([]);
+  const [bookingShifts, setBookingShifts] = useState([]);
+  const [company, setCompany] = useState([]);
+  const [notice, setNotice] = useState([]);
+  const [schedule, setSchedule] = useState([]);
+  const [users, setUsers] = useState([]);
+
   const getData = (initialCollection, key = null, value = null) => {
     useEffect(() => {
       const get = async () => {
@@ -28,8 +37,13 @@ export const useFireFetch = () => {
             querySnapshot.forEach((doc) => {
               userData.push(doc.data());
             });
-
-            setData(userData);
+            if (initialCollection === "bookedShifts") setBookedShifts(userData);
+            else if (initialCollection === "bookingShifts")
+              setBookingShifts(userData);
+            else if (initialCollection === "company") setCompany(userData);
+            else if (initialCollection === "notice") setNotice(userData);
+            else if (initialCollection === "schedule") setSchedule(userData);
+            else if (initialCollection === "users") setUsers(userData);
           } else {
             const Ref = collection(db, initialCollection);
             const querySnapshot = await getDocs(Ref);
@@ -39,7 +53,13 @@ export const useFireFetch = () => {
               userData.push(doc.data());
             });
 
-            setData(userData);
+            if (initialCollection === "bookedShifts") setBookedShifts(userData);
+            else if (initialCollection === "bookingShifts")
+              setBookingShifts(userData);
+            else if (initialCollection === "company") setCompany(userData);
+            else if (initialCollection === "notice") setNotice(userData);
+            else if (initialCollection === "schedule") setSchedule(userData);
+            else if (initialCollection === "users") setUsers(userData);
           }
         } catch (error) {
           console.error(error);
@@ -48,7 +68,12 @@ export const useFireFetch = () => {
       get();
     }, [initialCollection]);
 
-    return data;
+    if (initialCollection === "bookedShifts") return bookedShifts;
+    else if (initialCollection === "bookingShifts") return bookingShifts;
+    else if (initialCollection === "company") return company;
+    else if (initialCollection === "notice") return notice;
+    else if (initialCollection === "schedule") return schedule;
+    else if (initialCollection === "users") return users;
   };
 
   const postData = (initialCollection, id, data) => {
@@ -56,7 +81,19 @@ export const useFireFetch = () => {
       try {
         await setDoc(doc(db, initialCollection, id), data);
 
-        setData((prev) => [data, ...prev]);
+        if (initialCollection === "bookedShifts")
+          setBookedShifts((prev) => [data, ...prev]);
+        else if (initialCollection === "bookingShifts")
+          setBookingShifts((prev) => [data, ...prev]);
+        else if (initialCollection === "company")
+          setCompany((prev) => [data, ...prev]);
+        else if (initialCollection === "notice")
+          setNotice((prev) => [data, ...prev]);
+        else if (initialCollection === "schedule")
+          setSchedule((prev) => [data, ...prev]);
+        else if (initialCollection === "users")
+          setUsers((prev) => [data, ...prev]);
+
         console.log("성공");
       } catch (error) {
         console.error(error);
@@ -65,5 +102,33 @@ export const useFireFetch = () => {
     set();
   };
 
-  return { getData, postData };
+  const bookedUser = (id) => {
+    useEffect(() => {
+      const dataJoin = async () => {
+        const dataRef = collection(db, "bookedShifts");
+        const dataQ = query(dataRef, where("scheduleId", "==", id));
+        const usersRef = collection(db, "users");
+
+        const dataSnapshot = await getDocs(dataQ);
+
+        const data = [];
+
+        dataSnapshot.forEach(async (doc, i) => {
+          const usersQ = query(usersRef, where("id", "==", doc.data().userId));
+
+          const userSnapshot = await getDocs(usersQ);
+
+          userSnapshot.forEach((doc2) => {
+            data.push(doc2.data());
+          });
+          setJoin(data);
+        });
+      };
+      dataJoin();
+    }, [id]);
+
+    return join;
+  };
+
+  return { getData, postData, bookedUser };
 };
