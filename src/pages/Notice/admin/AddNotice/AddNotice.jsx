@@ -2,22 +2,31 @@ import { useState } from "react";
 import * as style from "./AddNotice.style";
 import { Heading, Flex, Input, Textarea, Button } from "@chakra-ui/react";
 import { db } from "../../../../firebase/firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, doc } from "firebase/firestore";
+// import { useFireFetch } from "hooks/useFireFetch";
 
 const AddNotice = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  // const fetch = useFireFetch();
 
   const noticeCollectionRef = collection(db, "notice");
+  const date = new Date();
 
   const onSubmit = async (event) => {
     event.preventDefault();
+
     const newNotice = {
-      // companyId: "YOUR_COMPANY_ID",
+      // companyId: "",
       title: title,
       content: content,
-      timestamp: Timestamp.now(),
-      // id: "UNIQUE_ID"
+      timestamp: serverTimestamp(),
+      // id: doc.id,
+      date: {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        day: date.getDate(),
+      },
     };
     try {
       const docRef = await addDoc(noticeCollectionRef, newNotice);
