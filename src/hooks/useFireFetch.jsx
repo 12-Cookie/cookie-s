@@ -6,6 +6,7 @@ import {
   where,
   doc,
   setDoc,
+  addDoc,
 } from "firebase/firestore";
 import { app } from "../firebase/firebase";
 import { useEffect, useState } from "react";
@@ -102,6 +103,37 @@ export const useFireFetch = () => {
     set();
   };
 
+  const addData = (initialCollection, data) => {
+    const set = async () => {
+      try {
+        const docRef = await addDoc(collection(db, initialCollection), data);
+        const docId = docRef.id;
+        const newData = { id: docId, ...data };
+
+        // 데이터 업데이트
+        await setDoc(doc(db, initialCollection, docId), newData);
+        console.log(data);
+        if (initialCollection === "bookedShifts")
+          setBookedShifts((prev) => [data, ...prev]);
+        else if (initialCollection === "bookingShifts")
+          setBookingShifts((prev) => [data, ...prev]);
+        else if (initialCollection === "company")
+          setCompany((prev) => [data, ...prev]);
+        else if (initialCollection === "notice")
+          setNotice((prev) => [data, ...prev]);
+        else if (initialCollection === "schedule")
+          setSchedule((prev) => [data, ...prev]);
+        else if (initialCollection === "users")
+          setUsers((prev) => [data, ...prev]);
+
+        console.log("성공, 문서 ID:", docRef.id);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    set();
+  };
+
   const bookedUser = (id) => {
     useEffect(() => {
       const dataJoin = async () => {
@@ -130,5 +162,5 @@ export const useFireFetch = () => {
     return join;
   };
 
-  return { getData, postData, bookedUser };
+  return { getData, postData, bookedUser, addData };
 };
