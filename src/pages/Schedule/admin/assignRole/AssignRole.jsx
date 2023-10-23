@@ -57,9 +57,7 @@ const AssignRole = () => {
           )
         : null}
       <Stack mt="3rem">
-        <Button>
-          역할 배정 완료
-        </Button>
+        <Button>역할 배정 완료</Button>
       </Stack>
     </style.AssignRoleWrap>
   );

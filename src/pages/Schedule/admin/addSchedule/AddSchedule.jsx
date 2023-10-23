@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import AdminCalendar from "../../../../components/Schedule/AdminCalendar";
+import AdminCalendar from "../../../../components/Schedule/admin/AddSchedule/AdminCalendar";
+import moment from "moment";
+import { Timestamp } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 import * as style from "./AddSchedule.style";
 import {
   Heading,
@@ -9,28 +12,36 @@ import {
   Stack,
   Button,
 } from "@chakra-ui/react";
-import moment from "moment";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
+import Roles from "../../../../components/Schedule/admin/AddSchedule/Roles";
+import WorkersComponent from "../../../../components/Schedule/admin/AddSchedule/WorkersComponent";
 
 const AddSchedule = () => {
+  const navigate = useNavigate();
   const [value, onChange] = useState(new Date());
-  const initialMark = ["2023-10-02", "2023-10-12", "2023-10-10"];
-  const [mark, setMark] = useState(initialMark);
+  const [radioValue, setRadioValue] = useState("1");
   const [startTimeValue, setStartTimeValue] = useState("09:00");
   const [endTimeValue, setEndTimeValue] = useState("18:00");
-  const [radioValue, setRadioValue] = useState("1");
   const [oneScheduleValue, setOneScheduleValue] = useState("");
-  const [manyScheduleValue, setManyScheduleValue] = useState([]);
+  const [manyScheduleValue, setManyScheduleValue] = useState("");
   const [monthValue, setMonthValue] = useState("");
+  const [workersValue, setWorkersValue] = useState("");
+
+  const fireFetch = useFireFetch();
+  const user = fireFetch.getData("users", "id", "2qDwPH70ot7fSw7ixr1Z")[0];
+  const company = user?.companyId;
   useEffect(() => {
-    setOneScheduleValue(moment(value).format("YYYY년 MM월 DD일"));
+    setOneScheduleValue(moment(value).format("YYYY-MM-DD"));
   }, [value]);
 
   useEffect(() => {
-    setMark(["2023-10-10", "2023-10-12", "2023-10-11"]);
-    console.log(mark);
-    console.log(radioValue);
-  }, [radioValue]);
+    if (radioValue === "2") {
+      if (monthValue !== "") {
+        const customDate = monthValue + "-1";
+        onChange(new Date(customDate));
+      }
+    }
+  }, [radioValue, monthValue]);
   const handleStartTimeValue = (e) => {
     setStartTimeValue(e.target.value);
   };
@@ -45,12 +56,53 @@ const AddSchedule = () => {
   };
   //form 제출
   const handleSubmit = (e) => {
-    console.log("a");
-  };
-  console.log(endTimeValue);
-  const fireFetch = useFireFetch();
+    e.preventDefault();
+    const timestamp = Timestamp.now();
 
-  const schedule = fireFetch.postData("schedule", "1", { a: "b" })[0];
+    if (radioValue === "1") {
+      fireFetch.addData("schedule", {
+        companyId: company,
+        date: {
+          year: Number(oneScheduleValue.split("-")[0]),
+          month: Number(oneScheduleValue.split("-")[1]),
+          day: Number(oneScheduleValue.split("-")[2]),
+        },
+        numWorkers: Number(workersValue),
+        status: "모집중",
+
+        time: {
+          start: startTimeValue,
+          end: endTimeValue,
+        },
+        timestamp: timestamp,
+      });
+      navigate("/schedule");
+    } else {
+      const year = monthValue.split("-")[0];
+      const month = monthValue.split("-")[1];
+      const days = manyScheduleValue.split(",");
+      days.map((v, i) => {
+        fireFetch.addData("schedule", {
+          companyId: company,
+          date: {
+            year: Number(year),
+            month: Number(month),
+            day: Number(v),
+          },
+          numWorkers: Number(workersValue),
+          status: "모집중",
+
+          time: {
+            start: startTimeValue,
+            end: endTimeValue,
+          },
+          timestamp: timestamp,
+        });
+      });
+      navigate("/dashboard");
+    }
+  };
+
   return (
     <style.AddScheduleWrap>
       <Heading as="h2" size="md" mb="1rem">
@@ -92,14 +144,21 @@ const AddSchedule = () => {
               type="string"
               value={manyScheduleValue}
               onChange={handleManyScheduleValue}
-              placeholder="10,12,13,21"
+              placeholder="(예:)10,12,13,21"
             />
           </div>
         )}
         <div>
           <div>날짜</div>
           <div>
-            <AdminCalendar onChange={onChange} value={value} mark={mark} />
+            {user && (
+              <AdminCalendar
+                setOneScheduleValue={setOneScheduleValue}
+                onChange={onChange}
+                value={value}
+                user={user}
+              />
+            )}
           </div>
         </div>
 
@@ -125,16 +184,14 @@ const AddSchedule = () => {
         </div>
         <div>
           <div>롤</div>
+          {user && <Roles user={user} />}
         </div>
         <div>
           <div>인원</div>
           <div>
-            <input
-              style={{ width: "6.3rem" }}
-              required
-              type="number"
-              size="sm"
-              placeholder="0"
+            <WorkersComponent
+              setWorkersValue={setWorkersValue}
+              workersValue={workersValue}
             />
           </div>
         </div>

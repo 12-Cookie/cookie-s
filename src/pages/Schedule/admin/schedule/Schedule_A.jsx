@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import { Button, Heading } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import AdminCalendar from "../../../../components/Schedule/AdminCalendar";
+import AdminCalendar from "../../../../components/Schedule/admin/AddSchedule/AdminCalendar";
 
 const Schedule_A = () => {
   const [value, onChange] = useState(new Date());
