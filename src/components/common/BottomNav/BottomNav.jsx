@@ -3,10 +3,11 @@ import * as style from "./BottomNav.style";
 import DashBoard_i from "../../icons/DashBoard_i";
 import Schedule_i from "../../icons/Schedule_i";
 import Salary_i from "../../icons/Salary_i";
+import Company_i from "../../icons/Company_i";
 import Notice_i from "../../icons/Notice_i";
 import Info_i from "../../icons/Info_i";
 
-const BottomNav = () => {
+const BottomNav = ({ isAdmin }) => {
   const navigate = useNavigate();
 
   return (
@@ -33,13 +34,24 @@ const BottomNav = () => {
       </style.BottomNavLink>
       <style.BottomNavLink
         onClick={() => {
-          navigate("/salary");
+          isAdmin ? navigate("/workers") : navigate("/salary");
         }}
       >
-        <style.Icon>
-          <Salary_i />
-        </style.Icon>
-        <div>급여</div>
+        {isAdmin ? (
+          <>
+            <style.Icon>
+              <Info_i />
+            </style.Icon>
+            <div>직원관리</div>
+          </>
+        ) : (
+          <>
+            <style.Icon>
+              <Salary_i />
+            </style.Icon>
+            <div>급여</div>
+          </>
+        )}
       </style.BottomNavLink>
       <style.BottomNavLink
         onClick={() => {
@@ -56,10 +68,21 @@ const BottomNav = () => {
           navigate("/info");
         }}
       >
-        <style.Icon>
-          <Info_i />
-        </style.Icon>
-        <div>내정보</div>
+        {isAdmin ? (
+          <>
+            <style.Icon>
+              <Company_i />
+            </style.Icon>
+            <div>회사정보</div>
+          </>
+        ) : (
+          <>
+            <style.Icon>
+              <Info_i />
+            </style.Icon>
+            <div>내정보</div>
+          </>
+        )}
       </style.BottomNavLink>
     </style.BottomNavWrap>
   );

@@ -1,16 +1,13 @@
 import {
   collection,
   query,
-  getFirestore,
   getDocs,
   where,
   doc,
   setDoc,
 } from "firebase/firestore";
-import { app } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
-
-const db = getFirestore(app);
 
 export const useFireFetch = () => {
   const [data, setData] = useState([]);
