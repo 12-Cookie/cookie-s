@@ -80,7 +80,7 @@ const AddSchedule = () => {
     } else {
       const year = monthValue.split("-")[0];
       const month = monthValue.split("-")[1];
-      const days = manyScheduleValue.split(",");
+      const days = manyScheduleValue.split(" ");
       days.map((v, i) => {
         fireFetch.addData("schedule", {
           companyId: company,
@@ -144,7 +144,7 @@ const AddSchedule = () => {
               type="string"
               value={manyScheduleValue}
               onChange={handleManyScheduleValue}
-              placeholder="(예:)10,12,13,21"
+              placeholder="(예:)1 2 13 21"
             />
           </div>
         )}
