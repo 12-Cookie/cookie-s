@@ -1,5 +1,5 @@
 import * as style from "./AssignRole.style";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { Heading, Button, Stack } from "@chakra-ui/react";
 import AssignHeader from "../../../../components/Schedule/admin/assignRole/AssignHeader/AssignHeader";
@@ -12,6 +12,7 @@ const AssignRole = () => {
   const [config, setConfig] = useState("");
   const [isHidden, setIsHidden] = useState([]);
   const [userData, setuserData] = useState([]);
+  const [userId, setUserId] = useState([]);
   const [booking, setBooking] = useState([]);
 
   const fireFetch = useFireFetch();
@@ -26,7 +27,9 @@ const AssignRole = () => {
     console.log(roleData);
   };
 
-  console.log(booking);
+  useEffect(() => {
+    console.log(booking);
+  }, [booking]);
 
   return (
     <style.AssignRoleWrap>
@@ -41,10 +44,13 @@ const AssignRole = () => {
           roleData={roleData}
           userData={userData}
           config={config}
+          booking={booking}
+          userId={userId}
           setViewFooter={setViewFooter}
           setRoleDate={setRoleDate}
           setConfig={setConfig}
           setIsHidden={setIsHidden}
+          setBooking={setBooking}
         />
       )}
       {schedule
@@ -57,9 +63,11 @@ const AssignRole = () => {
               isHidden={isHidden}
               userData={userData}
               booking={booking}
+              userId={userId}
               setIsHidden={setIsHidden}
               setuserData={setuserData}
               setBooking={setBooking}
+              setUserId={setUserId}
             />
           )
         : null}

@@ -10,10 +10,12 @@ const AssignFooter = ({
   roleData,
   isHidden,
   booking,
+  userId,
   setRoleDate,
   setIsHidden,
   setuserData,
   setBooking,
+  setUserId,
 }) => {
   const fireFetch = useFireFetch();
 
@@ -34,7 +36,7 @@ const AssignFooter = ({
     copy.push(data);
     setBooking(copy);
 
-    console.log(booking);
+    // console.log(booking);
     // console.log(schedule);
   };
 
@@ -42,6 +44,7 @@ const AssignFooter = ({
     if (users) {
       setIsHidden(Array(users.length).fill(false));
       setuserData(users.map((v, i) => v.name));
+      setUserId([...users]);
     }
   }, [users]);
 
