@@ -16,6 +16,7 @@ import ManageSchedule_S from "./pages/Schedule/staff/manageSchedule/ManageSchedu
 import AssignRole from "./pages/Schedule/admin/assignRole/AssignRole";
 import AddSchedule from "./pages/Schedule/admin/addSchedule/AddSchedule";
 import Salary_S from "./pages/Salary/Salary_S";
+import Workers from "./pages/Workers/Workers";
 import ViewStaff from "./pages/UserInfo/ViewStaff/ViewStaff";
 import StaffInfo from "./pages/UserInfo/StaffInfo/StaffInfo";
 import Notice_S from "./pages/Notice/staff/Notice_S";
@@ -72,6 +73,10 @@ function App() {
             element={!isAdmin ? <Salary_S /> : <NotFound />}
           />
           <Route
+            path="/workers"
+            element={!isAdmin ? <NotFound /> : <Workers />}
+          />
+          <Route
             path="/staff"
             element={!isAdmin ? <NotFound /> : <ViewStaff />}
           />
@@ -92,7 +97,9 @@ function App() {
         </Routes>
       </section>
 
-      <section className="nav">{isLogin ? <BottomNav /> : null}</section>
+      <section className="nav">
+        {isLogin ? <BottomNav isAdmin={isAdmin} /> : null}
+      </section>
     </>
   );
 }
