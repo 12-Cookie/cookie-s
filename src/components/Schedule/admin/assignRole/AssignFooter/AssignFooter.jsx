@@ -9,18 +9,33 @@ const AssignFooter = ({
   config,
   roleData,
   isHidden,
+  booking,
   setRoleDate,
   setIsHidden,
   setuserData,
+  setBooking,
 }) => {
   const fireFetch = useFireFetch();
 
   const users = fireFetch.bookedUser(schedule.id);
 
-  const handleClick = (name) => {
+  const handleClick = (name, id) => {
     const map = new Map(roleData);
     map.set(config, [...map.get(config), name]);
     setRoleDate(map);
+
+    const data = {
+      role: config,
+      scheduleId: schedule.id,
+      userId: id,
+    };
+
+    const copy = [...booking];
+    copy.push(data);
+    setBooking(copy);
+
+    console.log(booking);
+    // console.log(schedule);
   };
 
   useEffect(() => {
@@ -46,7 +61,7 @@ const AssignFooter = ({
             cursor="pointer"
             userSelect="none"
             onClick={() => {
-              handleClick(v.name);
+              handleClick(v.name, v.id);
               toggleVisibility(i);
             }}
             style={isHidden[i] ? { display: "none" } : null}

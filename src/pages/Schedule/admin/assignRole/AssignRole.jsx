@@ -12,6 +12,7 @@ const AssignRole = () => {
   const [config, setConfig] = useState("");
   const [isHidden, setIsHidden] = useState([]);
   const [userData, setuserData] = useState([]);
+  const [booking, setBooking] = useState([]);
 
   const fireFetch = useFireFetch();
 
@@ -21,7 +22,11 @@ const AssignRole = () => {
     "NyOKqZmAHtErt68DHrTO",
   )[0];
 
-  // console.log(roleData);
+  const handleClick = () => {
+    console.log(roleData);
+  };
+
+  console.log(booking);
 
   return (
     <style.AssignRoleWrap>
@@ -51,15 +56,15 @@ const AssignRole = () => {
               roleData={roleData}
               isHidden={isHidden}
               userData={userData}
+              booking={booking}
               setIsHidden={setIsHidden}
               setuserData={setuserData}
+              setBooking={setBooking}
             />
           )
         : null}
       <Stack mt="3rem">
-        <Button>
-          역할 배정 완료
-        </Button>
+        <Button onClick={handleClick}>역할 배정 완료</Button>
       </Stack>
     </style.AssignRoleWrap>
   );
