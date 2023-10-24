@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import * as style from "./InfoForm_S.style";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
+import { useNavigate } from "react-router";
 
 const userName = {
   required: "필수 필드입니다.",
@@ -28,6 +29,7 @@ const userPhone = {
 
 const InfoForm_S = () => {
   const firefetch = useFireFetch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -40,6 +42,9 @@ const InfoForm_S = () => {
     // firefetch.postData("users", id, data); // id 상태에서 불러오기
     console.log(data);
     reset();
+    if (data) {
+      navigate("/info/code");
+    }
   };
 
   return (

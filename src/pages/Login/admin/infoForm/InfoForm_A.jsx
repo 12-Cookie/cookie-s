@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as style from "./InfoForm_A.style";
-import { useNavigate } from "react-router";
 
 const companyName = {
   required: "필수 필드입니다.",
@@ -17,7 +16,6 @@ const companyRole = {
 
 const InfoForm_A = () => {
   const [roles, setRoles] = useState([""]);
-  const navigate = useNavigate();
 
   const {
     register,
@@ -31,9 +29,6 @@ const InfoForm_A = () => {
     console.log(data);
     setRoles([""]);
     reset();
-    if (data) {
-      navigate("/info/code");
-    }
   };
 
   const addRoleField = () => {

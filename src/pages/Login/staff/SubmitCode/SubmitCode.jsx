@@ -33,22 +33,22 @@ const SubmitCode = () => {
     // firefetch.postData("users", id, data); // id 상태에서 불러오기
     console.log(data);
     reset();
-    if (data) {
-      const pinNum = combineArrayToNumber(data.code);
+    const get = async () => {
+      if (data) {
+        const pinNum = combineArrayToNumber(data.code);
 
-      const companiesRef = collection(db, "company");
-      const _query = query(companiesRef, where("code", "==", pinNum));
-      const querySnapshot = getDocs(_query);
-      querySnapshot.map((doc) => {
-        console.log(doc.data);
-      });
+        const companiesRef = collection(db, "company");
+        const _query = query(companiesRef, where("code", "==", pinNum));
+        const querySnapshot = await getDocs(_query);
 
-      if (querySnapshot) {
-        navigate("/dashboard");
-      } else {
-        console.log("일치하는 회사 코드를 찾을 수 없습니다.");
+        if (querySnapshot.empty) {
+          console.log("일치하는 회사 코드를 찾을 수 없습니다.");
+        } else {
+          navigate("/dashboard");
+        }
       }
-    }
+    };
+    get();
   };
 
   const handleChange = (index, value) => {
