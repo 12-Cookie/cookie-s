@@ -2,7 +2,7 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Div = styled.div`
   position: relative;
@@ -11,12 +11,12 @@ const Div = styled.div`
     border: none;
   }
   .react-calendar__tile--now {
-    background: #f0f0f0;
-    color: white;
+    background: white !important;
+    color: red;
   }
   .react-calendar__tile--now:hover {
-    background: #f0f0f0;
-    color: white;
+    background: white;
+    color: red;
   }
   .react-calendar__tile--active {
     background-color: white;
@@ -27,6 +27,8 @@ const Div = styled.div`
   .react-calendar__tile {
     position: relative;
     height: 3rem;
+    padding-top: 0;
+    height: 2.5rem;
   }
   .react-calendar__tile--active abbr {
     background: #f87171 !important;
@@ -37,13 +39,13 @@ const Div = styled.div`
   }
   .dot-container {
     position: absolute;
-    top: 80%;
+    top: 70%;
     left: 50%;
     transform: translateX(-50%);
   }
   .dot {
-    height: 7px;
-    width: 7px;
+    height: 6px;
+    width: 6px;
     background-color: red;
     border-radius: 50%;
     display: flex;
@@ -56,9 +58,13 @@ const Div = styled.div`
   }
 `;
 
-const AdminCalendar = ({ onChange, value }) => {
+const AddCalendar = ({ onChange, value }) => {
   const initialMark = ["2023-10-02", "2023-10-12", "2023-10-10"];
   const [mark, setMark] = useState(initialMark);
+  const tileDisabled = ({ date, view }) => {
+    // 오늘 이전의 모든 날짜를 비활성화합니다.
+    return date < new Date();
+  };
   return (
     <Div>
       <Calendar
@@ -67,6 +73,7 @@ const AdminCalendar = ({ onChange, value }) => {
         value={value}
         navigationLabel={null}
         showNeighboringMonth={true}
+        tileDisabled={tileDisabled}
         tileContent={({ date }) => {
           let html = [];
           if (mark.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
@@ -83,4 +90,4 @@ const AdminCalendar = ({ onChange, value }) => {
   );
 };
 
-export default AdminCalendar;
+export default AddCalendar;
