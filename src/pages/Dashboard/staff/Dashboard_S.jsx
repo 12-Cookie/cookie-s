@@ -5,7 +5,7 @@ import { app } from "../../../firebase/firebase";
 import { useNavigate, useLocation } from "react-router-dom";
 import Notice from "../admin/notice/Notice";
 import { useFireFetch } from "../../../hooks/useFireFetch";
-import { ScheduleItem } from "../../../components/common/ScheduleItem/ScheduleItem.style";
+import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
 
 const initailUserdata = localStorage.getItem("userData")
   ? JSON.parse(localStorage.getItem("userData"))
@@ -55,6 +55,7 @@ const Dashboard_S = () => {
   return (
     <style.DashboardWrap>
       <Notice noticeData={noticeData} />
+      <h1>내 스케줄</h1>
       <ScheduleItem
         scheduleData={filteredScheduleData}
         bookedShiftsData={bookedShiftsData}
