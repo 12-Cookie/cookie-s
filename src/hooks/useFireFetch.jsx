@@ -1,16 +1,15 @@
 import {
   collection,
   query,
-  getFirestore,
   getDocs,
   where,
   doc,
   setDoc,
+  addDoc,
+  deleteDoc,
 } from "firebase/firestore";
-import { app, db } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
-
-// const db = getFirestore(app);
 
 export const useFireFetch = () => {
   const [data, setData] = useState([]);
@@ -102,6 +101,37 @@ export const useFireFetch = () => {
     set();
   };
 
+  const addData = (initialCollection, data) => {
+    const set = async () => {
+      try {
+        const docRef = await addDoc(collection(db, initialCollection), data);
+        const docId = docRef.id;
+        const newData = { id: docId, ...data };
+
+        // 데이터 업데이트
+        await setDoc(doc(db, initialCollection, docId), newData);
+        console.log(data);
+        if (initialCollection === "bookedShifts")
+          setBookedShifts((prev) => [data, ...prev]);
+        else if (initialCollection === "bookingShifts")
+          setBookingShifts((prev) => [data, ...prev]);
+        else if (initialCollection === "company")
+          setCompany((prev) => [data, ...prev]);
+        else if (initialCollection === "notice")
+          setNotice((prev) => [data, ...prev]);
+        else if (initialCollection === "schedule")
+          setSchedule((prev) => [data, ...prev]);
+        else if (initialCollection === "users")
+          setUsers((prev) => [data, ...prev]);
+
+        console.log("성공, 문서 ID:", docRef.id);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    set();
+  };
+
   const bookedUser = (id) => {
     useEffect(() => {
       const dataJoin = async () => {
@@ -130,5 +160,18 @@ export const useFireFetch = () => {
     return join;
   };
 
-  return { getData, postData, bookedUser };
+  const deleteById = (initialCollection, id) => {
+    console.log(schedule);
+    const set = async () => {
+      try {
+        await deleteDoc(doc(db, initialCollection, id));
+        console.log(`문서 ${id} 삭제 완료`);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    set();
+  };
+
+  return { getData, postData, bookedUser, addData, deleteById };
 };

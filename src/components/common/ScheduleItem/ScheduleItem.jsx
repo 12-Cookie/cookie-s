@@ -5,8 +5,14 @@ import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
 import PropTypes from "prop-types";
 import * as style from "./ScheduleItem.style";
 
-const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
+const ScheduleItem = ({
+  scheduleLists,
+  setScheduleLists,
+}) => {
   const [isAdmin, setIsAdmin] = useState(true);
+  const [userLength, setUserLength] = useState(
+    Array(scheduleLists.length).fill(0),
+  );
 
   const getDayOfWeekFromDate = (date) => {
     const { year, month, day } = date;
@@ -18,13 +24,13 @@ const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
     return getDay;
   };
 
-  const renderStatusToAdmin = (scheduleData) => {
+  const renderStatusToAdmin = (scheduleData, index) => {
     const { status, numWorkers } = scheduleData;
     switch (status) {
       case "모집중":
         return (
           <Badge>
-            모집중 ({bookedShiftsData.length}/{numWorkers})
+            모집중 ({userLength[index]}/{numWorkers})
           </Badge>
         );
       case "모집완료":
@@ -53,7 +59,7 @@ const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
 
   return (
     <style.ScheduleItemWrap>
-      {scheduleData.map((scheduleData) => (
+      {scheduleLists.map((scheduleData, index) => (
         <style.ScheduleItem key={scheduleData.id}>
           <style.ScheduleInfo>
             <style.ScheduleDate>
@@ -69,13 +75,24 @@ const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
             <style.ScheduleStatus>
               <div>
                 {isAdmin
-                  ? renderStatusToAdmin(scheduleData)
+                  ? renderStatusToAdmin(scheduleData, index)
                   : renderStatusToStaff(scheduleData)}
               </div>
             </style.ScheduleStatus>
           </style.ScheduleInfo>
           {isAdmin ? "" : <ScheduleRoleItem />}
-          {isAdmin ? <ScheduleUtilItem scheduleData={scheduleData} /> : ""}
+          {isAdmin ? (
+            <ScheduleUtilItem
+              scheduleData={scheduleData}
+              scheduleLists={scheduleLists}
+              userLength={userLength}
+              setScheduleLists={setScheduleLists}
+              setUserLength={setUserLength}
+              index={index}
+            />
+          ) : (
+            ""
+          )}
         </style.ScheduleItem>
       ))}
     </style.ScheduleItemWrap>
