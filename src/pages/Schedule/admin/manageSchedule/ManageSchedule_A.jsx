@@ -35,7 +35,6 @@ const ManageSchedule_A = () => {
       {scheduleLists[0] && (
         <ScheduleItem
           scheduleLists={scheduleLists}
-          bookedShiftsData={bookedSchedule}
           setScheduleLists={setScheduleLists}
         />
       )}
