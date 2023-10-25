@@ -40,7 +40,7 @@ const Login = () => {
   //       setUserData(user);
   //       navigate("/");
   //     } else if (user && pathname === "/") {
-  //       navigate("/dashboard");
+  //       navigate("/info/staff");
   //     }
   //   });
 
