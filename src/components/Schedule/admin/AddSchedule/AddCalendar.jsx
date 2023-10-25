@@ -11,12 +11,12 @@ const Div = styled.div`
     border: none;
   }
   .react-calendar__tile--now {
-    background: white !important;
-    color: red;
+    background: grey;
+    color: white;
   }
   .react-calendar__tile--now:hover {
-    background: white;
-    color: red;
+    background: #f0f0f0;
+    color: white;
   }
   .react-calendar__tile--active {
     background-color: white;
@@ -27,8 +27,6 @@ const Div = styled.div`
   .react-calendar__tile {
     position: relative;
     height: 3rem;
-    padding-top: 0;
-    height: 2.5rem;
   }
   .react-calendar__tile--active abbr {
     background: #f87171 !important;
@@ -39,13 +37,13 @@ const Div = styled.div`
   }
   .dot-container {
     position: absolute;
-    top: 70%;
+    top: 80%;
     left: 50%;
     transform: translateX(-50%);
   }
   .dot {
-    height: 6px;
-    width: 6px;
+    height: 7px;
+    width: 7px;
     background-color: red;
     border-radius: 50%;
     display: flex;
@@ -56,14 +54,21 @@ const Div = styled.div`
   .react-calendar__month-view__days__day--neighboringMonth {
     color: #f0f0f0;
   }
+  .react-calendar__tile:disabled {
+    opacity: 0.5;
+  }
 `;
 
 const AddCalendar = ({ onChange, value }) => {
   const initialMark = ["2023-10-02", "2023-10-12", "2023-10-10"];
   const [mark, setMark] = useState(initialMark);
-  const tileDisabled = ({ date, view }) => {
-    // 오늘 이전의 모든 날짜를 비활성화합니다.
-    return date < new Date();
+  const tileDisabled = ({ date }) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(today.getDate());
+    twoDaysAgo.setHours(0, 0, 0, 0);
+    return date < twoDaysAgo;
   };
   return (
     <Div>

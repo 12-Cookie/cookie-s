@@ -5,10 +5,7 @@ import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
 import PropTypes from "prop-types";
 import * as style from "./ScheduleItem.style";
 
-const ScheduleItem = ({
-  scheduleLists,
-  setScheduleLists,
-}) => {
+const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
   const [isAdmin, setIsAdmin] = useState(true);
   const [userLength, setUserLength] = useState(
     Array(scheduleLists.length).fill(0),
