@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Notice from "../admin/notice/Notice";
 import { useFireFetch } from "../../../hooks/useFireFetch";
 import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
+import Chart from "./chart/Chart";
 
 const initailUserdata = localStorage.getItem("userData")
   ? JSON.parse(localStorage.getItem("userData"))
@@ -57,9 +58,10 @@ const Dashboard_S = () => {
       <Notice noticeData={noticeData} />
       <h1>내 스케줄</h1>
       <ScheduleItem
-        scheduleData={filteredScheduleData}
+        scheduleLists={filteredScheduleData}
         bookedShiftsData={bookedShiftsData}
       />
+      <Chart />
       <button onClick={handleLogOut}>로그아웃</button>
     </style.DashboardWrap>
   );

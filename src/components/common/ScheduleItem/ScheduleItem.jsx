@@ -5,10 +5,7 @@ import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
 import PropTypes from "prop-types";
 import * as style from "./ScheduleItem.style";
 
-const ScheduleItem = ({
-  scheduleLists,
-  setScheduleLists,
-}) => {
+const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
   const [isAdmin, setIsAdmin] = useState(true);
   const [userLength, setUserLength] = useState(
     Array(scheduleLists.length).fill(0),
@@ -30,7 +27,7 @@ const ScheduleItem = ({
       case "모집중":
         return (
           <Badge>
-            모집중 ({userLength[index]}/{numWorkers})
+            모집중 ({userLength[index] ? userLength[index] : "0"}/{numWorkers})
           </Badge>
         );
       case "모집완료":
@@ -52,7 +49,6 @@ const ScheduleItem = ({
       case "모집취소":
         return <Badge colorScheme="red">취소됨</Badge>;
       default:
-        console.log("일치하는 양식이 없습니다.");
         console.log("일치하는 양식이 없습니다.");
     }
   };
@@ -102,6 +98,6 @@ const ScheduleItem = ({
 export default ScheduleItem;
 
 ScheduleItem.propTypes = {
-  scheduleData: PropTypes.array,
-  bookedShiftsData: PropTypes.array,
+  scheduleLists: PropTypes.array,
+  setScheduleLists: PropTypes.array,
 };
