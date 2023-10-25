@@ -9,10 +9,13 @@ const AssignBody = ({
   isHidden,
   userData,
   config,
+  booking,
+  userId,
   setViewFooter,
   setRoleDate,
   setConfig,
   setIsHidden,
+  setBooking,
 }) => {
   const [isConfig, setIsConfig] = useState([]);
 
@@ -55,9 +58,14 @@ const AssignBody = ({
       const mapCopy = new Map(roleData);
       const roleCopy = [...mapCopy.get(config)];
       const i = roleCopy.findIndex((v, i) => v === name);
+      
       roleCopy.splice(i, 1);
       mapCopy.set(config, roleCopy);
       setRoleDate(mapCopy);
+
+      const user = userId.find((v, i) => v.name === name);
+      const newArray = booking.filter((v, i) => v.userId !== user.id);
+      setBooking([...newArray]);
     }
   };
 

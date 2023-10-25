@@ -6,6 +6,7 @@ import {
   doc,
   setDoc,
   addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
@@ -159,5 +160,18 @@ export const useFireFetch = () => {
     return join;
   };
 
-  return { getData, postData, bookedUser, addData };
+  const deleteById = (initialCollection, id) => {
+    console.log(schedule);
+    const set = async () => {
+      try {
+        await deleteDoc(doc(db, initialCollection, id));
+        console.log(`문서 ${id} 삭제 완료`);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    set();
+  };
+
+  return { getData, postData, bookedUser, addData, deleteById };
 };
