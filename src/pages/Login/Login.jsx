@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { app } from "../../firebase/firebase";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { Button, Heading, Text } from "@chakra-ui/react";
 
 const initailUserdata = localStorage.getItem("userData")
   ? JSON.parse(localStorage.getItem("userData"))
@@ -27,6 +28,7 @@ const Login = () => {
       .then((response) => {
         console.log(response);
         localStorage.setItem("userData", JSON.stringify(response.user));
+        navigate("/info/staff");
       })
       .catch((error) => {
         console.log(error);
@@ -51,15 +53,28 @@ const Login = () => {
 
   return (
     <style.LoginWrap>
-      <h1>내 근무에 맞게</h1>
-      <h1>근무 스케줄 지정</h1>
-      <button onClick={handleAuth}>Google 로그인</button>
-      <p>
-        관리자이신가요?{" "}
+      <Heading as="h2" size="md" mb="1rem">
+        내 일정에 맞게
+        <br />
+        근무 스케줄 지정
+      </Heading>
+      <Button
+        w="100%"
+        mt="100px"
+        colorScheme="teal"
+        size="md"
+        onClick={handleAuth}
+      >
+        Google 로그인
+      </Button>
+      <style.AdminLoginWrap>
+        <Text>관리자이신가요? </Text>
         <Link to={"/login/admin"}>
-          <button>관리자 로그인</button>
+          <Text color="green" ml="10px">
+            관리자 로그인
+          </Text>
         </Link>
-      </p>
+      </style.AdminLoginWrap>
     </style.LoginWrap>
   );
 };
