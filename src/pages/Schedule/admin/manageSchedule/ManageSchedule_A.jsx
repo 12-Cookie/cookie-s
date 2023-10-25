@@ -2,15 +2,23 @@ import * as style from "./ManageSchedule_A.style";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { Heading } from "@chakra-ui/react";
 import ScheduleItem from "../../../../components/common/ScheduleItem/ScheduleItem";
-import ScheduleUtilItem from "../../../../components/common/ScheduleUtilItem/ScheduleUtilItem";
+import { useEffect, useState } from "react";
 
 const ManageSchedule_A = () => {
   const fireFetch = useFireFetch();
+  const [scheduleLists, setScheduleLists] = useState([]);
+
   const schedules = fireFetch.getData(
     "schedule",
     "companyId",
     "TiP9VRKNKplTMNoZzYji",
   );
+
+  useEffect(() => {
+    if (schedules[0]) {
+      setScheduleLists([...schedules]);
+    }
+  }, [schedules]);
 
   const bookedSchedule = fireFetch.getData(
     "bookedShifts",
@@ -18,19 +26,19 @@ const ManageSchedule_A = () => {
     "TiP9VRKNKplTMNoZzYji",
   );
 
-  // console.log(bookedSchedule);
-
-  // console.log(schedules);
+  // console.log(scheduleLists);
   return (
     <style.ManageScheduleWrap>
       <Heading as="h2" size="md" mb="1rem">
         스케줄 관리
       </Heading>
-      <ScheduleItem
-        scheduleData={schedules}
-        bookedShiftsData={bookedSchedule}
-      />
-      {/* <ScheduleUtilItem scheduleData={schedules} /> */}
+      {scheduleLists[0] && (
+        <ScheduleItem
+          scheduleLists={scheduleLists}
+          bookedShiftsData={bookedSchedule}
+          setScheduleLists={setScheduleLists}
+        />
+      )}
     </style.ManageScheduleWrap>
   );
 };
