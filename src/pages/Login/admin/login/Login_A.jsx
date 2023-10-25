@@ -50,11 +50,13 @@ const Login_A = () => {
   }, [auth, navigate]);
 
   return (
-    <LoginForm
-      title={"로그인"}
-      getDataForm={handleLogin}
-      firebaseError={firebaseError}
-    />
+    <style.AdminLoginWrap>
+      <LoginForm
+        title={"관리자 로그인"}
+        getDataForm={handleLogin}
+        firebaseError={firebaseError}
+      />
+    </style.AdminLoginWrap>
   );
 };
 
