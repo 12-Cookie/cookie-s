@@ -59,7 +59,6 @@ const Div = styled.div`
 const AdminCalendar = ({ onChange, value, user }) => {
   const initialMark = ["2023-10-02", "2023-10-12", "2023-10-10"];
   const [mark, setMark] = useState(initialMark);
-  console.log(user?.id);
   return (
     <Div>
       <Calendar
