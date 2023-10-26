@@ -1,6 +1,8 @@
 import * as style from "./Login_A.style";
 import LoginForm from "../../../../components/Login/LoginForm";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { collection, query, getDocs, where } from "firebase/firestore";
+import { db } from "../../../../firebase/firebase";
 import { app } from "../../../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -13,33 +15,31 @@ const Login_A = () => {
   const { userData, setUserData } = useUserStore();
   const fireFetch = useFireFetch();
   const [firebaseError, setFirebaseError] = useState("");
-  const [user, setUser] = useState({});
 
   const handleLogin = (email, password) => {
-    if (user?.id) {
-      navigate("/dashboard");
-    } else {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((response) => {
-          const { uid } = response.user;
-          setUserData({ ...userData, id: uid, isAdmin: true });
-        })
-        .then(() => {
-          fireFetch.postData("users", userData.id, userData);
-        })
-        .then(() => {
-          navigate("/info/admin");
-        })
-        .catch((error) => {
-          return error & setFirebaseError("이메일 또는 비밀번호가 틀렸습니다.");
-        });
-    }
-  };
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (response) => {
+        const { uid } = response.user;
 
-  useEffect(() => {
-    const userDataFromLocalStorage = localStorage.getItem("user");
-    setUser(JSON.parse(userDataFromLocalStorage));
-  }, []);
+        const Ref = collection(db, "users");
+        const q = query(Ref, where("id", "==", uid));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          setUserData({ ...userData, id: uid, isAdmin: false });
+          fireFetch.postData("users", uid, userData);
+          navigate("/info/admin");
+        } else {
+          querySnapshot.forEach((doc) => {
+            setUserData({ ...doc.data() });
+            navigate("/dashboard");
+          });
+        }
+      })
+      .catch((error) => {
+        return error & setFirebaseError("이메일 또는 비밀번호가 틀렸습니다.");
+      });
+  };
 
   return (
     <style.AdminLoginWrap>
