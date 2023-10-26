@@ -15,6 +15,7 @@ const useUserStore = create(
     },
     setUserData: (userData) => {
       set({ userData });
+      localStorage.setItem("user", JSON.stringify(userData));
     },
   })),
 );
