@@ -29,10 +29,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useUserStore from "./store/user/useUserStore";
 
 function App() {
-  // const [isAdmin, setIsAdmin] = useState(true);
-  const { id, isAdmin } = useUserStore((state) => state.userData);
-  // const [isLogin, setIsLogin] = useState(true);
-  const isLogin = id ? true : false;
+  const [isAdmin, setIsAdmin] = useState(true);
+  // const { id, isAdmin } = useUserStore((state) => state.userData);
+  const [isLogin, setIsLogin] = useState(true);
+  // const isLogin = id ? true : false;
 
   const navigate = useNavigate();
   const location = useLocation();
