@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as style from "./InfoForm_A.style";
 import { Button, Heading, Input, Text } from "@chakra-ui/react";
+import { useFireFetch } from "../../../../hooks/useFireFetch";
+import { useNavigate } from "react-router";
+import useCompanyStore from "../../../../store/company/useCompanyStore";
 
 const companyName = {
   required: "필수 필드입니다.",
@@ -16,7 +19,10 @@ const companyRole = {
 };
 
 const InfoForm_A = () => {
+  const fireFetch = useFireFetch();
+  const navigate = useNavigate();
   const [roles, setRoles] = useState([""]);
+  const { companyData, setCompanyData } = useCompanyStore();
 
   const {
     register,
@@ -25,11 +31,17 @@ const InfoForm_A = () => {
     reset,
   } = useForm({ mode: "onBlur" });
 
-  const onSubmit = (data) => {
-    // firefetch.postData("users", id, data); // id 상태에서 불러오기
-    console.log(data);
+  const onSubmit = async (data) => {
     setRoles([""]);
     reset();
+    await setCompanyData({
+      ...companyData,
+      name: data.name,
+      address: data.address,
+      roles: data.roles,
+    });
+    await fireFetch.postData("company", companyData.id, companyData);
+    navigate("/dashboard");
   };
 
   const addRoleField = () => {
@@ -92,21 +104,21 @@ const InfoForm_A = () => {
 
         {roles.map((role, index) => (
           <style.InputWrap key={index}>
-            <Text htmlFor={`role[${index}]`} as="b">
+            <Text htmlFor={`roles[${index}]`} as="b">
               역할
             </Text>
             <Input
               type="text"
               placeholder="팀장"
-              {...register(`role[${index}]`, companyRole)}
+              {...register(`roles[${index}]`, companyRole)}
               value={role}
               onChange={(e) => handleRoleChange(index, e.target.value)}
               width="73%"
               ml="1rem"
             />
-            {errors[`role[${index}]`] && (
+            {errors[`roles[${index}]`] && (
               <div>
-                <Text color="red">{errors[`role[${index}]`]?.message}</Text>
+                <Text color="red">{errors[`roles[${index}]`]?.message}</Text>
               </div>
             )}
             <Button

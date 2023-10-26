@@ -61,11 +61,15 @@ const LoginForm = ({ title, getDataForm, firebaseError }) => {
             <Text color="red">{errors?.password?.message}</Text>
           )}
         </div>
+        {firebaseError && (
+          <Text color="red" mt="1rem">
+            {firebaseError}
+          </Text>
+        )}
 
         <Button type="submit" w="100%" mt="100px" colorScheme="teal" size="md">
           {title}
         </Button>
-        {firebaseError && <span>{firebaseError}</span>}
       </form>
     </>
   );

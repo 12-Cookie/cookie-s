@@ -1,54 +1,36 @@
 import * as style from "./Login.style";
-import React, { useEffect, useState } from "react";
-import {
-  GoogleAuthProvider,
-  getAuth,
-  onAuthStateChanged,
-  signInWithPopup,
-} from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../firebase/firebase";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button, Heading, Text } from "@chakra-ui/react";
 import useUserStore from "../../store/user/useUserStore";
+import { useFireFetch } from "../../hooks/useFireFetch";
 
 const Login = () => {
-  // const userDataFromStore = useUserStore((state) => state.userData);
-  // const [userData, setUserData] = useState(userDataFromStore);
+  // const initialUserData = useUserStore((state) => state.userData);
 
   const navigate = useNavigate();
-  // const { pathname } = useLocation();
-
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
-  const { setUserData } = useUserStore();
+  const { userData, setUserData } = useUserStore();
+  const fireFetch = useFireFetch();
 
   const handleAuth = () => {
     signInWithPopup(auth, provider)
       .then((response) => {
         const { uid } = response.user;
-        setUserData({ id: uid, isAdmin: false });
+        setUserData({ ...userData, id: uid, isAdmin: false });
+      })
+      .then(() => {
+        fireFetch.postData("users", userData.id, userData);
+      })
+      .then(() => {
         navigate("/info/staff");
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (!user) {
-  //       console.log(user);
-  //       setUserData(user);
-  //       navigate("/");
-  //     } else if (user && pathname === "/") {
-  //       navigate("/info/staff");
-  //     }
-  //   });
-
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [auth, navigate]);
 
   return (
     <style.LoginWrap>

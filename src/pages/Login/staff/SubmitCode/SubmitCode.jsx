@@ -26,6 +26,7 @@ const SubmitCode = () => {
   // const [pin, setPin] = useState(["", "", "", "", "", ""]); // 초기 상태: 4자리 빈 PIN
   const navigate = useNavigate();
   const { userData, setUserData } = useUserStore();
+  const fireFetch = useFireFetch();
 
   const {
     control,
@@ -51,7 +52,8 @@ const SubmitCode = () => {
           alert("일치하는 회사 코드를 찾을 수 없습니다.");
         } else {
           const companyId = querySnapshot.docs[0].data().id;
-          setUserData({ ...userData, companyId });
+          await setUserData({ ...userData, companyId });
+          await fireFetch.postData("users", userData.id, userData);
           navigate("/dashboard");
         }
       }

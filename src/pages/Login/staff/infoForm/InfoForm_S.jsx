@@ -21,7 +21,7 @@ const userGender = {
   required: "필수 필드입니다.",
 };
 
-const userBirthdate = {
+const userBirthDate = {
   required: "필수 필드입니다.",
 };
 
@@ -38,7 +38,7 @@ const userPhone = {
 };
 
 const InfoForm_S = () => {
-  const firefetch = useFireFetch();
+  const fireFetch = useFireFetch();
   const navigate = useNavigate();
   const { userData, setUserData } = useUserStore();
 
@@ -49,9 +49,9 @@ const InfoForm_S = () => {
     reset,
   } = useForm({ mode: "onBlur" });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     reset();
-    setUserData({
+    await setUserData({
       ...userData,
       name: data.name,
       phone: data.phone,
@@ -60,10 +60,8 @@ const InfoForm_S = () => {
       birthDate: data.birthDate,
       address: data.address,
     });
-    // firefetch.postData("users", id, data); // id 상태에서 불러오기
-    if (data) {
-      navigate("/info/code");
-    }
+    await fireFetch.postData("users", userData.id, userData);
+    navigate("/info/code");
   };
 
   return (
@@ -118,19 +116,19 @@ const InfoForm_S = () => {
         </style.InputWrap>
 
         <style.InputWrap>
-          <Text htmlFor="birthdate" as="b">
+          <Text htmlFor="birthDate" as="b">
             생년월일
           </Text>
           <Input
             type="text"
             placeholder="YYYY.MM.DD"
-            {...register("birthdate", userBirthdate)}
+            {...register("birthDate", userBirthDate)}
             width="76.3%"
             ml="1rem"
           />
-          {errors?.birthdate && (
+          {errors?.birthDate && (
             <div>
-              <Text color="red">{errors?.birthdate?.message}</Text>
+              <Text color="red">{errors?.birthDate?.message}</Text>
             </div>
           )}
         </style.InputWrap>
