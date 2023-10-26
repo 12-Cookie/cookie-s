@@ -14,7 +14,7 @@ const initailUserdata = localStorage.getItem("userData")
 
 const Dashboard_S = () => {
   const dummyUserData = JSON.parse(localStorage.getItem("user"));
-  const dummyUserId = dummyUserData.userId;
+  const dummyUserId = dummyUserData.id;
 
   const [userData, setUserData] = useState(initailUserdata);
 
@@ -25,7 +25,6 @@ const Dashboard_S = () => {
   const noticeData = fetch.getData("notice");
   const scheduleData = fetch.getData("schedule");
   const bookedShiftsData = fetch.getData("bookedShifts");
-  const usersData = fetch.getData("users");
   const filteredScheduleData = [...scheduleData].slice(0, 3);
   const bookingShiftsData = fetch.getData(
     "bookingShifts",

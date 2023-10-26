@@ -31,6 +31,7 @@ const Chart = ({ matchingData }) => {
 
   useEffect(() => {
     handleLast7days();
+    console.log(matchingData);
   }, [matchingData]);
 
   const last7daysData = (data) => {
