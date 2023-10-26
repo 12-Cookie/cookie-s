@@ -39,7 +39,7 @@ const Login_A = () => {
   useEffect(() => {
     const userDataFromLocalStorage = localStorage.getItem("user");
     setUser(JSON.parse(userDataFromLocalStorage));
-  });
+  }, []);
 
   return (
     <style.AdminLoginWrap>

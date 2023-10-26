@@ -41,7 +41,7 @@ const Login = () => {
   useEffect(() => {
     const userDataFromLocalStorage = localStorage.getItem("user");
     setUser(JSON.parse(userDataFromLocalStorage));
-  });
+  }, []);
 
   return (
     <style.LoginWrap>
