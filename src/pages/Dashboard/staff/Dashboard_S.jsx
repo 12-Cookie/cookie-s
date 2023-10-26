@@ -7,12 +7,12 @@ import Notice from "../admin/notice/Notice";
 import { useFireFetch } from "../../../hooks/useFireFetch";
 import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
 
-const initailUserdata = localStorage.getItem("userData")
+const initialUserdata = localStorage.getItem("userData")
   ? JSON.parse(localStorage.getItem("userData"))
   : {};
 
 const Dashboard_S = () => {
-  const [userData, setUserData] = useState(initailUserdata);
+  const [userData, setUserData] = useState(initialUserdata);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();

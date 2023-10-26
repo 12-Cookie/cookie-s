@@ -1,7 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as style from "./SubmitCode.style";
-import combineArrayToNumber from "../../../../utils/combineArrayToNumber";
 import {
   collection,
   query,
@@ -18,16 +17,16 @@ import {
   Button,
   FormControl,
 } from "@chakra-ui/react";
-
-const companyCode = {
-  required: "필수 필드입니다.",
-};
+import { useFireFetch } from "../../../../hooks/useFireFetch";
+import useUserStore from "../../../../store/user/useUserStore";
 
 const db = getFirestore(app);
 
 const SubmitCode = () => {
-  const [pin, setPin] = useState(["", "", "", "", "", ""]); // 초기 상태: 4자리 빈 PIN
+  // const [pin, setPin] = useState(["", "", "", "", "", ""]); // 초기 상태: 4자리 빈 PIN
   const navigate = useNavigate();
+  const { userData, setUserData } = useUserStore();
+  const fireFetch = useFireFetch();
 
   const {
     control,
@@ -38,7 +37,6 @@ const SubmitCode = () => {
 
   const onSubmit = (data) => {
     // firefetch.postData("users", id, data); // id 상태에서 불러오기
-    console.log(data);
     reset();
     const get = async () => {
       if (data) {
@@ -51,8 +49,11 @@ const SubmitCode = () => {
         const querySnapshot = await getDocs(_query);
 
         if (querySnapshot.empty) {
-          console.log("일치하는 회사 코드를 찾을 수 없습니다.");
+          alert("일치하는 회사 코드를 찾을 수 없습니다.");
         } else {
+          const companyId = querySnapshot.docs[0].data().id;
+          await setUserData({ ...userData, companyId });
+          await fireFetch.postData("users", userData.id, userData);
           navigate("/dashboard");
         }
       }
@@ -72,7 +73,7 @@ const SubmitCode = () => {
             control={control}
             render={({ field }) => (
               <PinInput size="lg">
-                <PinInputField {...field} valueAsNumber />
+                <PinInputField {...field} />
               </PinInput>
             )}
           />
@@ -81,7 +82,7 @@ const SubmitCode = () => {
             control={control}
             render={({ field }) => (
               <PinInput size="lg">
-                <PinInputField {...field} valueAsNumber ml="0.5rem" />
+                <PinInputField {...field} ml="0.5rem" />
               </PinInput>
             )}
           />
@@ -90,7 +91,7 @@ const SubmitCode = () => {
             control={control}
             render={({ field }) => (
               <PinInput size="lg">
-                <PinInputField {...field} valueAsNumber ml="0.5rem" />
+                <PinInputField {...field} ml="0.5rem" />
               </PinInput>
             )}
           />
@@ -99,7 +100,7 @@ const SubmitCode = () => {
             control={control}
             render={({ field }) => (
               <PinInput size="lg">
-                <PinInputField {...field} valueAsNumber ml="0.5rem" />
+                <PinInputField {...field} ml="0.5rem" />
               </PinInput>
             )}
           />
@@ -108,7 +109,7 @@ const SubmitCode = () => {
             control={control}
             render={({ field }) => (
               <PinInput size="lg">
-                <PinInputField {...field} valueAsNumber ml="0.5rem" />
+                <PinInputField {...field} ml="0.5rem" />
               </PinInput>
             )}
           />
@@ -117,7 +118,7 @@ const SubmitCode = () => {
             control={control}
             render={({ field }) => (
               <PinInput size="lg">
-                <PinInputField {...field} valueAsNumber ml="0.5rem" />
+                <PinInputField {...field} ml="0.5rem" />
               </PinInput>
             )}
           />

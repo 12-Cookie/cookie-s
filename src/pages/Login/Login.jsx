@@ -1,55 +1,36 @@
 import * as style from "./Login.style";
-import React, { useEffect, useState } from "react";
-import {
-  GoogleAuthProvider,
-  getAuth,
-  onAuthStateChanged,
-  signInWithPopup,
-} from "firebase/auth";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../firebase/firebase";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button, Heading, Text } from "@chakra-ui/react";
-
-const initailUserdata = localStorage.getItem("userData")
-  ? JSON.parse(localStorage.getItem("userData"))
-  : {};
+import useUserStore from "../../store/user/useUserStore";
+import { useFireFetch } from "../../hooks/useFireFetch";
 
 const Login = () => {
-  const [userData, setUserData] = useState(initailUserdata);
+  // const initialUserData = useUserStore((state) => state.userData);
 
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const { userData, setUserData } = useUserStore();
+  const fireFetch = useFireFetch();
 
   const handleAuth = () => {
     signInWithPopup(auth, provider)
       .then((response) => {
-        console.log(response);
-        localStorage.setItem("userData", JSON.stringify(response.user));
+        const { uid } = response.user;
+        setUserData({ ...userData, id: uid, isAdmin: false });
+      })
+      .then(() => {
+        fireFetch.postData("users", userData.id, userData);
+      })
+      .then(() => {
         navigate("/info/staff");
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (!user) {
-  //       console.log(user);
-  //       setUserData(user);
-  //       navigate("/");
-  //     } else if (user && pathname === "/") {
-  //       navigate("/info/staff");
-  //     }
-  //   });
-
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [auth, navigate]);
 
   return (
     <style.LoginWrap>
