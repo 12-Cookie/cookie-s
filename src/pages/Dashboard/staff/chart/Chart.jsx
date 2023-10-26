@@ -25,13 +25,12 @@ const Chart = ({ matchingData }) => {
   const currentMonth = today.getMonth() + 1;
   const currentYear = today.getFullYear();
   const currentDate = today.getDate();
-  const [chartPay, setChartPay] = useState([]);
   const [chartDate, setChartDate] = useState([]);
-  const [chartLabel, setChartLabel] = useState("지난 7일");
+  const [chartPay, setChartPay] = useState([]);
+  const [chartLabel, setChartLabel] = useState("");
 
   useEffect(() => {
     handleLast7days();
-    console.log(matchingData);
   }, [matchingData]);
 
   const last7daysData = (data) => {
@@ -59,39 +58,58 @@ const Chart = ({ matchingData }) => {
   };
 
   const handleLast7days = () => {
-    setChartPay(
+    setChartDate(
       last7daysData(matchingData).map(
         (data) => `${data.date.year}-${data.date.month}-${data.date.day}`,
       ),
     );
-    setChartLabel("지난 7일 페이");
+    setChartLabel("지난 7일 근무 급여");
     calculatePay(last7daysData(matchingData));
   };
 
   const handleThisMonth = () => {
-    setChartPay(
+    setChartDate(
       thisMonthData(matchingData).map(
         (data) => `${data.date.year}-${data.date.month}-${data.date.day}`,
       ),
     );
-    setChartLabel("이번 달 페이");
+    setChartLabel("이번 달 근무 급여");
     calculatePay(thisMonthData(matchingData));
   };
 
   const handleThisYear = () => {
-    setChartPay(
-      thisYearData(matchingData).map(
-        (data) => `${data.date.year}-${data.date.month}-${data.date.day}`,
-      ),
-    );
-    setChartLabel("월 별 페이");
-    calculatePay(thisYearData(matchingData));
+    const groupedData = {};
+    thisYearData(matchingData).forEach((data) => {
+      const key = `${data.date.year}-${data.date.month}`;
+      if (!groupedData[key]) {
+        groupedData[key] = [];
+      }
+      groupedData[key].push(data);
+    });
+
+    const chartPay = [];
+
+    for (const key in groupedData) {
+      const monthData = groupedData[key];
+      const totalPayForMonth = monthData.reduce((totalPay, item) => {
+        const start = Number(item.time.start.replace(":", ""));
+        const end = Number(item.time.end.replace(":", ""));
+        const answer = (end - start) / 100;
+        return totalPay + answer * 10000;
+      }, 0);
+
+      chartPay.push(totalPayForMonth);
+    }
+
+    setChartDate(Object.keys(groupedData));
+    setChartPay(chartPay);
+    setChartLabel("월 별 급여 총액");
   };
 
   const calculatePay = (data) => {
     const OVERTIME_HOURS = 9;
     const USER_PAY = 10000;
-    const newArr = data.map((item) => {
+    const userPay = data.map((item) => {
       const start = Number(item.time.start.replace(":", ""));
       const end = Number(item.time.end.replace(":", ""));
       const answer = (end - start) / 100;
@@ -107,11 +125,11 @@ const Chart = ({ matchingData }) => {
 
       return pay;
     });
-    setChartDate(newArr);
+    setChartPay(userPay);
   };
 
-  const labels = chartPay;
-  const datas = chartDate;
+  const labels = chartDate;
+  const datas = chartPay;
 
   const options = {
     responsive: true,
