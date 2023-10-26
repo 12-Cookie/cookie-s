@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import * as style from "./Login.style";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../firebase/firebase";
@@ -14,23 +15,33 @@ const Login = () => {
   const provider = new GoogleAuthProvider();
   const { userData, setUserData } = useUserStore();
   const fireFetch = useFireFetch();
+  const [user, setUser] = useState({});
 
   const handleAuth = () => {
-    signInWithPopup(auth, provider)
-      .then((response) => {
-        const { uid } = response.user;
-        setUserData({ ...userData, id: uid, isAdmin: false });
-      })
-      .then(() => {
-        fireFetch.postData("users", userData.id, userData);
-      })
-      .then(() => {
-        navigate("/info/staff");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (user?.name) {
+      navigate("/dashboard");
+    } else {
+      signInWithPopup(auth, provider)
+        .then((response) => {
+          const { uid } = response.user;
+          setUserData({ ...userData, id: uid, isAdmin: false });
+        })
+        .then(() => {
+          fireFetch.postData("users", userData.id, userData);
+        })
+        .then(() => {
+          navigate("/info/staff");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
+
+  useEffect(() => {
+    const userDataFromLocalStorage = localStorage.getItem("user");
+    setUser(JSON.parse(userDataFromLocalStorage));
+  });
 
   return (
     <style.LoginWrap>

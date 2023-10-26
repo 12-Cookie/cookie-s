@@ -3,33 +3,43 @@ import LoginForm from "../../../../components/Login/LoginForm";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../../../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useUserStore from "../../../../store/user/useUserStore";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 
 const Login_A = () => {
   const navigate = useNavigate();
   const auth = getAuth(app);
-  const [firebaseError, setFirebaseError] = useState("");
   const { userData, setUserData } = useUserStore();
   const fireFetch = useFireFetch();
+  const [firebaseError, setFirebaseError] = useState("");
+  const [user, setUser] = useState({});
 
   const handleLogin = (email, password) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((response) => {
-        const { uid } = response.user;
-        setUserData({ ...userData, id: uid, isAdmin: true });
-      })
-      .then(() => {
-        fireFetch.postData("users", userData.id, userData);
-      })
-      .then(() => {
-        navigate("/info/admin");
-      })
-      .catch((error) => {
-        return error & setFirebaseError("이메일 또는 비밀번호가 틀렸습니다.");
-      });
+    if (user?.id) {
+      navigate("/dashboard");
+    } else {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((response) => {
+          const { uid } = response.user;
+          setUserData({ ...userData, id: uid, isAdmin: true });
+        })
+        .then(() => {
+          fireFetch.postData("users", userData.id, userData);
+        })
+        .then(() => {
+          navigate("/info/admin");
+        })
+        .catch((error) => {
+          return error & setFirebaseError("이메일 또는 비밀번호가 틀렸습니다.");
+        });
+    }
   };
+
+  useEffect(() => {
+    const userDataFromLocalStorage = localStorage.getItem("user");
+    setUser(JSON.parse(userDataFromLocalStorage));
+  });
 
   return (
     <style.AdminLoginWrap>
