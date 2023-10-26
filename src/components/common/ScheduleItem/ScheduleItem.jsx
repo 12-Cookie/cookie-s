@@ -27,7 +27,7 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
       case "모집중":
         return (
           <Badge>
-            모집중 ({userLength[index] ? userLength[index] : "0"}/{numWorkers})
+            모집중 ({userLength[index]}/{numWorkers})
           </Badge>
         );
       case "모집완료":

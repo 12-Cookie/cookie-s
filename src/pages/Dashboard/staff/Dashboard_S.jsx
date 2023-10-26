@@ -13,6 +13,9 @@ const initailUserdata = localStorage.getItem("userData")
   : {};
 
 const Dashboard_S = () => {
+  const dummyUserData = JSON.parse(localStorage.getItem("user"));
+  const dummyUserId = dummyUserData.userId;
+
   const [userData, setUserData] = useState(initailUserdata);
 
   const navigate = useNavigate();
@@ -22,7 +25,35 @@ const Dashboard_S = () => {
   const noticeData = fetch.getData("notice");
   const scheduleData = fetch.getData("schedule");
   const bookedShiftsData = fetch.getData("bookedShifts");
+  const usersData = fetch.getData("users");
   const filteredScheduleData = [...scheduleData].slice(0, 3);
+  const bookingShiftsData = fetch.getData(
+    "bookingShifts",
+    "userId",
+    dummyUserId,
+  );
+
+  const matchingData = [];
+
+  const fetchData = () => {
+    for (const secondItem of bookingShiftsData) {
+      const scheduleId = secondItem.scheduleId;
+
+      const matchingFirstItem = scheduleData.find(
+        (firstItem) => firstItem.id === scheduleId,
+      );
+
+      if (matchingFirstItem) {
+        const newObject = {
+          ...matchingFirstItem,
+        };
+
+        matchingData.push(newObject);
+      }
+    }
+  };
+
+  fetchData();
 
   const auth = getAuth(app);
 
@@ -61,7 +92,7 @@ const Dashboard_S = () => {
         scheduleLists={filteredScheduleData}
         bookedShiftsData={bookedShiftsData}
       />
-      <Chart />
+      <Chart matchingData={matchingData} />
       <button onClick={handleLogOut}>로그아웃</button>
     </style.DashboardWrap>
   );
