@@ -9,25 +9,24 @@ import {
 import { app } from "../../firebase/firebase";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button, Heading, Text } from "@chakra-ui/react";
-
-const initailUserdata = localStorage.getItem("userData")
-  ? JSON.parse(localStorage.getItem("userData"))
-  : {};
+import useUserStore from "../../store/user/useUserStore";
 
 const Login = () => {
-  const [userData, setUserData] = useState(initailUserdata);
+  // const userDataFromStore = useUserStore((state) => state.userData);
+  // const [userData, setUserData] = useState(userDataFromStore);
 
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
 
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const { setUserData } = useUserStore();
 
   const handleAuth = () => {
     signInWithPopup(auth, provider)
       .then((response) => {
-        console.log(response);
-        localStorage.setItem("userData", JSON.stringify(response.user));
+        const { uid } = response.user;
+        setUserData({ id: uid, isAdmin: false });
         navigate("/info/staff");
       })
       .catch((error) => {

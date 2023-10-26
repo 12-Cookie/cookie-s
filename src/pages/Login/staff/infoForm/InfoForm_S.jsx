@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import * as style from "./InfoForm_S.style";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { useNavigate } from "react-router";
@@ -11,6 +11,7 @@ import {
   Stack,
   Button,
 } from "@chakra-ui/react";
+import useUserStore from "../../../../store/user/useUserStore";
 
 const userName = {
   required: "필수 필드입니다.",
@@ -39,6 +40,7 @@ const userPhone = {
 const InfoForm_S = () => {
   const firefetch = useFireFetch();
   const navigate = useNavigate();
+  const { userData, setUserData } = useUserStore();
 
   const {
     register,
@@ -48,9 +50,17 @@ const InfoForm_S = () => {
   } = useForm({ mode: "onBlur" });
 
   const onSubmit = (data) => {
-    // firefetch.postData("users", id, data); // id 상태에서 불러오기
-    console.log(data);
     reset();
+    setUserData({
+      ...userData,
+      name: data.name,
+      phone: data.phone,
+      gender: data.gender,
+      payPerHour: data.payPerHour,
+      birthDate: data.birthDate,
+      address: data.address,
+    });
+    // firefetch.postData("users", id, data); // id 상태에서 불러오기
     if (data) {
       navigate("/info/code");
     }

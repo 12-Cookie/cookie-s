@@ -9,12 +9,12 @@ import { app } from "../../../../firebase/firebase";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-const initailUserdata = localStorage.getItem("userData")
+const initialUserdata = localStorage.getItem("userData")
   ? JSON.parse(localStorage.getItem("userData"))
   : {};
 
 const Login_A = () => {
-  const [userData, setUserData] = useState(initailUserdata);
+  const [userData, setUserData] = useState(initialUserdata);
 
   const auth = getAuth(app);
   const navigate = useNavigate();
