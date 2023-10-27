@@ -12,7 +12,7 @@ const ScheduleUtilItem = ({
   setScheduleLists,
   setUserLength,
 }) => {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
   const fireFetch = useFireFetch();
   const { id } = scheduleData;
