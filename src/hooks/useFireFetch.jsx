@@ -173,5 +173,18 @@ export const useFireFetch = () => {
     set();
   };
 
-  return { getData, postData, bookedUser, addData, deleteById };
+  const get = async (initialCollection, key, value) => {
+    const Ref = collection(db, initialCollection);
+    const q = query(Ref, where(key, "==", value));
+    const querySnapshot = await getDocs(q);
+    const userData = [];
+
+    querySnapshot.forEach((doc) => {
+      userData.push(doc.data());
+    });
+
+    return userData;
+  };
+
+  return { getData, postData, bookedUser, addData, deleteById, get };
 };
