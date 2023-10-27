@@ -7,6 +7,7 @@ import {
   setDoc,
   addDoc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
@@ -173,18 +174,42 @@ export const useFireFetch = () => {
     set();
   };
 
-  const get = async (initialCollection, key, value) => {
-    const Ref = collection(db, initialCollection);
-    const q = query(Ref, where(key, "==", value));
-    const querySnapshot = await getDocs(q);
-    const userData = [];
+  const get = async (initialCollection, key = null, value = null) => {
+    if (key) {
+      const Ref = collection(db, initialCollection);
+      const q = query(Ref, where(key, "==", value));
+      const querySnapshot = await getDocs(q);
+      const userData = [];
 
-    querySnapshot.forEach((doc) => {
-      userData.push(doc.data());
-    });
+      querySnapshot.forEach((doc) => {
+        userData.push(doc.data());
+      });
 
-    return userData;
+      return userData;
+    } else {
+      const Ref = collection(db, initialCollection);
+      const userData = [];
+      const querySnapshot = await getDocs(Ref);
+
+      querySnapshot.forEach((doc) => {
+        userData.push(doc.data());
+      });
+
+      return userData;
+    }
   };
 
-  return { getData, postData, bookedUser, addData, deleteById, get };
+  const update = async (initialCollection, id, newData) => {
+    try {
+      const docRef = doc(db, initialCollection, id);
+
+      await updateDoc(docRef, newData);
+
+      console.log("good");
+    } catch (error) {
+      console.error("bad: ", error);
+    }
+  };
+
+  return { getData, postData, bookedUser, addData, deleteById, get, update };
 };
