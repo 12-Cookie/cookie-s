@@ -1,4 +1,4 @@
-import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/react";
+import { Tag, TagLabel } from "@chakra-ui/react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 
 const Roles = ({ user }) => {

@@ -175,7 +175,6 @@ const AddSchedule = () => {
         </div>
         <div>
           <div>롤</div>
-          {user && <Roles user={user} />}
         </div>
         <div>
           <div>인원</div>
