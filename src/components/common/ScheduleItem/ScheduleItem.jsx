@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import * as style from "./ScheduleItem.style";
 
 const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [userLength, setUserLength] = useState(
     scheduleLists && Array(scheduleLists.length).fill(0),
   );
@@ -78,7 +78,7 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
                 </div>
               </style.ScheduleStatus>
             </style.ScheduleInfo>
-            {isAdmin ? "" : <ScheduleRoleItem />}
+            {isAdmin ? "" : <ScheduleRoleItem scheduleData={scheduleData} />}
             {isAdmin ? (
               <ScheduleUtilItem
                 scheduleData={scheduleData}
