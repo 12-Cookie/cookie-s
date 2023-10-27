@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useFireFetch } from "../../../hooks/useFireFetch";
+import useUserStore from "../../../store/user/useUserStore";
 
 const ScheduleRoleItem = ({ scheduleData }) => {
-  const [user, setUser] = useState("ZGDupTlZ8OON2cD6LvHO");
+  const { id } = useUserStore((state) => state.userData);
   const [role, setRole] = useState("");
 
   const fireFetch = useFireFetch();
 
   useEffect(() => {
     const fetchData = async () => {
-      const bookedUser = await fireFetch.get("bookedShifts", "userId", user);
+      const bookedUser = await fireFetch.get("bookedShifts", "userId", id);
 
       const find = bookedUser.find((v, i) => v.scheduleId === scheduleData.id);
 

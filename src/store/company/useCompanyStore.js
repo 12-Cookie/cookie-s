@@ -8,7 +8,7 @@ const useCompanyStore = create(
   persist(
     (set) => ({
       companyData: {
-        id: v4(),
+        id: "",
         name: "",
         code: 111111,
         address: "",
