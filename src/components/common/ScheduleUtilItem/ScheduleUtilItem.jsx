@@ -45,7 +45,7 @@ const ScheduleUtilItem = ({
 
   const handleAllocation = () => {
     console.log(scheduleData);
-    navigate(`/schedule/assign?id=${id}`);
+    navigate(`/schedule/assign/${id}`);
   };
 
   const handleCancel = () => {
