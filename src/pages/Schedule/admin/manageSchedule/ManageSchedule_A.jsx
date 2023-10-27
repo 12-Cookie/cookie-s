@@ -1,6 +1,7 @@
 import * as style from "./ManageSchedule_A.style";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
-import { Heading } from "@chakra-ui/react";
+import { Heading, Button } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import ScheduleItem from "../../../../components/common/ScheduleItem/ScheduleItem";
 import { useEffect, useState } from "react";
 
@@ -20,18 +21,27 @@ const ManageSchedule_A = () => {
     }
   }, [schedules]);
 
-  const bookedSchedule = fireFetch.getData(
-    "bookedShifts",
-    "companyId",
-    "TiP9VRKNKplTMNoZzYji",
-  );
-
   // console.log(scheduleLists);
   return (
     <style.ManageScheduleWrap>
       <Heading as="h2" size="md" mb="1rem">
         스케줄 관리
       </Heading>
+      <div style={{ marginBottom: "1rem" }}>
+        <Link to="/schedule">
+          <Button
+            borderRadius="2rem "
+            colorScheme="white"
+            color="black"
+            size="md"
+          >
+            스케줄 생성
+          </Button>
+        </Link>
+        <Button borderRadius="2rem " colorScheme="blue" size="md">
+          스케줄 관리
+        </Button>
+      </div>
       {scheduleLists[0] && (
         <ScheduleItem
           scheduleLists={scheduleLists}
