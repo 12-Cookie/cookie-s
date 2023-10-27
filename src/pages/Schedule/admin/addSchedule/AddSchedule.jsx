@@ -16,7 +16,7 @@ import Roles from "../../../../components/Schedule/admin/AddSchedule/Roles";
 import WorkersComponent from "../../../../components/Schedule/admin/AddSchedule/WorkersComponent";
 import AddCalendar from "../../../../components/Schedule/admin/AddSchedule/AddCalendar";
 
-const AddSchedule = () => {
+const AddSchedule = ({ companyId, isAdmin }) => {
   const navigate = useNavigate();
   const [value, onChange] = useState(new Date());
   const [radioValue, setRadioValue] = useState("1");
@@ -28,8 +28,7 @@ const AddSchedule = () => {
   const [workersValue, setWorkersValue] = useState("");
 
   const fireFetch = useFireFetch();
-  const user = fireFetch.getData("users", "id", "2qDwPH70ot7fSw7ixr1Z")[0];
-  const company = user?.companyId;
+  const company = companyId;
   useEffect(() => {
     setOneScheduleValue(moment(value).format("YYYY-MM-DD"));
   }, [value]);
@@ -150,7 +149,9 @@ const AddSchedule = () => {
         )}
         <div>
           <div>날짜</div>
-          <div>{user && <AddCalendar onChange={onChange} value={value} />}</div>
+          <div>
+            {isAdmin && <AddCalendar onChange={onChange} value={value} />}
+          </div>
         </div>
 
         <div>
@@ -175,6 +176,7 @@ const AddSchedule = () => {
         </div>
         <div>
           <div>롤</div>
+          <Roles companyId={companyId} />
         </div>
         <div>
           <div>인원</div>

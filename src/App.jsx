@@ -29,7 +29,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useUserStore from "./store/user/useUserStore";
 
 function App() {
-  const { id, isAdmin } = useUserStore((state) => state.userData);
+  const { id, isAdmin, companyId } = useUserStore((state) => state.userData);
   const isLogin = id ? true : false;
   // const [isAdmin, setIsAdmin] = useState(true);
   // const [isLogin, setIsLogin] = useState(true);
@@ -69,7 +69,13 @@ function App() {
           />
           <Route
             path="/schedule/add"
-            element={!isAdmin ? <NotFound /> : <AddSchedule />}
+            element={
+              !isAdmin ? (
+                <NotFound />
+              ) : (
+                <AddSchedule isAdmin={isAdmin} companyId={companyId} />
+              )
+            }
           />
           <Route
             path="/salary"
