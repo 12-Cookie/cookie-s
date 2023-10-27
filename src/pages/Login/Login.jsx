@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import * as style from "./Login.style";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../firebase/firebase";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button, Heading, Text } from "@chakra-ui/react";
 import useUserStore from "../../store/user/useUserStore";
 import { useFireFetch } from "../../hooks/useFireFetch";
+import { collection, query, getDocs, where } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
 
 const Login = () => {
   // const initialUserData = useUserStore((state) => state.userData);
@@ -15,33 +17,31 @@ const Login = () => {
   const provider = new GoogleAuthProvider();
   const { userData, setUserData } = useUserStore();
   const fireFetch = useFireFetch();
-  const [user, setUser] = useState({});
 
   const handleAuth = () => {
-    if (user?.name) {
-      navigate("/dashboard");
-    } else {
-      signInWithPopup(auth, provider)
-        .then((response) => {
-          const { uid } = response.user;
-          setUserData({ ...userData, id: uid, isAdmin: false });
-        })
-        .then(() => {
-          fireFetch.postData("users", userData.id, userData);
-        })
-        .then(() => {
-          navigate("/info/staff");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
+    signInWithPopup(auth, provider)
+      .then(async (response) => {
+        const { uid } = response.user;
 
-  useEffect(() => {
-    const userDataFromLocalStorage = localStorage.getItem("user");
-    setUser(JSON.parse(userDataFromLocalStorage));
-  }, []);
+        const Ref = collection(db, "users");
+        const q = query(Ref, where("id", "==", uid));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          setUserData({ ...userData, id: uid, isAdmin: false });
+          fireFetch.postData("users", uid, userData);
+          navigate("/info/staff");
+        } else {
+          querySnapshot.forEach((doc) => {
+            setUserData({ ...doc.data() });
+            navigate("/dashboard");
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <style.LoginWrap>

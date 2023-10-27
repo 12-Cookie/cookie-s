@@ -1,25 +1,31 @@
 import { create } from "zustand";
 import zukeeper from "zukeeper";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 const useUserStore = create(
-  zukeeper((set) => ({
-    userData: {
-      id: "",
-      name: "",
-      phone: "",
-      companyId: "",
-      isAdmin: false,
-      gender: "",
-      payPerHour: "",
-      birthDate: "",
+  // zukeeper(
+  persist(
+    (set) => ({
+      userData: {
+        id: "",
+        name: "",
+        phone: "",
+        companyId: "",
+        isAdmin: false,
+        gender: "",
+        payPerHour: "",
+        birthDate: "",
+      },
+      setUserData: (userData) => set({ userData }),
+    }),
+    {
+      name: "user",
+      storage: createJSONStorage(() => sessionStorage),
     },
-    setUserData: (userData) => {
-      set({ userData });
-      localStorage.setItem("user", JSON.stringify(userData));
-    },
-  })),
+  ),
+  // ),
 );
 
-window.store = useUserStore;
+// window.store = useUserStore;
 
 export default useUserStore;
