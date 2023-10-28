@@ -41,15 +41,6 @@ const AddSchedule = ({ companyId, isAdmin }) => {
       }
     }
   }, [radioValue, monthValue]);
-  const handleStartTimeValue = (e) => {
-    setStartTimeValue(e.target.value);
-  };
-  const handleEndTimeValue = (e) => {
-    setEndTimeValue(e.target.value);
-  };
-  const handleManyScheduleValue = (e) => {
-    setManyScheduleValue(e.target.value);
-  };
 
   //form 제출
   const handleSubmit = (e) => {
@@ -78,7 +69,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
       const year = monthValue.split("-")[0];
       const month = monthValue.split("-")[1];
       const days = manyScheduleValue.split(" ");
-      days.map((v, i) => {
+      days.map((v) => {
         fireFetch.addData("schedule", {
           companyId: company,
           date: {
@@ -140,7 +131,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
               required
               type="string"
               value={manyScheduleValue}
-              onChange={handleManyScheduleValue}
+              onChange={(e) => setManyScheduleValue(e.target.value)}
               placeholder="(예:)1 2 13 21"
             />
           </div>
@@ -157,7 +148,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
           <style.TimeInput>
             <Input
               value={startTimeValue}
-              onChange={handleStartTimeValue}
+              onChange={(e) => setStartTimeValue(e.target.value)}
               placeholder="Select"
               size="sm"
               type="time"
@@ -165,7 +156,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
             <span>~</span>
             <Input
               value={endTimeValue}
-              onChange={handleEndTimeValue}
+              onChange={(e) => setEndTimeValue(e.target.value)}
               placeholder="Select"
               size="sm"
               type="time"
