@@ -50,9 +50,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
   const handleManyScheduleValue = (e) => {
     setManyScheduleValue(e.target.value);
   };
-  const handleMonthValue = (e) => {
-    setMonthValue(e.target.value);
-  };
+
   //form 제출
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -135,7 +133,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
               required
               type="month"
               value={monthValue}
-              onChange={handleMonthValue}
+              onChange={(e) => setMonthValue(e.target.value)}
             />
             <input
               style={{ width: "12rem" }}
