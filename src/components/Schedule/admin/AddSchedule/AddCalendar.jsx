@@ -60,7 +60,6 @@ const Div = styled.div`
 `;
 
 const AddCalendar = ({ onChange, value }) => {
-  const initialMark = ["2023-10-02", "2023-10-12", "2023-10-10"];
   const [mark, setMark] = useState(initialMark);
   const tileDisabled = ({ date }) => {
     const today = new Date();
