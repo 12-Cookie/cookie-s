@@ -16,6 +16,7 @@ const AssignBody = ({
   setConfig,
   setIsHidden,
   setBooking,
+  setLoading,
 }) => {
   const [isConfig, setIsConfig] = useState([]);
 
@@ -33,6 +34,7 @@ const AssignBody = ({
       setRoleDate(map);
       setIsConfig(Array(company.roles.length).fill(false));
     }
+    setLoading(false);
   }, [company]);
 
   const handleConfig = (role, i) => {

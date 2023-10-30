@@ -1,13 +1,27 @@
 import * as style from "./AssignRole.style";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { Heading, Button, Stack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
+import { HashLoader } from "react-spinners";
+import Loader from "../../../../components/common/loader/Loader";
 import AssignHeader from "../../../../components/Schedule/admin/assignRole/AssignHeader/AssignHeader";
 import AssignBody from "../../../../components/Schedule/admin/assignRole/AssignBody/AssignBody";
 import AssignFooter from "../../../../components/Schedule/admin/assignRole/AssignFooter/AssignFooter";
 
+const override = {
+  position: "absolute",
+  display: "block",
+  margin: "0 auto",
+  top: "40%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  borderColor: "red",
+};
+
 const AssignRole = () => {
+  const [loading, setLoading] = useState(true);
+  const [color, setColor] = useState("#319795");
   const [viewFooter, setViewFooter] = useState(false);
   const [roleData, setRoleDate] = useState([]);
   const [config, setConfig] = useState("");
@@ -43,44 +57,48 @@ const AssignRole = () => {
       <Heading as="h2" size="md" mb="1rem">
         역할배정
       </Heading>
-      {schedule && <AssignHeader schedule={schedule} />}
-      {schedule && roleData && (
-        <AssignBody
-          schedule={schedule}
-          isHidden={isHidden}
-          roleData={roleData}
-          userData={userData}
-          config={config}
-          booking={booking}
-          userId={userId}
-          setViewFooter={setViewFooter}
-          setRoleDate={setRoleDate}
-          setConfig={setConfig}
-          setIsHidden={setIsHidden}
-          setBooking={setBooking}
-        />
-      )}
-      {schedule
-        ? viewFooter && (
-            <AssignFooter
-              schedule={schedule}
-              setRoleDate={setRoleDate}
-              config={config}
-              roleData={roleData}
-              isHidden={isHidden}
-              userData={userData}
-              booking={booking}
-              userId={userId}
-              setIsHidden={setIsHidden}
-              setuserData={setuserData}
-              setBooking={setBooking}
-              setUserId={setUserId}
-            />
-          )
-        : null}
-      <Stack mt="3rem">
-        <Button onClick={handleClick}>역할 배정 완료</Button>
-      </Stack>
+      {loading ? <Loader loading={loading} /> : null}
+      <div style={{ display: loading ? "none" : "block" }}>
+        {schedule && <AssignHeader schedule={schedule} />}
+        {schedule && roleData && (
+          <AssignBody
+            schedule={schedule}
+            isHidden={isHidden}
+            roleData={roleData}
+            userData={userData}
+            config={config}
+            booking={booking}
+            userId={userId}
+            setViewFooter={setViewFooter}
+            setRoleDate={setRoleDate}
+            setConfig={setConfig}
+            setIsHidden={setIsHidden}
+            setBooking={setBooking}
+            setLoading={setLoading}
+          />
+        )}
+        {schedule
+          ? viewFooter && (
+              <AssignFooter
+                schedule={schedule}
+                setRoleDate={setRoleDate}
+                config={config}
+                roleData={roleData}
+                isHidden={isHidden}
+                userData={userData}
+                booking={booking}
+                userId={userId}
+                setIsHidden={setIsHidden}
+                setuserData={setuserData}
+                setBooking={setBooking}
+                setUserId={setUserId}
+              />
+            )
+          : null}
+        <Stack mt="3rem">
+          <Button onClick={handleClick}>역할 배정 완료</Button>
+        </Stack>
+      </div>
     </style.AssignRoleWrap>
   );
 };
