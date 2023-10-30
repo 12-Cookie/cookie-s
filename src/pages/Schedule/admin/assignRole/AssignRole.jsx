@@ -2,7 +2,7 @@ import * as style from "./AssignRole.style";
 import { useState } from "react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { Heading, Button, Stack } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../../../../components/common/loader/Loader";
 import AssignHeader from "../../../../components/Schedule/admin/assignRole/AssignHeader/AssignHeader";
 import AssignBody from "../../../../components/Schedule/admin/assignRole/AssignBody/AssignBody";
@@ -21,10 +21,12 @@ const AssignRole = () => {
   const { id } = useParams();
 
   const fireFetch = useFireFetch();
+  const navigate = useNavigate();
 
   const schedule = fireFetch.getData("schedule", "id", id)[0];
 
   const fetch = async () => {
+    setLoading(true);
     await fireFetch.update("schedule", id, { status: "모집완료" });
 
     for (const x of booking) {
@@ -33,6 +35,10 @@ const AssignRole = () => {
       await fireFetch.update("bookedShifts", data.id, { role: x.role });
 
       alert("완료");
+
+      setLoading(false);
+
+      navigate("/schedule/manage");
     }
   };
 
