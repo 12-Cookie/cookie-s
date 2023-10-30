@@ -3,25 +3,13 @@ import { useState } from "react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { Heading, Button, Stack } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import { HashLoader } from "react-spinners";
 import Loader from "../../../../components/common/loader/Loader";
 import AssignHeader from "../../../../components/Schedule/admin/assignRole/AssignHeader/AssignHeader";
 import AssignBody from "../../../../components/Schedule/admin/assignRole/AssignBody/AssignBody";
 import AssignFooter from "../../../../components/Schedule/admin/assignRole/AssignFooter/AssignFooter";
 
-const override = {
-  position: "absolute",
-  display: "block",
-  margin: "0 auto",
-  top: "40%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  borderColor: "red",
-};
-
 const AssignRole = () => {
   const [loading, setLoading] = useState(true);
-  const [color, setColor] = useState("#319795");
   const [viewFooter, setViewFooter] = useState(false);
   const [roleData, setRoleDate] = useState([]);
   const [config, setConfig] = useState("");
