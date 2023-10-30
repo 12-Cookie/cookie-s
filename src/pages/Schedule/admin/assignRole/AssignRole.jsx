@@ -2,6 +2,7 @@ import * as style from "./AssignRole.style";
 import { useEffect, useState } from "react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { Heading, Button, Stack } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import AssignHeader from "../../../../components/Schedule/admin/assignRole/AssignHeader/AssignHeader";
 import AssignBody from "../../../../components/Schedule/admin/assignRole/AssignBody/AssignBody";
 import AssignFooter from "../../../../components/Schedule/admin/assignRole/AssignFooter/AssignFooter";
@@ -15,21 +16,27 @@ const AssignRole = () => {
   const [userId, setUserId] = useState([]);
   const [booking, setBooking] = useState([]);
 
+  const { id } = useParams();
+
   const fireFetch = useFireFetch();
 
-  const schedule = fireFetch.getData(
-    "schedule",
-    "id",
-    "NyOKqZmAHtErt68DHrTO",
-  )[0];
+  const schedule = fireFetch.getData("schedule", "id", id)[0];
 
-  const handleClick = () => {
-    console.log(roleData);
+  const fetch = async () => {
+    await fireFetch.update("schedule", id, { status: "모집완료" });
+
+    for (const x of booking) {
+      const booked = await fireFetch.get("bookedShifts", "userId", x.userId);
+      const data = booked.find((v, i) => v.scheduleId === x.scheduleId);
+      await fireFetch.update("bookedShifts", data.id, { role: x.role });
+
+      alert("완료");
+    }
   };
 
-  useEffect(() => {
-    console.log(booking);
-  }, [booking]);
+  const handleClick = () => {
+    fetch();
+  };
 
   return (
     <style.AssignRoleWrap>

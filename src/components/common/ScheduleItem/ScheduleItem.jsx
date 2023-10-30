@@ -1,12 +1,13 @@
+import * as style from "./ScheduleItem.style";
 import { useState } from "react";
 import { Badge } from "@chakra-ui/react";
+import useUserStore from "../../../store/user/useUserStore";
+import PropTypes from "prop-types";
 import ScheduleRoleItem from "../ScheduleRoleItem/ScheduleRoleItem";
 import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
-import PropTypes from "prop-types";
-import * as style from "./ScheduleItem.style";
 
 const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const { isAdmin } = useUserStore((state) => state.userData);
   const [userLength, setUserLength] = useState(
     scheduleLists && Array(scheduleLists.length).fill(0),
   );
@@ -78,7 +79,7 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
                 </div>
               </style.ScheduleStatus>
             </style.ScheduleInfo>
-            {isAdmin ? "" : <ScheduleRoleItem />}
+            {isAdmin ? "" : <ScheduleRoleItem scheduleData={scheduleData} />}
             {isAdmin ? (
               <ScheduleUtilItem
                 scheduleData={scheduleData}

@@ -64,7 +64,7 @@ function App() {
             element={!isAdmin ? <ManageSchedule_S /> : <ManageSchedule_A />}
           />
           <Route
-            path="/schedule/assign"
+            path="/schedule/assign/:id"
             element={!isAdmin ? <NotFound /> : <AssignRole />}
           />
           <Route
