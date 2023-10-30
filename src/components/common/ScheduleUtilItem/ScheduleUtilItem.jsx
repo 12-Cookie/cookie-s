@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 import * as style from "./ScheduleUtilItem.style";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useFireFetch } from "../../../hooks/useFireFetch";
+import PropTypes from "prop-types";
+import useUserStore from "../../../store/user/useUserStore";
 
 const ScheduleUtilItem = ({
   scheduleLists,
@@ -12,7 +13,7 @@ const ScheduleUtilItem = ({
   setScheduleLists,
   setUserLength,
 }) => {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const { isAdmin } = useUserStore((state) => state.userData);
   const navigate = useNavigate();
   const fireFetch = useFireFetch();
   const { id } = scheduleData;
@@ -20,11 +21,11 @@ const ScheduleUtilItem = ({
   const users = fireFetch.bookedUser(scheduleData.id);
 
   useEffect(() => {
-    if (users[0]) {
-      const copy = [...userLength];
+    setUserLength((prev) => {
+      const copy = [...prev];
       copy[index] = users.length;
-      setUserLength(copy);
-    }
+      return copy;
+    });
   }, [users]);
 
   const deleteData = () => {
@@ -44,8 +45,7 @@ const ScheduleUtilItem = ({
   };
 
   const handleAllocation = () => {
-    console.log(scheduleData);
-    navigate(`/schedule/assign?id=${id}`);
+    navigate(`/schedule/assign/${id}`);
   };
 
   const handleCancel = () => {

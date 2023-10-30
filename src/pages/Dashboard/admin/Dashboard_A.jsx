@@ -17,7 +17,7 @@ const Dashboard_A = () => {
       <Notice noticeData={noticeData} />
       <h1>스케줄 관리</h1>
       <ScheduleItem
-        scheduleData={filteredScheduleData}
+        scheduleLists={filteredScheduleData}
         bookedShiftsData={bookedShiftsData}
       />
       <StaffManagement userData={userData} />
