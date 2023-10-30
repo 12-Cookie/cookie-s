@@ -16,6 +16,7 @@ import Roles from "../../../../components/Schedule/admin/AddSchedule/Roles";
 import WorkersComponent from "../../../../components/Schedule/admin/AddSchedule/WorkersComponent";
 import AddCalendar from "../../../../components/Schedule/admin/AddSchedule/AddCalendar";
 import getWeekdayWeekend from "../../../../utils/getWeekdayWeekend";
+import getCurrentWeekNumber from "../../../../utils/getCurrentWeekNumber";
 
 const AddSchedule = ({ companyId, isAdmin }) => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
   const [oneScheduleValue, setOneScheduleValue] = useState("");
   const [manyScheduleValue, setManyScheduleValue] = useState("");
   const [monthValue, setMonthValue] = useState("");
-  const [weekValue, setWeekValue] = useState("");
+  const [weekValue, setWeekValue] = useState("2023-W44");
   const [workersValue, setWorkersValue] = useState("");
   const fireFetch = useFireFetch();
   const weekInfo = weekValue.split("-W");
@@ -34,28 +35,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
     Number(weekInfo[0]),
     Number(weekInfo[1]),
   );
-  console.log(weekdays);
-  console.log(weekends);
-  function getCurrentWeekNumber() {
-    const today = new Date();
-    const year = today.getFullYear();
 
-    const target = new Date(today.valueOf());
-    const dayNumber = (today.getDay() + 6) % 7;
-    target.setDate(target.getDate() - dayNumber + 3);
-
-    const firstThursday = target.valueOf();
-    target.setMonth(0, 1);
-    if (target.getDay() !== 4) {
-      target.setMonth(0, 1 + ((4 - target.getDay() + 7) % 7));
-    }
-    return `${year}-W${String(
-      Math.ceil((firstThursday - target) / 604800000) + 1,
-    ).padStart(2, "0")}`;
-  }
-
-  // 현재 날짜의 주 번호를 출력합니다.
-  console.log(getCurrentWeekNumber());
   useEffect(() => {
     setOneScheduleValue(moment(value).format("YYYY-MM-DD"));
   }, [value]);
@@ -69,14 +49,6 @@ const AddSchedule = ({ companyId, isAdmin }) => {
     }
   }, [radioValue, monthValue]);
 
-  const handleWeekdaysSubmit = (e) => {
-    e.preventDefault();
-    const timestamp = Timestamp.now();
-    fireFetch.addData("schedule", {
-      companyId: companyId,
-      date: {},
-    });
-  };
   //form 제출
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -125,7 +97,60 @@ const AddSchedule = ({ companyId, isAdmin }) => {
       navigate("/dashboard");
     }
   };
-
+  const handleWeekdaysSubmit = (e) => {
+    e.preventDefault();
+    if (workersValue === "") {
+      alert("인원을 입력해주세요!");
+    } else {
+      const timestamp = Timestamp.now();
+      weekdays.map((v, i) => {
+        const date = v.slice(0, 10).split("-");
+        fireFetch.addData("schedule", {
+          companyId: companyId,
+          date: {
+            year: Number(date[0]),
+            month: Number(date[1]),
+            day: Number(date[2]),
+          },
+          numWorkers: Number(workersValue),
+          status: "모집중",
+          time: {
+            start: startTimeValue,
+            end: endTimeValue,
+          },
+          timestamp: timestamp,
+        });
+      });
+      navigate("/dashboard");
+    }
+  };
+  const handleWeekendsSubmit = (e) => {
+    e.preventDefault();
+    if (workersValue === "") {
+      alert("인원을 입력해주세요!");
+    } else {
+      const timestamp = Timestamp.now();
+      weekends.map((v, i) => {
+        const date = v.slice(0, 10).split("-");
+        fireFetch.addData("schedule", {
+          companyId: companyId,
+          date: {
+            year: Number(date[0]),
+            month: Number(date[1]),
+            day: Number(date[2]),
+          },
+          numWorkers: Number(workersValue),
+          status: "모집중",
+          time: {
+            start: startTimeValue,
+            end: endTimeValue,
+          },
+          timestamp: timestamp,
+        });
+      });
+      navigate("/dashboard");
+    }
+  };
   return (
     <style.AddScheduleWrap>
       <Heading as="h2" size="md" mb="1rem">
@@ -276,10 +301,10 @@ const AddSchedule = ({ companyId, isAdmin }) => {
           </Button>
         ) : (
           <div id="weekButtons">
-            <Button type="submit" w="45%">
+            <Button onClick={handleWeekdaysSubmit} type="submit" w="45%">
               평일 스케줄 생성
             </Button>
-            <Button type="submit" w="45%">
+            <Button onClick={handleWeekendsSubmit} type="submit" w="45%">
               주말 스케줄 생성
             </Button>
           </div>

@@ -69,7 +69,9 @@ const AddCalendar = ({ onChange, value, companyId }) => {
     if (schedules[0]) {
       setScheduleLists([...schedules]);
       const date = schedules.map((obj) => {
-        return `${obj.date.year}-${obj.date.month}-${obj.date.day}`;
+        return `${obj.date.year}-${obj.date.month
+          .toString()
+          .padStart(2, "0")}-${obj.date.day.toString().padStart(2, "0")}`;
       });
       setMark(date);
     }

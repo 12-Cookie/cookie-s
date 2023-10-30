@@ -23,8 +23,11 @@ const Schedule_A = () => {
     if (schedules[0]) {
       setScheduleLists([...schedules]);
       const date = schedules.map((obj) => {
-        return `${obj.date.year}-${obj.date.month}-${obj.date.day}`;
+        return `${obj.date.year}-${obj.date.month
+          .toString()
+          .padStart(2, "0")}-${obj.date.day.toString().padStart(2, "0")}`;
       });
+      console.log(date);
       setMark(date);
 
       const selectedDate = moment(value).format("YYYY-MM-DD");
