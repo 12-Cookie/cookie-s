@@ -12,15 +12,22 @@ import {
   Button,
   Flex,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
+import useUserStore from "../../../store/user/useUserStore";
+
+const formatDate = (date) => {
+  return `${date.year}-${date.month}-${date.day}`;
+};
 
 const Notice_S = () => {
   const navigate = useNavigate();
   const fetch = useFireFetch();
-  // const company = user?.companyId;
-  // 로그인한 company의 id로 작성된 공지만
-  const notices = fetch.getData("notice");
-  console.log(notices);
+  const userStore = useUserStore();
+  const currentCompanyId = userStore.userData.companyId;
+  const notices = fetch.getData("notice").filter((notice) => {
+    return notice.companyId === currentCompanyId;
+  });
 
   return (
     <style.NoticeWrap>
@@ -46,12 +53,18 @@ const Notice_S = () => {
               <h3>
                 <AccordionButton>
                   <Box as="span" flex="1" textAlign="left">
-                    {notice.title}
+                    <Flex>
+                      <Text>{notice.title}</Text>
+                      <Spacer />
+                      <Text size="xs">{formatDate(notice.date)}</Text>
+                    </Flex>
                   </Box>
                   <AccordionIcon />
                 </AccordionButton>
               </h3>
-              <AccordionPanel pb={4}>{notice.content}</AccordionPanel>
+              <AccordionPanel pb={4}>
+                <Text>{notice.content}</Text>
+              </AccordionPanel>
             </AccordionItem>
           );
         })}
