@@ -3,21 +3,23 @@ import * as style from "./AddNotice.style";
 import { Heading, Flex, Input, Textarea, Button } from "@chakra-ui/react";
 import { db } from "../../../../firebase/firebase";
 import { collection, addDoc, serverTimestamp, doc } from "firebase/firestore";
-// import { useFireFetch } from "hooks/useFireFetch";
+import { useFireFetch } from "../../../../hooks/useFireFetch";
+import { useNavigate } from "react-router-dom";
 
 const AddNotice = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  // const fetch = useFireFetch();
-
-  const noticeCollectionRef = collection(db, "notice");
+  const fetch = useFireFetch();
+  // const user = fetch.getData("users", "id", "2qDwPH70ot7fSw7ixr1Z")[0];
+  // const company = user?.companyId;
   const date = new Date();
 
   const onSubmit = async (event) => {
     event.preventDefault();
 
     const newNotice = {
-      // companyId: "",
+      // companyId: company,
       title: title,
       content: content,
       timestamp: serverTimestamp(),
@@ -28,14 +30,12 @@ const AddNotice = () => {
         day: date.getDate(),
       },
     };
-    try {
-      const docRef = await addDoc(noticeCollectionRef, newNotice);
-      console.log("Document written with ID: ", docRef.id);
-      setTitle("");
-      setContent("");
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
+
+    // const docRef = await addDoc(noticeCollectionRef, newNotice);
+    await fetch.addData("notice", newNotice);
+    setTitle("");
+    setContent("");
+    navigate("/notice");
   };
   return (
     <style.AddNoticeWrap>

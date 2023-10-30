@@ -17,6 +17,8 @@ import {
 const Notice_S = () => {
   const navigate = useNavigate();
   const fetch = useFireFetch();
+  // const company = user?.companyId;
+  // 로그인한 company의 id로 작성된 공지만
   const notices = fetch.getData("notice");
   console.log(notices);
 
