@@ -2,7 +2,6 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
-import { useEffect, useState } from "react";
 
 const Div = styled.div`
   position: relative;

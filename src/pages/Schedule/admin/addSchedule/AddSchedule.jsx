@@ -15,6 +15,7 @@ import { useFireFetch } from "../../../../hooks/useFireFetch";
 import Roles from "../../../../components/Schedule/admin/AddSchedule/Roles";
 import WorkersComponent from "../../../../components/Schedule/admin/AddSchedule/WorkersComponent";
 import AddCalendar from "../../../../components/Schedule/admin/AddSchedule/AddCalendar";
+import getWeekdayWeekend from "../../../../utils/getWeekdayWeekend";
 
 const AddSchedule = ({ companyId, isAdmin }) => {
   const navigate = useNavigate();
@@ -25,10 +26,36 @@ const AddSchedule = ({ companyId, isAdmin }) => {
   const [oneScheduleValue, setOneScheduleValue] = useState("");
   const [manyScheduleValue, setManyScheduleValue] = useState("");
   const [monthValue, setMonthValue] = useState("");
+  const [weekValue, setWeekValue] = useState("");
   const [workersValue, setWorkersValue] = useState("");
-
   const fireFetch = useFireFetch();
-  const company = companyId;
+  const weekInfo = weekValue.split("-W");
+  const { weekdays, weekends } = getWeekdayWeekend(
+    Number(weekInfo[0]),
+    Number(weekInfo[1]),
+  );
+  console.log(weekdays);
+  console.log(weekends);
+  function getCurrentWeekNumber() {
+    const today = new Date();
+    const year = today.getFullYear();
+
+    const target = new Date(today.valueOf());
+    const dayNumber = (today.getDay() + 6) % 7;
+    target.setDate(target.getDate() - dayNumber + 3);
+
+    const firstThursday = target.valueOf();
+    target.setMonth(0, 1);
+    if (target.getDay() !== 4) {
+      target.setMonth(0, 1 + ((4 - target.getDay() + 7) % 7));
+    }
+    return `${year}-W${String(
+      Math.ceil((firstThursday - target) / 604800000) + 1,
+    ).padStart(2, "0")}`;
+  }
+
+  // 현재 날짜의 주 번호를 출력합니다.
+  console.log(getCurrentWeekNumber());
   useEffect(() => {
     setOneScheduleValue(moment(value).format("YYYY-MM-DD"));
   }, [value]);
@@ -42,6 +69,14 @@ const AddSchedule = ({ companyId, isAdmin }) => {
     }
   }, [radioValue, monthValue]);
 
+  const handleWeekdaysSubmit = (e) => {
+    e.preventDefault();
+    const timestamp = Timestamp.now();
+    fireFetch.addData("schedule", {
+      companyId: companyId,
+      date: {},
+    });
+  };
   //form 제출
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,7 +84,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
 
     if (radioValue === "1") {
       fireFetch.addData("schedule", {
-        companyId: company,
+        companyId: companyId,
         date: {
           year: Number(oneScheduleValue.split("-")[0]),
           month: Number(oneScheduleValue.split("-")[1]),
@@ -65,13 +100,13 @@ const AddSchedule = ({ companyId, isAdmin }) => {
         timestamp: timestamp,
       });
       navigate("/schedule");
-    } else {
+    } else if (radioValue === "2") {
       const year = monthValue.split("-")[0];
       const month = monthValue.split("-")[1];
       const days = manyScheduleValue.split(" ");
-      days.map((v) => {
+      days.map((v, i) => {
         fireFetch.addData("schedule", {
-          companyId: company,
+          companyId: companyId,
           date: {
             year: Number(year),
             month: Number(month),
@@ -105,6 +140,9 @@ const AddSchedule = ({ companyId, isAdmin }) => {
             <Radio size="sm" value="2">
               복수지정
             </Radio>
+            <Radio size="sm" value="3">
+              주간지정
+            </Radio>
           </Stack>
         </RadioGroup>
 
@@ -118,30 +156,86 @@ const AddSchedule = ({ companyId, isAdmin }) => {
             placeholder="0"
             disabled
           />
+        ) : radioValue === "2" ? (
+          <>
+            <div>
+              <div>년 월</div>
+              <input
+                required
+                type="month"
+                value={monthValue}
+                onChange={(e) => setMonthValue(e.target.value)}
+              />
+            </div>
+            <div>
+              <div>일</div>
+              <input
+                style={{ width: "12rem" }}
+                required
+                type="string"
+                value={manyScheduleValue}
+                onChange={(e) => setManyScheduleValue(e.target.value)}
+                placeholder="(예:)1 2 13 21"
+              />
+            </div>
+          </>
         ) : (
           <div>
+            <div>기간</div>
             <input
               required
-              type="month"
-              value={monthValue}
-              onChange={(e) => setMonthValue(e.target.value)}
-            />
-            <input
-              style={{ width: "12rem" }}
-              required
-              type="string"
-              value={manyScheduleValue}
-              onChange={(e) => setManyScheduleValue(e.target.value)}
-              placeholder="(예:)1 2 13 21"
+              id="week"
+              type="week"
+              name="week"
+              min={getCurrentWeekNumber()}
+              value={weekValue}
+              onChange={(e) => setWeekValue(e.target.value)}
             />
           </div>
         )}
-        <div>
-          <div>날짜</div>
+
+        {isAdmin && (radioValue === "1" || radioValue === "2") ? (
           <div>
-            {isAdmin && <AddCalendar onChange={onChange} value={value} />}
+            <div>날짜</div>
+
+            <AddCalendar
+              onChange={onChange}
+              value={value}
+              companyId={companyId}
+            />
           </div>
-        </div>
+        ) : (
+          <>
+            {weekdays[0][0] !== "N" && (
+              <div>{`${weekdays[0]} ~ ${weekends[1]}`}</div>
+            )}
+
+            <div>
+              <div>평일</div>
+              <ul>
+                {weekdays.map((day, index) =>
+                  day[0] === "N" ? (
+                    <li key={index}></li>
+                  ) : (
+                    <li key={index}>{day}</li>
+                  ),
+                )}
+              </ul>
+            </div>
+            <div>
+              <div>주말</div>
+              <ul>
+                {weekends.map((day, index) =>
+                  day[0] === "N" ? (
+                    <li key={index}></li>
+                  ) : (
+                    <li key={index}>{day}</li>
+                  ),
+                )}
+              </ul>
+            </div>
+          </>
+        )}
 
         <div>
           <div>시간</div>
@@ -176,9 +270,20 @@ const AddSchedule = ({ companyId, isAdmin }) => {
             />
           </div>
         </div>
-        <Button type="submit" w="100%" mt="3" colorScheme="teal" size="md">
-          스케줄 생성 완료
-        </Button>
+        {isAdmin && (radioValue === "1" || radioValue === "2") ? (
+          <Button type="submit" w="100%" mt="3" colorScheme="teal" size="md">
+            스케줄 생성
+          </Button>
+        ) : (
+          <div id="weekButtons">
+            <Button type="submit" w="45%">
+              평일 스케줄 생성
+            </Button>
+            <Button type="submit" w="45%">
+              주말 스케줄 생성
+            </Button>
+          </div>
+        )}
       </style.Form>
     </style.AddScheduleWrap>
   );
