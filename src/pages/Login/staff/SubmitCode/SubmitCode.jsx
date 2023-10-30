@@ -1,7 +1,6 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
 import * as style from "./SubmitCode.style";
-import combineArrayToNumber from "../../../../utils/combineArrayToNumber";
 import {
   collection,
   query,
@@ -11,19 +10,26 @@ import {
 } from "firebase/firestore";
 import { app } from "./../../../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-
-const companyCode = {
-  required: "필수 필드입니다.",
-};
+import {
+  Heading,
+  PinInput,
+  PinInputField,
+  Button,
+  FormControl,
+} from "@chakra-ui/react";
+import { useFireFetch } from "../../../../hooks/useFireFetch";
+import useUserStore from "../../../../store/user/useUserStore";
 
 const db = getFirestore(app);
 
 const SubmitCode = () => {
-  const [pin, setPin] = useState(["", "", "", "", "", ""]); // 초기 상태: 4자리 빈 PIN
+  // const [pin, setPin] = useState(["", "", "", "", "", ""]); // 초기 상태: 4자리 빈 PIN
   const navigate = useNavigate();
+  const { userData, setUserData } = useUserStore();
+  const fireFetch = useFireFetch();
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
@@ -31,19 +37,23 @@ const SubmitCode = () => {
 
   const onSubmit = (data) => {
     // firefetch.postData("users", id, data); // id 상태에서 불러오기
-    console.log(data);
     reset();
     const get = async () => {
       if (data) {
-        const pinNum = combineArrayToNumber(data.code);
-
+        const pinNum = parseInt(
+          `${data.pin1}${data.pin2}${data.pin3}${data.pin4}${data.pin5}${data.pin6}`,
+          10,
+        );
         const companiesRef = collection(db, "company");
         const _query = query(companiesRef, where("code", "==", pinNum));
         const querySnapshot = await getDocs(_query);
 
         if (querySnapshot.empty) {
-          console.log("일치하는 회사 코드를 찾을 수 없습니다.");
+          alert("일치하는 회사 코드를 찾을 수 없습니다.");
         } else {
+          const companyId = querySnapshot.docs[0].data().id;
+          await setUserData({ ...userData, companyId });
+          await fireFetch.postData("users", userData.id, userData);
           navigate("/dashboard");
         }
       }
@@ -51,44 +61,72 @@ const SubmitCode = () => {
     get();
   };
 
-  const handleChange = (index, value) => {
-    const newPin = [...pin];
-    newPin[index] = value;
-
-    if (/^\d+$/.test(value) || value === "") {
-      const newPin = [...pin];
-      newPin[index] = value;
-
-      setPin(newPin);
-    }
-  };
-
   return (
     <style.SubmitCodeWrap>
-      <h1>기업 코드 등록</h1>
+      <Heading as="h2" size="md" mb="1rem">
+        필수 정보 입력
+      </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          {pin.map((digit, index) => (
-            <div key={index}>
-              <label htmlFor={`code[${index}]`}>PIN{index + 1}: </label>
-              <input
-                type="text"
-                {...register(`code[${index}]`, companyCode)}
-                value={digit}
-                onChange={(e) => handleChange(index, e.target.value)}
-                maxLength="1"
-              />
-              <br />
-              {errors[`code[${index}]`] && (
-                <div>
-                  <span>{errors[`code[${index}]`]?.message}</span>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <FormControl display="flex" justifyContent="center" mt="6rem">
+          <Controller
+            name="pin1"
+            control={control}
+            render={({ field }) => (
+              <PinInput size="lg">
+                <PinInputField {...field} />
+              </PinInput>
+            )}
+          />
+          <Controller
+            name="pin2"
+            control={control}
+            render={({ field }) => (
+              <PinInput size="lg">
+                <PinInputField {...field} ml="0.5rem" />
+              </PinInput>
+            )}
+          />
+          <Controller
+            name="pin3"
+            control={control}
+            render={({ field }) => (
+              <PinInput size="lg">
+                <PinInputField {...field} ml="0.5rem" />
+              </PinInput>
+            )}
+          />
+          <Controller
+            name="pin4"
+            control={control}
+            render={({ field }) => (
+              <PinInput size="lg">
+                <PinInputField {...field} ml="0.5rem" />
+              </PinInput>
+            )}
+          />
+          <Controller
+            name="pin5"
+            control={control}
+            render={({ field }) => (
+              <PinInput size="lg">
+                <PinInputField {...field} ml="0.5rem" />
+              </PinInput>
+            )}
+          />
+          <Controller
+            name="pin6"
+            control={control}
+            render={({ field }) => (
+              <PinInput size="lg">
+                <PinInputField {...field} ml="0.5rem" />
+              </PinInput>
+            )}
+          />
+        </FormControl>
 
-        <button type="submit">입력</button>
+        <Button type="submit" w="100%" mt="100px" colorScheme="teal" size="md">
+          입력
+        </Button>
       </form>
     </style.SubmitCodeWrap>
   );

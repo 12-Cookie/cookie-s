@@ -2,7 +2,7 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Div = styled.div`
   position: relative;
@@ -11,7 +11,7 @@ const Div = styled.div`
     border: none;
   }
   .react-calendar__tile--now {
-    background: #f0f0f0;
+    background: grey;
     color: white;
   }
   .react-calendar__tile--now:hover {
@@ -54,9 +54,22 @@ const Div = styled.div`
   .react-calendar__month-view__days__day--neighboringMonth {
     color: #f0f0f0;
   }
+  .react-calendar__tile:disabled {
+    opacity: 0.5;
+  }
 `;
 
-const AdminCalendar = ({ onChange, value, mark, setmark }) => {
+const AddCalendar = ({ onChange, value }) => {
+  const initialMark = ["2023-10-02", "2023-10-12", "2023-10-10"];
+  const [mark, setMark] = useState(initialMark);
+  const tileDisabled = ({ date }) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(today.getDate());
+    twoDaysAgo.setHours(0, 0, 0, 0);
+    return date < twoDaysAgo;
+  };
   return (
     <Div>
       <Calendar
@@ -65,6 +78,7 @@ const AdminCalendar = ({ onChange, value, mark, setmark }) => {
         value={value}
         navigationLabel={null}
         showNeighboringMonth={true}
+        tileDisabled={tileDisabled}
         tileContent={({ date }) => {
           let html = [];
           if (mark.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
@@ -81,4 +95,4 @@ const AdminCalendar = ({ onChange, value, mark, setmark }) => {
   );
 };
 
-export default AdminCalendar;
+export default AddCalendar;

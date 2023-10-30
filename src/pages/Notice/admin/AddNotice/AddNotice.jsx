@@ -1,29 +1,27 @@
 import { useState } from "react";
 import * as style from "./AddNotice.style";
 import { Heading, Flex, Input, Textarea, Button } from "@chakra-ui/react";
-import { db } from "../../../../firebase/firebase";
 import { collection, addDoc, serverTimestamp, doc } from "firebase/firestore";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { useNavigate } from "react-router-dom";
+import useUserStore from "../../../../store/user/useUserStore";
 
 const AddNotice = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const companyId = useUserStore((state) => state.userData.companyId);
   const fetch = useFireFetch();
-  // const user = fetch.getData("users", "id", "2qDwPH70ot7fSw7ixr1Z")[0];
-  // const company = user?.companyId;
   const date = new Date();
 
   const onSubmit = async (event) => {
     event.preventDefault();
 
     const newNotice = {
-      // companyId: company,
+      companyId: companyId,
       title: title,
       content: content,
       timestamp: serverTimestamp(),
-      // id: doc.id,
       date: {
         year: date.getFullYear(),
         month: date.getMonth() + 1,
@@ -31,11 +29,14 @@ const AddNotice = () => {
       },
     };
 
-    // const docRef = await addDoc(noticeCollectionRef, newNotice);
-    await fetch.addData("notice", newNotice);
-    setTitle("");
-    setContent("");
-    navigate("/notice");
+    try {
+      await fetch.addData("notice", newNotice);
+      setTitle("");
+      setContent("");
+      navigate("/notice");
+    } catch (error) {
+      console.error("Failed to add notice:", error);
+    }
   };
   return (
     <style.AddNoticeWrap>

@@ -1,5 +1,6 @@
 import * as style from "../../pages/Login/admin/login/Login_A.style";
 import { useForm } from "react-hook-form";
+import { Heading, Input, Text, Button } from "@chakra-ui/react";
 
 const userEmail = {
   required: "필수 필드입니다.",
@@ -27,37 +28,50 @@ const LoginForm = ({ title, getDataForm, firebaseError }) => {
   };
 
   return (
-    <style.loginWrap>
-      <h1>내 근무에 맞게</h1>
-      <h1>근무 스케줄 지정</h1>
+    <>
+      <Heading as="h2" size="md" mb="1rem">
+        내 일정에 맞게
+        <br />
+        근무 스케줄 지정
+      </Heading>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <input
+          <Input
             type="email"
             placeholder="E-mail"
             {...register("email", userEmail)}
+            mt="1rem"
           />
           {errors?.email && (
             <div>
-              <span>{errors?.email?.message}</span>
+              <Text color="red">{errors?.email?.message}</Text>
             </div>
           )}
         </div>
 
         <div>
-          <input
+          <Input
             type="password"
             placeholder="Password"
             {...register("password", userPassword)}
+            mt="1rem"
           />
-          {errors?.password && <span>{errors?.password?.message}</span>}
+          {errors?.password && (
+            <Text color="red">{errors?.password?.message}</Text>
+          )}
         </div>
+        {firebaseError && (
+          <Text color="red" mt="1rem">
+            {firebaseError}
+          </Text>
+        )}
 
-        <button type="submit">{title}</button>
-        {firebaseError && <span>{firebaseError}</span>}
+        <Button type="submit" w="100%" mt="100px" colorScheme="teal" size="md">
+          {title}
+        </Button>
       </form>
-    </style.loginWrap>
+    </>
   );
 };
 

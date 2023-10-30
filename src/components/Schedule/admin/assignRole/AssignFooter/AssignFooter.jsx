@@ -4,13 +4,11 @@ import { useFireFetch } from "../../../../../hooks/useFireFetch";
 import { Tag } from "@chakra-ui/react";
 
 const AssignFooter = ({
-  userData,
   schedule,
   config,
   roleData,
   isHidden,
   booking,
-  userId,
   setRoleDate,
   setIsHidden,
   setuserData,
@@ -24,6 +22,7 @@ const AssignFooter = ({
   const handleClick = (name, id) => {
     const map = new Map(roleData);
     map.set(config, [...map.get(config), name]);
+
     setRoleDate(map);
 
     const data = {
