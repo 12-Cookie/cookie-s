@@ -17,8 +17,10 @@ import WorkersComponent from "../../../../components/Schedule/admin/AddSchedule/
 import AddCalendar from "../../../../components/Schedule/admin/AddSchedule/AddCalendar";
 import getWeekdayWeekend from "../../../../utils/getWeekdayWeekend";
 import getCurrentWeekNumber from "../../../../utils/getCurrentWeekNumber";
+import useUserStore from "../../../../store/user/useUserStore";
 
-const AddSchedule = ({ companyId, isAdmin }) => {
+const AddSchedule = () => {
+  const { companyId, isAdmin } = useUserStore((state) => state.userData);
   const navigate = useNavigate();
   const [value, onChange] = useState(new Date());
   const [radioValue, setRadioValue] = useState("1");
@@ -97,6 +99,7 @@ const AddSchedule = ({ companyId, isAdmin }) => {
       navigate("/dashboard");
     }
   };
+
   const handleWeekdaysSubmit = (e) => {
     e.preventDefault();
     if (workersValue === "") {

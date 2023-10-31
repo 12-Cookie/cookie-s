@@ -1,5 +1,5 @@
 import { Badge, Button } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useFireFetch } from "../../../hooks/useFireFetch";
 import useUserStore from "../../../store/user/useUserStore";
 import { useNavigate } from "react-router-dom";
@@ -21,19 +21,23 @@ const UserApplyButton = ({ scheduleData }) => {
   useEffect(() => {
     applyOrNot();
   }, []);
-  console.log(applySchedules);
   const handleUserApply = (e) => {
     e.preventDefault();
-    fireFetch.addData("bookedShifts", {
-      companyId: scheduleData?.companyId,
-      userId: id,
-      role: "",
-      scheduleId: scheduleData?.id,
-    });
-    navigate("/schedule/manage");
+
+    if (confirm("신청하시겠어요?")) {
+      fireFetch.addData("bookedShifts", {
+        companyId: scheduleData?.companyId,
+        userId: id,
+        role: "",
+        scheduleId: scheduleData?.id,
+      });
+      navigate("/schedule/manage");
+    }
   };
-  return (
-    <Button onClick={handleUserApply} colorScheme="gray">
+  return applySchedules.includes(scheduleData?.id) ? (
+    <Badge>신청완료</Badge>
+  ) : (
+    <Button size="sm" onClick={handleUserApply} colorScheme="gray">
       신청
     </Button>
   );
