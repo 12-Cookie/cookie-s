@@ -2,7 +2,6 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
-import { useState } from "react";
 
 const Div = styled.div`
   position: relative;
@@ -56,8 +55,7 @@ const Div = styled.div`
   }
 `;
 
-const StaffCalendar = ({ onChange, value }) => {
-  const [mark, setMark] = useState([]);
+const StaffCalendar = ({ onChange, value, mark }) => {
   return (
     <Div>
       <Calendar

@@ -7,18 +7,17 @@ import { Link } from "react-router-dom";
 import AdminCalendar from "../../../../components/Schedule/admin/AddSchedule/AdminCalendar";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import ScheduleItem from "../../../../components/common/ScheduleItem/ScheduleItem.jsx";
+import useUserStore from "../../../../store/user/useUserStore";
 
 const Schedule_A = () => {
+  const { companyId } = useUserStore((state) => state.userData);
+
   const [value, onChange] = useState(new Date());
   const [mark, setMark] = useState([]);
   const [scheduleLists, setScheduleLists] = useState([]);
   const [selectedSchedules, setSelectedSchedules] = useState([]);
   const fireFetch = useFireFetch();
-  const schedules = fireFetch.getData(
-    "schedule",
-    "companyId",
-    "TiP9VRKNKplTMNoZzYji",
-  );
+  const schedules = fireFetch.getData("schedule", "companyId", companyId);
   useEffect(() => {
     if (schedules[0]) {
       setScheduleLists([...schedules]);
@@ -27,7 +26,6 @@ const Schedule_A = () => {
           .toString()
           .padStart(2, "0")}-${obj.date.day.toString().padStart(2, "0")}`;
       });
-      console.log(date);
       setMark(date);
 
       const selectedDate = moment(value).format("YYYY-MM-DD");
