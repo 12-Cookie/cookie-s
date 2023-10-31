@@ -175,27 +175,43 @@ export const useFireFetch = () => {
   };
 
   const get = async (initialCollection, key = null, value = null) => {
-    if (key) {
-      const Ref = collection(db, initialCollection);
-      const q = query(Ref, where(key, "==", value));
-      const querySnapshot = await getDocs(q);
-      const userData = [];
+    try {
+      if (key) {
+        const Ref = collection(db, initialCollection);
+        const q = query(Ref, where(key, "==", value));
+        const querySnapshot = await getDocs(q);
+        const userData = [];
 
-      querySnapshot.forEach((doc) => {
-        userData.push(doc.data());
-      });
+        querySnapshot.forEach((doc) => {
+          userData.push(doc.data());
+        });
 
-      return userData;
-    } else {
-      const Ref = collection(db, initialCollection);
-      const userData = [];
-      const querySnapshot = await getDocs(Ref);
+        console.log("good");
+        return userData;
+      } else {
+        const Ref = collection(db, initialCollection);
+        const userData = [];
+        const querySnapshot = await getDocs(Ref);
 
-      querySnapshot.forEach((doc) => {
-        userData.push(doc.data());
-      });
+        querySnapshot.forEach((doc) => {
+          userData.push(doc.data());
+        });
 
-      return userData;
+        console.log("good");
+        return userData;
+      }
+    } catch (error) {
+      console.error("bad: ", error);
+    }
+  };
+
+  const post = async (initialCollection, id, data) => {
+    try {
+      await setDoc(doc(db, initialCollection, id), data);
+
+      console.log("good");
+    } catch (error) {
+      console.error("bad: ", error);
     }
   };
 
@@ -211,5 +227,14 @@ export const useFireFetch = () => {
     }
   };
 
-  return { getData, postData, bookedUser, addData, deleteById, get, update };
+  return {
+    getData,
+    postData,
+    bookedUser,
+    addData,
+    deleteById,
+    get,
+    update,
+    post,
+  };
 };

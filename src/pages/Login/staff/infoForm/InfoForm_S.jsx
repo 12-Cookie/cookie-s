@@ -60,7 +60,7 @@ const InfoForm_S = () => {
       birthDate: data.birthDate,
       address: data.address,
     });
-    await fireFetch.postData("users", userData.id, userData);
+    await fireFetch.post("users", userData.id, userData);
     navigate("/info/code");
   };
 
