@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import AdminCalendar from "../../../../components/Schedule/admin/AddSchedule/AdminCalendar";
 import moment from "moment";
 import { Timestamp } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +14,7 @@ import {
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import Roles from "../../../../components/Schedule/admin/AddSchedule/Roles";
 import WorkersComponent from "../../../../components/Schedule/admin/AddSchedule/WorkersComponent";
+import AddCalendar from "../../../../components/Schedule/admin/AddSchedule/AddCalendar";
 
 const AddSchedule = () => {
   const navigate = useNavigate();
@@ -150,16 +150,7 @@ const AddSchedule = () => {
         )}
         <div>
           <div>날짜</div>
-          <div>
-            {user && (
-              <AdminCalendar
-                setOneScheduleValue={setOneScheduleValue}
-                onChange={onChange}
-                value={value}
-                user={user}
-              />
-            )}
-          </div>
+          <div>{user && <AddCalendar onChange={onChange} value={value} />}</div>
         </div>
 
         <div>

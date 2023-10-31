@@ -26,10 +26,13 @@ import Info_S from "./pages/Info/staff/Info_S";
 import Info_A from "./pages/Info/admin/Info_A";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import useUserStore from "./store/user/useUserStore";
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const { id, isAdmin } = useUserStore((state) => state.userData);
+  const isLogin = id ? true : false;
+  // const [isAdmin, setIsAdmin] = useState(true);
+  // const [isLogin, setIsLogin] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,7 +64,7 @@ function App() {
             element={!isAdmin ? <ManageSchedule_S /> : <ManageSchedule_A />}
           />
           <Route
-            path="/schedule/assign"
+            path="/schedule/assign/:id"
             element={!isAdmin ? <NotFound /> : <AssignRole />}
           />
           <Route

@@ -1,14 +1,15 @@
+import * as style from "./ScheduleItem.style";
 import { useState } from "react";
 import { Badge } from "@chakra-ui/react";
+import useUserStore from "../../../store/user/useUserStore";
+import PropTypes from "prop-types";
 import ScheduleRoleItem from "../ScheduleRoleItem/ScheduleRoleItem";
 import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
-import PropTypes from "prop-types";
-import * as style from "./ScheduleItem.style";
 
 const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const { isAdmin } = useUserStore((state) => state.userData);
   const [userLength, setUserLength] = useState(
-    Array(scheduleLists.length).fill(0),
+    scheduleLists && Array(scheduleLists.length).fill(0),
   );
 
   const getDayOfWeekFromDate = (date) => {
@@ -55,42 +56,43 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
 
   return (
     <style.ScheduleItemWrap>
-      {scheduleLists.map((scheduleData, index) => (
-        <style.ScheduleItem key={scheduleData.id}>
-          <style.ScheduleInfo>
-            <style.ScheduleDate>
-              {`${scheduleData.date.month}월`}
-              {`${scheduleData.date.day}일`}
-              <style.ScheduleDay>
-                ({getDayOfWeekFromDate(scheduleData.date)})
-              </style.ScheduleDay>
-            </style.ScheduleDate>
-            <style.ScheduleTime>
-              {`${scheduleData.time.start} ~ ${scheduleData.time.end}`}
-            </style.ScheduleTime>
-            <style.ScheduleStatus>
-              <div>
-                {isAdmin
-                  ? renderStatusToAdmin(scheduleData, index)
-                  : renderStatusToStaff(scheduleData)}
-              </div>
-            </style.ScheduleStatus>
-          </style.ScheduleInfo>
-          {isAdmin ? "" : <ScheduleRoleItem />}
-          {isAdmin ? (
-            <ScheduleUtilItem
-              scheduleData={scheduleData}
-              scheduleLists={scheduleLists}
-              userLength={userLength}
-              setScheduleLists={setScheduleLists}
-              setUserLength={setUserLength}
-              index={index}
-            />
-          ) : (
-            ""
-          )}
-        </style.ScheduleItem>
-      ))}
+      {scheduleLists &&
+        scheduleLists.map((scheduleData, index) => (
+          <style.ScheduleItem key={scheduleData.id}>
+            <style.ScheduleInfo>
+              <style.ScheduleDate>
+                {`${scheduleData.date.month}월`}
+                {`${scheduleData.date.day}일`}
+                <style.ScheduleDay>
+                  ({getDayOfWeekFromDate(scheduleData.date)})
+                </style.ScheduleDay>
+              </style.ScheduleDate>
+              <style.ScheduleTime>
+                {`${scheduleData.time.start} ~ ${scheduleData.time.end}`}
+              </style.ScheduleTime>
+              <style.ScheduleStatus>
+                <div>
+                  {isAdmin
+                    ? renderStatusToAdmin(scheduleData, index)
+                    : renderStatusToStaff(scheduleData)}
+                </div>
+              </style.ScheduleStatus>
+            </style.ScheduleInfo>
+            {isAdmin ? "" : <ScheduleRoleItem scheduleData={scheduleData} />}
+            {isAdmin ? (
+              <ScheduleUtilItem
+                scheduleData={scheduleData}
+                scheduleLists={scheduleLists}
+                userLength={userLength}
+                setScheduleLists={setScheduleLists}
+                setUserLength={setUserLength}
+                index={index}
+              />
+            ) : (
+              ""
+            )}
+          </style.ScheduleItem>
+        ))}
     </style.ScheduleItemWrap>
   );
 };

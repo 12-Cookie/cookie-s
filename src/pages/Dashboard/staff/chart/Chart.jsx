@@ -87,22 +87,33 @@ const Chart = ({ matchingData }) => {
       groupedData[key].push(data);
     });
 
-    const chartPay = [];
+    const thisYearPay = [];
 
     for (const key in groupedData) {
+      const OVERTIME_HOURS = 9;
+      const USER_PAY = 10000;
       const monthData = groupedData[key];
       const totalPayForMonth = monthData.reduce((totalPay, item) => {
         const start = Number(item.time.start.replace(":", ""));
         const end = Number(item.time.end.replace(":", ""));
         const answer = (end - start) / 100;
-        return totalPay + answer * 10000;
+        let pay;
+
+        if (answer <= OVERTIME_HOURS) {
+          pay = answer * USER_PAY;
+        } else {
+          pay =
+            OVERTIME_HOURS * USER_PAY +
+            (answer - OVERTIME_HOURS) * USER_PAY * 1.5;
+        }
+
+        return totalPay + pay;
       }, 0);
 
-      chartPay.push(totalPayForMonth);
+      thisYearPay.push(totalPayForMonth);
     }
-
+    setChartPay(thisYearPay);
     setChartDate(Object.keys(groupedData));
-    setChartPay(chartPay);
     setChartLabel("월 별 급여 총액");
   };
 

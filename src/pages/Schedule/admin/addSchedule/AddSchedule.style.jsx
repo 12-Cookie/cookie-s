@@ -30,17 +30,6 @@ export const Form = styled.form`
     outline: none !important;
     border: 2px solid #2b6cb0 !important;
   }
-  .react-calendar__tile {
-    padding-top: 0;
-    height: 2.5rem;
-  }
-  .dot-container {
-    top: 70% !important;
-  }
-  .dot {
-    height: 6px;
-    width: 6px;
-  }
 `;
 
 export const TimeInput = styled.div`

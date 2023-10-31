@@ -1,7 +1,17 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import * as style from "./InfoForm_S.style";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { useNavigate } from "react-router";
+import {
+  Heading,
+  Text,
+  Input,
+  Radio,
+  RadioGroup,
+  Stack,
+  Button,
+} from "@chakra-ui/react";
+import useUserStore from "../../../../store/user/useUserStore";
 
 const userName = {
   required: "필수 필드입니다.",
@@ -11,7 +21,7 @@ const userGender = {
   required: "필수 필드입니다.",
 };
 
-const userBirthdate = {
+const userBirthDate = {
   required: "필수 필드입니다.",
 };
 
@@ -28,8 +38,9 @@ const userPhone = {
 };
 
 const InfoForm_S = () => {
-  const firefetch = useFireFetch();
+  const fireFetch = useFireFetch();
   const navigate = useNavigate();
+  const { userData, setUserData } = useUserStore();
 
   const {
     register,
@@ -38,118 +49,147 @@ const InfoForm_S = () => {
     reset,
   } = useForm({ mode: "onBlur" });
 
-  const onSubmit = (data) => {
-    // firefetch.postData("users", id, data); // id 상태에서 불러오기
-    console.log(data);
+  const onSubmit = async (data) => {
     reset();
-    if (data) {
-      navigate("/info/code");
-    }
+    await setUserData({
+      ...userData,
+      name: data.name,
+      phone: data.phone,
+      gender: data.gender,
+      payPerHour: data.payPerHour,
+      birthDate: data.birthDate,
+      address: data.address,
+    });
+    await fireFetch.postData("users", userData.id, userData);
+    navigate("/info/code");
   };
 
   return (
     <style.InfoFormWrap>
-      <h1>필수 정보 입력</h1>
+      <Heading as="h2" size="md" mb="1rem">
+        필수 정보 입력
+      </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="name">이름: </label>
-          <input
+        <style.InputWrap>
+          <Text htmlFor="name" as="b">
+            이름
+          </Text>
+          <Input
             type="text"
             placeholder="홍길동"
             {...register("name", userName)}
+            width="85%"
+            ml="1rem"
           />
           {errors?.name && (
             <div>
-              <span>{errors?.name?.message}</span>
+              <Text color="red">{errors?.name?.message}</Text>
             </div>
           )}
-        </div>
+        </style.InputWrap>
 
-        <div>
-          <label htmlFor="gender">성별: </label>
+        <style.InputWrap>
+          <Text htmlFor="gender" as="b">
+            성별
+          </Text>
           <div>
-            <label>
-              <input
-                type="radio"
-                value="남자"
-                checked
-                {...register("gender", userGender)}
-              />
-              남자
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="여자"
-                {...register("gender", userGender)}
-              />
-              여자
-            </label>
+            <RadioGroup mt="0.5rem">
+              <Stack direction="row">
+                <Radio value="남자" {...register("gender", userGender)}>
+                  남자
+                </Radio>
+                <Radio
+                  type="radio"
+                  value="여자"
+                  {...register("gender", userGender)}
+                >
+                  여자
+                </Radio>
+              </Stack>
+            </RadioGroup>
           </div>
           {errors?.gender && (
             <div>
-              <span>{errors?.gender?.message}</span>
+              <Text color="red">{errors?.gender?.message}</Text>
             </div>
           )}
-        </div>
+        </style.InputWrap>
 
-        <div>
-          <label htmlFor="birthdate">생년월일: </label>
-          <input
+        <style.InputWrap>
+          <Text htmlFor="birthDate" as="b">
+            생년월일
+          </Text>
+          <Input
             type="text"
             placeholder="YYYY.MM.DD"
-            {...register("birthdate", userBirthdate)}
+            {...register("birthDate", userBirthDate)}
+            width="76.3%"
+            ml="1rem"
           />
-          {errors?.birthdate && (
+          {errors?.birthDate && (
             <div>
-              <span>{errors?.birthdate?.message}</span>
+              <Text color="red">{errors?.birthDate?.message}</Text>
             </div>
           )}
-        </div>
+        </style.InputWrap>
 
-        <div>
-          <label htmlFor="address">주소: </label>
-          <input
+        <style.InputWrap>
+          <Text htmlFor="address" as="b">
+            주소
+          </Text>
+          <Input
             type="text"
             placeholder="서울시 강남구 역삼동 123-45"
             {...register("address", userAddress)}
+            width="85%"
+            ml="1rem"
           />
           {errors?.address && (
             <div>
-              <span>{errors?.address?.message}</span>
+              <Text color="red">{errors?.address?.message}</Text>
             </div>
           )}
-        </div>
+        </style.InputWrap>
 
-        <div>
-          <label htmlFor="payPerHour">시급: </label>
-          <input
+        <style.InputWrap>
+          <Text htmlFor="payPerHour" as="b">
+            시급
+          </Text>
+          <Input
             type="number"
             placeholder="9620"
             {...register("payPerHour", userPayPerHour)}
+            width="85%"
+            ml="1rem"
           />
           {errors?.payPerHour && (
             <div>
-              <span>{errors?.payPerHour?.message}</span>
+              <Text color="red">{errors?.payPerHour?.message}</Text>
             </div>
           )}
-        </div>
+        </style.InputWrap>
 
-        <div>
-          <label htmlFor="phone">핸드폰 번호: </label>
-          <input
+        <style.InputWrap>
+          <Text htmlFor="phone" as="b">
+            핸드폰 번호
+          </Text>
+          <Input
             type="text"
             placeholder="010-1234-5678"
             {...register("phone", userPhone)}
+            width="70.8%"
+            ml="1rem"
           />
           {errors?.phone && (
             <div>
-              <span>{errors?.phone?.message}</span>
+              <Text color="red">{errors?.phone?.message}</Text>
             </div>
           )}
-        </div>
+        </style.InputWrap>
 
-        <button type="submit">입력</button>
+        <Button type="submit" w="100%" mt="50px" colorScheme="teal" size="md">
+          입력
+        </Button>
       </form>
     </style.InfoFormWrap>
   );

@@ -1,18 +1,11 @@
 import * as style from "./Dashboard_S.style";
-import { useState, useEffect } from "react";
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
-import { app } from "../../../firebase/firebase";
-import { useNavigate, useLocation } from "react-router-dom";
 import Notice from "../admin/notice/Notice";
 import { useFireFetch } from "../../../hooks/useFireFetch";
 import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
 import Chart from "./chart/Chart";
 
-const initailUserdata = localStorage.getItem("userData")
-  ? JSON.parse(localStorage.getItem("userData"))
-  : {};
-
 const Dashboard_S = () => {
+<<<<<<< HEAD
   const dummyUserData = JSON.parse(localStorage.getItem("user"));
   const dummyUserId = dummyUserData.id;
 
@@ -21,6 +14,8 @@ const Dashboard_S = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+=======
+>>>>>>> e2bfe6c9dc346a123b2047d1fc2a52273db6f930
   const fetch = useFireFetch();
   const noticeData = fetch.getData("notice");
   const scheduleData = fetch.getData("schedule");
@@ -54,35 +49,6 @@ const Dashboard_S = () => {
 
   fetchData();
 
-  const auth = getAuth(app);
-
-  const handleLogOut = () => {
-    signOut(auth)
-      .then(() => {
-        setUserData({});
-        localStorage.removeItem("userData");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (!user) {
-  //       console.log(user);
-  //       setUserData(user);
-  //       navigate("/");
-  //     } else if (user && pathname === "/") {
-  //       navigate("/dashboard");
-  //     }
-  //   });
-
-  //   return () => {
-  //     unsubscribe();
-  //   };
-  // }, [auth, navigate]);
-
   return (
     <style.DashboardWrap>
       <Notice noticeData={noticeData} />
@@ -91,8 +57,6 @@ const Dashboard_S = () => {
         scheduleLists={filteredScheduleData}
         bookedShiftsData={bookedShiftsData}
       />
-      <Chart matchingData={matchingData} />
-      <button onClick={handleLogOut}>로그아웃</button>
     </style.DashboardWrap>
   );
 };
