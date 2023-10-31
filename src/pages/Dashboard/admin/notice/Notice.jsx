@@ -7,8 +7,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { Badge } from "@chakra-ui/react";
 
-const Notice = ({ noticeData }) => {
-  const filteredNoticeData = [...noticeData].slice(0, 5);
+const Notice = ({ fetchNoticeData }) => {
+  const filteredNoticeData = [...fetchNoticeData].slice(0, 5);
 
   const settings = {
     infinity: true,

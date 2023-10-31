@@ -2,61 +2,104 @@ import * as style from "./Dashboard_S.style";
 import Notice from "../admin/notice/Notice";
 import { useFireFetch } from "../../../hooks/useFireFetch";
 import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
-import Chart from "./chart/Chart";
+import Chart from "./chart/chart";
+import { useEffect, useState } from "react";
+import useUserStore from "../../../store/user/useUserStore";
 
 const Dashboard_S = () => {
-<<<<<<< HEAD
-  const dummyUserData = JSON.parse(localStorage.getItem("user"));
-  const dummyUserId = dummyUserData.id;
-
-  const [userData, setUserData] = useState(initailUserdata);
-
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
-
-=======
->>>>>>> e2bfe6c9dc346a123b2047d1fc2a52273db6f930
+  const { id, companyId } = useUserStore((state) => state.userData);
   const fetch = useFireFetch();
-  const noticeData = fetch.getData("notice");
   const scheduleData = fetch.getData("schedule");
-  const bookedShiftsData = fetch.getData("bookedShifts");
-  const filteredScheduleData = [...scheduleData].slice(0, 3);
-  const bookingShiftsData = fetch.getData(
-    "bookingShifts",
-    "userId",
-    dummyUserId,
-  );
-
+  const bookingShiftsData = fetch.getData("bookingShifts", "userId");
+  const [fetchNoticeData, setFetchNoticeData] = useState([]);
+  const [fetchBookedShifts, setFetchBookedShifts] = useState([]);
+  const [fetchScheduleData, setFetchScheduleData] = useState([]);
+  const [confirmedData, setConfirmedData] = useState([]);
+  const [matchedData, setMatchedData] = useState([]);
   const matchingData = [];
 
-  const fetchData = () => {
-    for (const secondItem of bookingShiftsData) {
-      const scheduleId = secondItem.scheduleId;
-
-      const matchingFirstItem = scheduleData.find(
-        (firstItem) => firstItem.id === scheduleId,
+  useEffect(() => {
+    const fetchData = async () => {
+      const getNoticeData = await fetch.get("notice", "companyId", companyId);
+      const getBookedShiftsData = await fetch.get("bookedShifts", "userId", id);
+      const getScheduleData = await fetch.get(
+        "schedule",
+        "companyId",
+        companyId,
       );
 
-      if (matchingFirstItem) {
-        const newObject = {
-          ...matchingFirstItem,
-        };
+      const matchData = [];
 
-        matchingData.push(newObject);
+      getScheduleData.forEach((scheduleData) => {
+        const matchingItem = getBookedShiftsData.find(
+          (bookedShiftsData) => scheduleData.id === bookedShiftsData.scheduleId,
+        );
+
+        if (matchingItem) {
+          matchData.push(scheduleData);
+        }
+      });
+
+      setFetchNoticeData(getNoticeData);
+      setFetchBookedShifts(getBookedShiftsData);
+      setFetchScheduleData(getScheduleData);
+      setMatchedData(matchData);
+
+      const dataArr = [];
+      const confirmDataArr = [];
+
+      for (const item of getBookedShiftsData) {
+        if (item.role) {
+          dataArr.push(item);
+        }
       }
-    }
-  };
 
-  fetchData();
+      getScheduleData.forEach((scheduleData) => {
+        const matchingItem = dataArr.find(
+          (item) => scheduleData.id === item.scheduleId,
+        );
+
+        if (matchingItem) {
+          confirmDataArr.push(scheduleData);
+        }
+      });
+
+      console.log("fetchBookedShifts", fetchBookedShifts);
+
+      setConfirmedData(confirmDataArr);
+
+      for (const secondItem of bookingShiftsData) {
+        const scheduleId = secondItem.scheduleId;
+
+        const matchingFirstItem = scheduleData.find(
+          (firstItem) => firstItem.id === scheduleId,
+        );
+
+        if (matchingFirstItem) {
+          const newObject = {
+            ...matchingFirstItem,
+          };
+
+          matchingData.push(newObject);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <style.DashboardWrap>
-      <Notice noticeData={noticeData} />
+      <Notice fetchNoticeData={fetchNoticeData} />
       <h1>내 스케줄</h1>
-      <ScheduleItem
-        scheduleLists={filteredScheduleData}
-        bookedShiftsData={bookedShiftsData}
-      />
+      {fetchBookedShifts.map((item) => (
+        <ScheduleItem
+          key={item.id}
+          scheduleLists={matchedData}
+          setFetchScheduleData={setFetchScheduleData}
+        />
+      ))}
+      <Chart matchingData={confirmedData} />
     </style.DashboardWrap>
   );
 };

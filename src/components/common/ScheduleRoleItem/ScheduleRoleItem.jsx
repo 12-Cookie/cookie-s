@@ -14,7 +14,7 @@ const ScheduleRoleItem = ({ scheduleData }) => {
 
       const find = bookedUser.find((v, i) => v.scheduleId === scheduleData.id);
 
-      setRole(find.role);
+      setRole(find?.role);
     };
     fetchData();
   }, []);

@@ -3,6 +3,7 @@ import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
 import { useFireFetch } from "../../../hooks/useFireFetch";
 import * as style from "./Dashboard_A.style";
 import Notice from "./notice/Notice";
+import { useEffect, useState } from "react";
 
 const Dashboard_A = () => {
   const fetch = useFireFetch();
@@ -11,10 +12,18 @@ const Dashboard_A = () => {
   const noticeData = fetch.getData("notice");
   const bookedShiftsData = fetch.getData("bookedShifts");
   const filteredScheduleData = [...scheduleData].slice(0, 3);
+  const [fetchNoticeData, setFetchNoticeData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const getNoticeData = await fetch.get("notice", "companyId", companyId);
+      setFetchNoticeData(getNoticeData);
+    };
+  }, []);
 
   return (
     <style.DashboardWrap>
-      <Notice noticeData={noticeData} />
+      <Notice fetchNoticeData={fetchNoticeData} />
       <h1>스케줄 관리</h1>
       <ScheduleItem
         scheduleLists={filteredScheduleData}
