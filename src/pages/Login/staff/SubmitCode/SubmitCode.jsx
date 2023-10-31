@@ -53,12 +53,17 @@ const SubmitCode = () => {
         } else {
           const companyId = querySnapshot.docs[0].data().id;
           await setUserData({ ...userData, companyId });
-          await fireFetch.postData("users", userData.id, userData);
-          navigate("/dashboard");
+          return {
+            ...userData,
+            companyId,
+          };
         }
       }
     };
-    get();
+    get().then((res) => {
+      fireFetch.postData("users", userData.id, res);
+      navigate("/dashboard");
+    });
   };
 
   return (
