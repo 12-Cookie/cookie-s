@@ -5,6 +5,7 @@ import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
 import Chart from "./chart/chart";
 import { useEffect, useState } from "react";
 import useUserStore from "../../../store/user/useUserStore";
+import Loader from "../../../components/common/loader/Loader";
 
 const Dashboard_S = () => {
   const { id, companyId } = useUserStore((state) => state.userData);
@@ -17,6 +18,7 @@ const Dashboard_S = () => {
   const [confirmedData, setConfirmedData] = useState([]);
   const [matchedData, setMatchedData] = useState([]);
   const matchingData = [];
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +45,7 @@ const Dashboard_S = () => {
       setFetchNoticeData(getNoticeData);
       setFetchBookedShifts(getBookedShiftsData);
       setFetchScheduleData(getScheduleData);
-      setMatchedData(matchData);
+      setMatchedData(matchData.slice(0, 3));
 
       const dataArr = [];
       const confirmDataArr = [];
@@ -64,8 +66,6 @@ const Dashboard_S = () => {
         }
       });
 
-      console.log("fetchBookedShifts", fetchBookedShifts);
-
       setConfirmedData(confirmDataArr);
 
       for (const secondItem of bookingShiftsData) {
@@ -83,6 +83,7 @@ const Dashboard_S = () => {
           matchingData.push(newObject);
         }
       }
+      setLoading(false);
     };
 
     fetchData();
@@ -90,16 +91,19 @@ const Dashboard_S = () => {
 
   return (
     <style.DashboardWrap>
-      <Notice fetchNoticeData={fetchNoticeData} />
-      <h1>내 스케줄</h1>
-      {fetchBookedShifts.map((item) => (
-        <ScheduleItem
-          key={item.id}
-          scheduleLists={matchedData}
-          setFetchScheduleData={setFetchScheduleData}
-        />
-      ))}
-      <Chart matchingData={confirmedData} />
+      {loading ? (
+        <Loader loading={loading} />
+      ) : (
+        <>
+          <Notice fetchNoticeData={fetchNoticeData} />
+          <h1>내 스케줄</h1>
+          <ScheduleItem
+            scheduleLists={matchedData}
+            setFetchScheduleData={setFetchScheduleData}
+          />
+          <Chart matchingData={confirmedData} />
+        </>
+      )}
     </style.DashboardWrap>
   );
 };

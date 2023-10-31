@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { Button } from "@chakra-ui/react";
+import useUserStore from "../../../../store/user/useUserStore";
 
 ChartJS.register(
   CategoryScale,
@@ -21,6 +22,7 @@ ChartJS.register(
 );
 
 const Chart = ({ matchingData }) => {
+  const { payPerHour } = useUserStore((state) => state.userData);
   const today = new Date();
   const currentMonth = today.getMonth() + 1;
   const currentYear = today.getFullYear();
@@ -58,21 +60,45 @@ const Chart = ({ matchingData }) => {
   };
 
   const handleLast7days = () => {
-    setChartDate(
-      last7daysData(matchingData).map(
-        (data) => `${data.date.year}-${data.date.month}-${data.date.day}`,
-      ),
-    );
+    const last7DaysArr = last7daysData(matchingData);
+
+    const sortedDates = last7DaysArr
+      .map(
+        (data) =>
+          new Date(`${data.date.year}-${data.date.month}-${data.date.day}`),
+      )
+      .sort((a, b) => a - b);
+
+    const returnStringToDate = sortedDates.map((date) => {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      return `${year}-${month}-${day}`;
+    });
+
+    setChartDate(returnStringToDate);
     setChartLabel("지난 7일 근무 급여");
     calculatePay(last7daysData(matchingData));
   };
 
   const handleThisMonth = () => {
-    setChartDate(
-      thisMonthData(matchingData).map(
-        (data) => `${data.date.year}-${data.date.month}-${data.date.day}`,
-      ),
-    );
+    const thisMonthDataArr = thisMonthData(matchingData);
+
+    const sortedDates = thisMonthDataArr
+      .map(
+        (data) =>
+          new Date(`${data.date.year}-${data.date.month}-${data.date.day}`),
+      )
+      .sort((a, b) => a - b);
+
+    const returnStringToDate = sortedDates.map((date) => {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      return `${year}-${month}-${day}`;
+    });
+
+    setChartDate(returnStringToDate);
     setChartLabel("이번 달 근무 급여");
     calculatePay(thisMonthData(matchingData));
   };
@@ -89,9 +115,15 @@ const Chart = ({ matchingData }) => {
 
     const thisYearPay = [];
 
+    const sortedKeys = Object.keys(groupedData).sort((a, b) => {
+      const dateA = new Date(a);
+      const dateB = new Date(b);
+      return dateA - dateB;
+    });
+
     for (const key in groupedData) {
       const OVERTIME_HOURS = 9;
-      const USER_PAY = 10000;
+      const USER_PAY = payPerHour;
       const monthData = groupedData[key];
       const totalPayForMonth = monthData.reduce((totalPay, item) => {
         const start = Number(item.time.start.replace(":", ""));
@@ -113,13 +145,13 @@ const Chart = ({ matchingData }) => {
       thisYearPay.push(totalPayForMonth);
     }
     setChartPay(thisYearPay);
-    setChartDate(Object.keys(groupedData));
+    setChartDate(sortedKeys);
     setChartLabel("월 별 급여 총액");
   };
 
   const calculatePay = (data) => {
     const OVERTIME_HOURS = 9;
-    const USER_PAY = 10000;
+    const USER_PAY = payPerHour;
     const userPay = data.map((item) => {
       const start = Number(item.time.start.replace(":", ""));
       const end = Number(item.time.end.replace(":", ""));
