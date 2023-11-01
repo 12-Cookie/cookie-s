@@ -7,7 +7,7 @@ import useUserStore from "../../../store/user/useUserStore";
 const ScheduleUtilItem = ({
   scheduleLists,
   scheduleData,
-  userLength,
+  status,
   index,
   setScheduleLists,
   setUserLength,
@@ -56,9 +56,11 @@ const ScheduleUtilItem = ({
       {isAdmin ? (
         <style.ScheduleUtilBtn>
           <style.DeleteBtn onClick={handleDelete}>삭제</style.DeleteBtn>
-          <style.AllocationBtn onClick={handleAllocation}>
-            배정
-          </style.AllocationBtn>
+          {status !== "모집완료" ? (
+            <style.AllocationBtn onClick={handleAllocation}>
+              배정
+            </style.AllocationBtn>
+          ) : null}
         </style.ScheduleUtilBtn>
       ) : (
         <button onClick={handleCancel}>취소하기</button>
