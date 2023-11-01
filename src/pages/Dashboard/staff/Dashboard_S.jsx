@@ -2,7 +2,7 @@ import * as style from "./Dashboard_S.style";
 import Notice from "../admin/notice/Notice";
 import { useFireFetch } from "../../../hooks/useFireFetch";
 import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
-import Chart from "./chart/chart";
+import Chart from "./chart/Chart";
 import { useEffect, useState } from "react";
 import useUserStore from "../../../store/user/useUserStore";
 import Loader from "../../../components/common/loader/Loader";
