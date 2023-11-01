@@ -10,7 +10,6 @@ import Loader from "../../../components/common/loader/Loader";
 const Dashboard_S = () => {
   const { id, companyId } = useUserStore((state) => state.userData);
   const fetch = useFireFetch();
-  const scheduleData = fetch.getData("schedule");
   const bookingShiftsData = fetch.getData("bookingShifts", "userId");
   const [fetchNoticeData, setFetchNoticeData] = useState([]);
   const [fetchBookedShifts, setFetchBookedShifts] = useState([]);
@@ -71,7 +70,7 @@ const Dashboard_S = () => {
       for (const secondItem of bookingShiftsData) {
         const scheduleId = secondItem.scheduleId;
 
-        const matchingFirstItem = scheduleData.find(
+        const matchingFirstItem = getScheduleData.find(
           (firstItem) => firstItem.id === scheduleId,
         );
 
