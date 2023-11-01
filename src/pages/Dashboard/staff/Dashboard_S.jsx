@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import useUserStore from "../../../store/user/useUserStore";
 import Loader from "../../../components/common/loader/Loader";
 
+import NoData from "./NoData";
+
 const Dashboard_S = () => {
   const { id, companyId } = useUserStore((state) => state.userData);
   const fetch = useFireFetch();
@@ -18,7 +20,6 @@ const Dashboard_S = () => {
   const [matchedData, setMatchedData] = useState([]);
   const matchingData = [];
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchData = async () => {
       const getNoticeData = await fetch.get("notice", "companyId", companyId);
@@ -82,6 +83,7 @@ const Dashboard_S = () => {
           matchingData.push(newObject);
         }
       }
+      console.log(matchedData);
       setLoading(false);
     };
 
@@ -95,11 +97,15 @@ const Dashboard_S = () => {
       ) : (
         <>
           <Notice fetchNoticeData={fetchNoticeData} />
-          <h1>내 스케줄</h1>
-          <ScheduleItem
-            scheduleLists={matchedData}
-            setFetchScheduleData={setFetchScheduleData}
-          />
+          <style.Title>내 스케줄</style.Title>
+          {matchedData.length === 0 ? (
+            <NoData />
+          ) : (
+            <ScheduleItem
+              scheduleLists={matchedData}
+              setFetchScheduleData={setFetchScheduleData}
+            />
+          )}
           <Chart matchingData={confirmedData} />
         </>
       )}

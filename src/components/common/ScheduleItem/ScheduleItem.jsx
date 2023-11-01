@@ -2,7 +2,6 @@ import * as style from "./ScheduleItem.style";
 import { useState } from "react";
 import { Badge } from "@chakra-ui/react";
 import useUserStore from "../../../store/user/useUserStore";
-import PropTypes from "prop-types";
 import ScheduleRoleItem from "../ScheduleRoleItem/ScheduleRoleItem";
 import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
 
@@ -98,8 +97,3 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
 };
 
 export default ScheduleItem;
-
-ScheduleItem.propTypes = {
-  scheduleLists: PropTypes.array,
-  setScheduleLists: PropTypes.array,
-};
