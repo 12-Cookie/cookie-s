@@ -30,6 +30,17 @@ export const Form = styled.form`
     outline: none !important;
     border: 2px solid #2b6cb0 !important;
   }
+  ul {
+    list-style: none;
+  }
+  li {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  #weekButtons {
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 
 export const TimeInput = styled.div`

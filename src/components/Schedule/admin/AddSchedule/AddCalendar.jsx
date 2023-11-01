@@ -2,7 +2,8 @@ import moment from "moment";
 import Calendar from "react-calendar";
 import styled from "styled-components";
 import "react-calendar/dist/Calendar.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useFireFetch } from "../../../../hooks/useFireFetch";
 
 const Div = styled.div`
   position: relative;
@@ -59,9 +60,22 @@ const Div = styled.div`
   }
 `;
 
-const AddCalendar = ({ onChange, value }) => {
-  const initialMark = ["2023-10-02", "2023-10-12", "2023-10-10"];
-  const [mark, setMark] = useState(initialMark);
+const AddCalendar = ({ onChange, value, companyId }) => {
+  const [mark, setMark] = useState([]);
+  const [scheduleLists, setScheduleLists] = useState([]);
+  const fireFetch = useFireFetch();
+  const schedules = fireFetch.getData("schedule", "companyId", companyId);
+  useEffect(() => {
+    if (schedules[0]) {
+      setScheduleLists([...schedules]);
+      const date = schedules.map((obj) => {
+        return `${obj.date.year}-${obj.date.month
+          .toString()
+          .padStart(2, "0")}-${obj.date.day.toString().padStart(2, "0")}`;
+      });
+      setMark(date);
+    }
+  }, [schedules]);
   const tileDisabled = ({ date }) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);

@@ -53,9 +53,20 @@ const Div = styled.div`
   .react-calendar__month-view__days__day--neighboringMonth {
     color: #f0f0f0;
   }
+  .react-calendar__tile:disabled {
+    opacity: 0.5;
+  }
 `;
 
-const AdminCalendar = ({ onChange, value, mark, setmark }) => {
+const StaffCalendar = ({ onChange, value, mark }) => {
+  const tileDisabled = ({ date }) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(today.getDate());
+    twoDaysAgo.setHours(0, 0, 0, 0);
+    return date < twoDaysAgo;
+  };
   return (
     <Div>
       <Calendar
@@ -64,6 +75,7 @@ const AdminCalendar = ({ onChange, value, mark, setmark }) => {
         value={value}
         navigationLabel={null}
         showNeighboringMonth={true}
+        tileDisabled={tileDisabled}
         tileContent={({ date }) => {
           let html = [];
           if (mark.find((x) => x === moment(date).format("YYYY-MM-DD"))) {
@@ -80,4 +92,4 @@ const AdminCalendar = ({ onChange, value, mark, setmark }) => {
   );
 };
 
-export default AdminCalendar;
+export default StaffCalendar;
