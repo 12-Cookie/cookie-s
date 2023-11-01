@@ -8,9 +8,8 @@ import Notice from "./notice/Notice";
 import { useEffect, useState } from "react";
 
 const Dashboard_A = () => {
-  const { id, companyId } = useUserStore((state) => state.userData);
+  const { companyId } = useUserStore((state) => state.userData);
   const fetch = useFireFetch();
-  const bookedShiftsData = fetch.getData("bookedShifts");
   const [fetchNoticeData, setFetchNoticeData] = useState([]);
   const [fetchScheduleData, setFetchScheduleData] = useState([]);
   const [fetchUserData, setFetchUserData] = useState([]);
@@ -30,7 +29,6 @@ const Dashboard_A = () => {
       setFetchNoticeData(getNoticeData);
       setFetchScheduleData(getScheduleData);
       setFetchUserData(getUserData);
-      console.log(fetchUserData);
 
       setLoading(false);
     };
@@ -44,10 +42,10 @@ const Dashboard_A = () => {
       ) : (
         <>
           <Notice fetchNoticeData={fetchNoticeData} />
-          <h1>스케줄 관리</h1>
+          <style.h1>스케줄 관리</style.h1>
           <ScheduleItem
             scheduleLists={filteredScheduleData}
-            bookedShiftsData={bookedShiftsData}
+            setScheduleLists={setFetchScheduleData}
           />
           <StaffManagement userData={fetchUserData} />
         </>

@@ -1,3 +1,4 @@
+import * as style from "./Chart.style";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -199,8 +200,8 @@ const Chart = ({ matchingData }) => {
   };
 
   return (
-    <div>
-      <div style={{ display: "flex", gap: "5px", justifyContent: "flex-end" }}>
+    <style.ChartWrap>
+      <style.ButtonWrap>
         <Button onClick={handleLast7days} colorScheme="teal" size="sm">
           지난 7일
         </Button>
@@ -210,9 +211,9 @@ const Chart = ({ matchingData }) => {
         <Button onClick={handleThisYear} colorScheme="teal" size="sm">
           월 별
         </Button>
-      </div>
+      </style.ButtonWrap>
       <Bar options={options} data={data} />
-    </div>
+    </style.ChartWrap>
   );
 };
 

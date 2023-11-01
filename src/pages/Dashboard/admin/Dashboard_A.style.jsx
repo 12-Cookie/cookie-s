@@ -1,3 +1,3 @@
 import styled from "styled-components";
 
-export const DashboardWrap = styled.div``;
+export const h1 = styled.div``;
