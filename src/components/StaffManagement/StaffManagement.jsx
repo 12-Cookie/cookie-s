@@ -10,7 +10,7 @@ const StaffManagement = ({ userData }) => {
   };
 
   const renderUserTag = (userData) => {
-    if (userData.gender === "male") {
+    if (userData.gender === "남자") {
       return (
         <Tag variant="solid" colorScheme="teal">
           <TagLabel>{userData.name}</TagLabel>

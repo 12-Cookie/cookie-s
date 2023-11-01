@@ -51,7 +51,6 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
         return <Badge colorScheme="red">취소됨</Badge>;
       default:
         console.log("일치하는 양식이 없습니다.");
-        console.log("일치하는 양식이 없습니다.");
     }
   };
 
@@ -101,6 +100,6 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
 export default ScheduleItem;
 
 ScheduleItem.propTypes = {
-  scheduleData: PropTypes.array,
-  bookedShiftsData: PropTypes.array,
+  scheduleLists: PropTypes.array,
+  setScheduleLists: PropTypes.array,
 };

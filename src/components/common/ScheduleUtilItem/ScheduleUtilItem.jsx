@@ -2,7 +2,6 @@ import * as style from "./ScheduleUtilItem.style";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFireFetch } from "../../../hooks/useFireFetch";
-import PropTypes from "prop-types";
 import useUserStore from "../../../store/user/useUserStore";
 
 const ScheduleUtilItem = ({
@@ -69,7 +68,3 @@ const ScheduleUtilItem = ({
 };
 
 export default ScheduleUtilItem;
-
-ScheduleUtilItem.propTypes = {
-  scheduleData: PropTypes.object,
-};
