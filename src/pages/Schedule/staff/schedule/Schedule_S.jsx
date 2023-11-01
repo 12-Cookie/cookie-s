@@ -1,7 +1,7 @@
 import { Button, Heading } from "@chakra-ui/react";
 import * as style from "./Schedule_S.style";
 import { Link } from "react-router-dom";
-import StaffCalendar from "../../../../components/Schedule/staff/staffCalendar";
+import StaffCalendar from "../../../../components/Schedule/staff/StaffCalendar";
 import { useEffect, useState } from "react";
 import useUserStore from "../../../../store/user/useUserStore";
 import { useFireFetch } from "../../../../hooks/useFireFetch";

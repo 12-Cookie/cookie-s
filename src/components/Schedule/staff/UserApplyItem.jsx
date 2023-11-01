@@ -1,4 +1,3 @@
-import React from "react";
 import {
   ScheduleDate,
   ScheduleDay,
@@ -7,10 +6,15 @@ import {
   ScheduleStatus,
   ScheduleTime,
 } from "../../common/ScheduleItem/ScheduleItem.style";
-import { Badge } from "@chakra-ui/react";
 import Roles from "../admin/AddSchedule/Roles";
 import UserApplyButton from "./UserApplyButton";
 import styled from "styled-components";
+
+export const ScheduleItemWraps = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
 export const ScheduleItems = styled.div`
   width: 100%;
@@ -21,6 +25,28 @@ export const ScheduleItems = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`;
+
+export const ScheduleInfos = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+`;
+
+export const ScheduleDates = styled.div`
+  display: flex;
+  font-weight: bold;
+  gap: 3px;
+  min-width: 80px;
+`;
+export const ScheduleDays = styled.div``;
+
+export const ScheduleTimes = styled.span`
+  font-weight: normal;
+`;
+
+export const ScheduleStatuss = styled.div`
+  margin-left: auto;
 `;
 
 const UserApplyItem = ({ scheduleLists, setScheduleLists }) => {
@@ -35,31 +61,31 @@ const UserApplyItem = ({ scheduleLists, setScheduleLists }) => {
   };
 
   return (
-    <ScheduleItemWrap>
+    <ScheduleItemWraps>
       {setScheduleLists &&
         scheduleLists.map((scheduleData, index) => (
-          <ScheduleItems key={scheduleData.id}>
-            <ScheduleInfo>
-              <ScheduleDate>
+          <ScheduleItems key={scheduleData?.id}>
+            <ScheduleInfos>
+              <ScheduleDates>
                 {`${scheduleData.date.month}월`}
                 {`${scheduleData.date.day}일`}
-                <ScheduleDay>
+                <ScheduleDays>
                   ({getDayOfWeekFromDate(scheduleData.date)})
-                </ScheduleDay>
-              </ScheduleDate>
-              <ScheduleTime>
+                </ScheduleDays>
+              </ScheduleDates>
+              <ScheduleTimes>
                 {`${scheduleData.time.start} ~ ${scheduleData.time.end}`}
-              </ScheduleTime>
-              <ScheduleStatus>
+              </ScheduleTimes>
+              <ScheduleStatuss>
                 <UserApplyButton scheduleData={scheduleData} />
-              </ScheduleStatus>
-            </ScheduleInfo>
+              </ScheduleStatuss>
+            </ScheduleInfos>
             <div>
               <Roles companyId={scheduleData?.companyId} />
             </div>
           </ScheduleItems>
         ))}
-    </ScheduleItemWrap>
+    </ScheduleItemWraps>
   );
 };
 
