@@ -27,7 +27,7 @@ const StaffManagement = ({ userData }) => {
 
   return (
     <>
-      <h1 onClick={handleClick}>직원관리</h1>
+      <style.Title onClick={handleClick}>직원관리</style.Title>
       <style.StaffManagementWrap>
         {userData.map((userData) => (
           <li key={userData.id} onClick={() => handleClick(userData)}>

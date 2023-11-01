@@ -97,7 +97,7 @@ const Dashboard_S = () => {
       ) : (
         <>
           <Notice fetchNoticeData={fetchNoticeData} />
-          <style.title>내 스케줄</style.title>
+          <style.Title>내 스케줄</style.Title>
           {matchedData.length === 0 ? (
             <NoData />
           ) : (

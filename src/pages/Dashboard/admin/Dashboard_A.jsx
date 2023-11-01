@@ -30,6 +30,8 @@ const Dashboard_A = () => {
       setFetchScheduleData(getScheduleData);
       setFetchUserData(getUserData);
 
+      console.log(fetchScheduleData);
+
       setLoading(false);
     };
     fetchData();
@@ -42,12 +44,14 @@ const Dashboard_A = () => {
       ) : (
         <>
           <Notice fetchNoticeData={fetchNoticeData} />
-          <style.h1>스케줄 관리</style.h1>
+          <style.Title>스케줄 관리</style.Title>
           <ScheduleItem
             scheduleLists={filteredScheduleData}
             setScheduleLists={setFetchScheduleData}
           />
-          <StaffManagement userData={fetchUserData} />
+          <style.StaffManagementWrap>
+            <StaffManagement userData={fetchUserData} />
+          </style.StaffManagementWrap>
         </>
       )}
     </style.DashboardWrap>
