@@ -1,16 +1,16 @@
 import {
   collection,
   query,
-  getFirestore,
   getDocs,
   where,
   doc,
   setDoc,
+  addDoc,
+  deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
-import { app } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 import { useEffect, useState } from "react";
-
-const db = getFirestore(app);
 
 export const useFireFetch = () => {
   const [data, setData] = useState([]);
@@ -102,6 +102,37 @@ export const useFireFetch = () => {
     set();
   };
 
+  const addData = (initialCollection, data) => {
+    const set = async () => {
+      try {
+        const docRef = await addDoc(collection(db, initialCollection), data);
+        const docId = docRef.id;
+        const newData = { id: docId, ...data };
+
+        // 데이터 업데이트
+        await setDoc(doc(db, initialCollection, docId), newData);
+        console.log(data);
+        if (initialCollection === "bookedShifts")
+          setBookedShifts((prev) => [data, ...prev]);
+        else if (initialCollection === "bookingShifts")
+          setBookingShifts((prev) => [data, ...prev]);
+        else if (initialCollection === "company")
+          setCompany((prev) => [data, ...prev]);
+        else if (initialCollection === "notice")
+          setNotice((prev) => [data, ...prev]);
+        else if (initialCollection === "schedule")
+          setSchedule((prev) => [data, ...prev]);
+        else if (initialCollection === "users")
+          setUsers((prev) => [data, ...prev]);
+
+        console.log("성공, 문서 ID:", docRef.id);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    set();
+  };
+
   const bookedUser = (id) => {
     useEffect(() => {
       const dataJoin = async () => {
@@ -130,5 +161,80 @@ export const useFireFetch = () => {
     return join;
   };
 
-  return { getData, postData, bookedUser };
+  const deleteById = (initialCollection, id) => {
+    console.log(schedule);
+    const set = async () => {
+      try {
+        await deleteDoc(doc(db, initialCollection, id));
+        console.log(`문서 ${id} 삭제 완료`);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    set();
+  };
+
+  const get = async (initialCollection, key = null, value = null) => {
+    try {
+      if (key) {
+        const Ref = collection(db, initialCollection);
+        const q = query(Ref, where(key, "==", value));
+        const querySnapshot = await getDocs(q);
+        const userData = [];
+
+        querySnapshot.forEach((doc) => {
+          userData.push(doc.data());
+        });
+
+        console.log("good");
+        return userData;
+      } else {
+        const Ref = collection(db, initialCollection);
+        const userData = [];
+        const querySnapshot = await getDocs(Ref);
+
+        querySnapshot.forEach((doc) => {
+          userData.push(doc.data());
+        });
+
+        console.log("good");
+        return userData;
+      }
+    } catch (error) {
+      console.error("bad: ", error);
+    }
+  };
+
+  const post = async (initialCollection, id, data) => {
+    try {
+      await setDoc(doc(db, initialCollection, id), data);
+
+      console.log("good");
+    } catch (error) {
+      console.error("bad: ", error);
+    }
+  };
+
+  const update = async (initialCollection, id, newData) => {
+    try {
+      const docRef = doc(db, initialCollection, id);
+
+      await updateDoc(docRef, newData);
+
+      console.log("good");
+    } catch (error) {
+      console.error("bad: ", error);
+    }
+  };
+
+  return {
+    getData,
+    postData,
+    bookedUser,
+    addData,
+    deleteById,
+    get,
+    update,
+    post,
+  };
 };

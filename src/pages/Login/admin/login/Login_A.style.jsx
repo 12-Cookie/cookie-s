@@ -1,3 +1,5 @@
 import styled from "styled-components";
 
-export const loginWrap = styled.div``;
+export const AdminLoginWrap = styled.div`
+  position: relative;
+`;

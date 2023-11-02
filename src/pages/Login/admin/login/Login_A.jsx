@@ -1,59 +1,54 @@
 import * as style from "./Login_A.style";
-import LoginForm from "./LoginForm";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-} from "firebase/auth";
+import LoginForm from "../../../../components/Login/LoginForm";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../../../../firebase/firebase";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-
-const initailUserdata = localStorage.getItem("userData")
-  ? JSON.parse(localStorage.getItem("userData"))
-  : {};
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import useUserStore from "../../../../store/user/useUserStore";
+import { useFireFetch } from "../../../../hooks/useFireFetch";
+import { collection, query, getDocs, where } from "firebase/firestore";
+import { db } from "../../../../firebase/firebase";
 
 const Login_A = () => {
-  const [userData, setUserData] = useState(initailUserdata);
-
-  const auth = getAuth(app);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const auth = getAuth(app);
+  const { userData, setUserData } = useUserStore();
+  const fireFetch = useFireFetch();
   const [firebaseError, setFirebaseError] = useState("");
 
   const handleLogin = (email, password) => {
     signInWithEmailAndPassword(auth, email, password)
-      .then((response) => {
-        console.log(response);
-        localStorage.setItem("userData", JSON.stringify(response.user));
+      .then(async (response) => {
+        const { uid } = response.user;
+
+        const Ref = collection(db, "users");
+        const q = query(Ref, where("id", "==", uid));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          setUserData({ ...userData, id: uid, isAdmin: false });
+          fireFetch.postData("users", uid, userData);
+          navigate("/info/admin");
+        } else {
+          querySnapshot.forEach((doc) => {
+            setUserData({ ...doc.data() });
+            navigate("/dashboard");
+          });
+        }
       })
       .catch((error) => {
         return error & setFirebaseError("이메일 또는 비밀번호가 틀렸습니다.");
       });
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        console.log(user);
-        setUserData(user); // 상태관리 필요
-        navigate("/login/admin");
-      } else if (user && pathname === "/login/admin") {
-        navigate("/dashboard");
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [auth, navigate]);
-
   return (
-    <LoginForm
-      title={"로그인"}
-      getDataForm={handleLogin}
-      firebaseError={firebaseError}
-    />
+    <style.AdminLoginWrap>
+      <LoginForm
+        title={"관리자 로그인"}
+        getDataForm={handleLogin}
+        firebaseError={firebaseError}
+      />
+    </style.AdminLoginWrap>
   );
 };
 

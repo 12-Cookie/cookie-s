@@ -1,13 +1,20 @@
+import * as style from "./ScheduleItem.style";
 import { useState } from "react";
 import { Badge } from "@chakra-ui/react";
+import useUserStore from "../../../store/user/useUserStore";
 import ScheduleRoleItem from "../ScheduleRoleItem/ScheduleRoleItem";
 import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
-import PropTypes from "prop-types";
-import * as style from "./ScheduleItem.style";
 
-const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
-  const [isAdmin, setIsAdmin] = useState(true);
-
+const ScheduleItem = ({
+  scheduleLists,
+  setScheduleLists,
+  fetchBookedShifts,
+}) => {
+  const { isAdmin } = useUserStore((state) => state.userData);
+  const [status, setStatus] = useState("");
+  const [userLength, setUserLength] = useState(
+    scheduleLists && Array(scheduleLists.length).fill(0),
+  );
   const getDayOfWeekFromDate = (date) => {
     const { year, month, day } = date;
     const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -18,13 +25,14 @@ const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
     return getDay;
   };
 
-  const renderStatusToAdmin = (scheduleData) => {
+
+  const renderStatusToAdmin = (scheduleData, index) => {
     const { status, numWorkers } = scheduleData;
     switch (status) {
       case "모집중":
         return (
           <Badge>
-            모집중 ({bookedShiftsData.length}/{numWorkers})
+            모집중 ({userLength[index]}/{numWorkers})
           </Badge>
         );
       case "모집완료":
@@ -36,55 +44,63 @@ const ScheduleItem = ({ scheduleData, bookedShiftsData }) => {
     }
   };
 
-  const renderStatusToStaff = (scheduleData) => {
+  const renderStatusToStaff = (scheduleData, index, fetchBookedShifts) => {
     const { status } = scheduleData;
-    switch (status) {
-      case "모집중":
-        return <Badge>대기중</Badge>;
-      case "모집완료":
-        return <Badge colorScheme="green">확정</Badge>;
-      case "모집취소":
-        return <Badge colorScheme="red">취소됨</Badge>;
-      default:
-        console.log("일치하는 양식이 없습니다.");
-        console.log("일치하는 양식이 없습니다.");
+    if (status === "모집중") {
+      return <Badge>대기중</Badge>;
+    } else if (status === "모집완료" && !fetchBookedShifts[index].role) {
+      return <Badge colorScheme="red">취소됨</Badge>;
+    } else if (status === "모집완료" && fetchBookedShifts[index].role) {
+      return <Badge colorScheme="green">확정</Badge>;
     }
   };
 
   return (
     <style.ScheduleItemWrap>
-      {scheduleData.map((scheduleData) => (
-        <style.ScheduleItem key={scheduleData.id}>
-          <style.ScheduleInfo>
-            <style.ScheduleDate>
-              {`${scheduleData.date.month}월`}
-              {`${scheduleData.date.day}일`}
-              <style.ScheduleDay>
-                ({getDayOfWeekFromDate(scheduleData.date)})
-              </style.ScheduleDay>
-            </style.ScheduleDate>
-            <style.ScheduleTime>
-              {`${scheduleData.time.start} ~ ${scheduleData.time.end}`}
-            </style.ScheduleTime>
-            <style.ScheduleStatus>
-              <div>
-                {isAdmin
-                  ? renderStatusToAdmin(scheduleData)
-                  : renderStatusToStaff(scheduleData)}
-              </div>
-            </style.ScheduleStatus>
-          </style.ScheduleInfo>
-          {isAdmin ? "" : <ScheduleRoleItem />}
-          {isAdmin ? <ScheduleUtilItem scheduleData={scheduleData} /> : ""}
-        </style.ScheduleItem>
-      ))}
+      {scheduleLists &&
+        scheduleLists.map((scheduleData, index) => (
+          <style.ScheduleItem key={scheduleData.id}>
+            <style.ScheduleInfo>
+              <style.ScheduleDate>
+                {`${scheduleData.date.month}월`}
+                {`${scheduleData.date.day}일`}
+                <style.ScheduleDay>
+                  ({getDayOfWeekFromDate(scheduleData.date)})
+                </style.ScheduleDay>
+              </style.ScheduleDate>
+              <style.ScheduleTime>
+                {`${scheduleData.time.start} ~ ${scheduleData.time.end}`}
+              </style.ScheduleTime>
+              <style.ScheduleStatus>
+                <div>
+                  {isAdmin
+                    ? renderStatusToAdmin(scheduleData, index)
+                    : renderStatusToStaff(
+                        scheduleData,
+                        index,
+                        fetchBookedShifts,
+                      )}
+                </div>
+              </style.ScheduleStatus>
+            </style.ScheduleInfo>
+            {isAdmin ? "" : <ScheduleRoleItem scheduleData={scheduleData} />}
+            {isAdmin ? (
+              <ScheduleUtilItem
+                scheduleData={scheduleData}
+                scheduleLists={scheduleLists}
+                userLength={userLength}
+                setScheduleLists={setScheduleLists}
+                setUserLength={setUserLength}
+                index={index}
+                status={scheduleData.status}
+              />
+            ) : (
+              ""
+            )}
+          </style.ScheduleItem>
+        ))}
     </style.ScheduleItemWrap>
   );
 };
 
 export default ScheduleItem;
-
-ScheduleItem.propTypes = {
-  scheduleData: PropTypes.array,
-  bookedShiftsData: PropTypes.array,
-};

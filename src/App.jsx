@@ -16,6 +16,7 @@ import ManageSchedule_S from "./pages/Schedule/staff/manageSchedule/ManageSchedu
 import AssignRole from "./pages/Schedule/admin/assignRole/AssignRole";
 import AddSchedule from "./pages/Schedule/admin/addSchedule/AddSchedule";
 import Salary_S from "./pages/Salary/Salary_S";
+import Workers from "./pages/Workers/Workers";
 import ViewStaff from "./pages/UserInfo/ViewStaff/ViewStaff";
 import StaffInfo from "./pages/UserInfo/StaffInfo/StaffInfo";
 import Notice_S from "./pages/Notice/staff/Notice_S";
@@ -23,13 +24,15 @@ import Notice_A from "./pages/Notice/admin/Notice_A";
 import AddNotice from "./pages/Notice/admin/AddNotice/AddNotice";
 import Info_S from "./pages/Info/staff/Info_S";
 import Info_A from "./pages/Info/admin/Info_A";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import useUserStore from "./store/user/useUserStore";
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(true);
-  const [isLogin, setIsLogin] = useState(true);
-
+  const { id, isAdmin } = useUserStore((state) => state.userData);
+  const isLogin = id ? true : false;
+  // const [isAdmin, setIsAdmin] = useState(true);
+  // const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -60,7 +63,7 @@ function App() {
             element={!isAdmin ? <ManageSchedule_S /> : <ManageSchedule_A />}
           />
           <Route
-            path="/schedule/assign"
+            path="/schedule/assign/:id"
             element={!isAdmin ? <NotFound /> : <AssignRole />}
           />
           <Route
@@ -70,6 +73,10 @@ function App() {
           <Route
             path="/salary"
             element={!isAdmin ? <Salary_S /> : <NotFound />}
+          />
+          <Route
+            path="/workers"
+            element={!isAdmin ? <NotFound /> : <Workers />}
           />
           <Route
             path="/staff"
@@ -92,7 +99,9 @@ function App() {
         </Routes>
       </section>
 
-      <section className="nav">{isLogin ? <BottomNav /> : null}</section>
+      <section className="nav">
+        {isLogin ? <BottomNav isAdmin={isAdmin} /> : null}
+      </section>
     </>
   );
 }

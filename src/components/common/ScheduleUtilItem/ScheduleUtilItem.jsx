@@ -1,23 +1,50 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
 import * as style from "./ScheduleUtilItem.style";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useFireFetch } from "../../../hooks/useFireFetch";
+import useUserStore from "../../../store/user/useUserStore";
 
-const ScheduleUtilItem = ({ scheduleData }) => {
-  const [isAdmin, setIsAdmin] = useState(true);
+const ScheduleUtilItem = ({
+  scheduleLists,
+  scheduleData,
+  status,
+  index,
+  setScheduleLists,
+  setUserLength,
+}) => {
+  const { isAdmin } = useUserStore((state) => state.userData);
   const navigate = useNavigate();
+  const fireFetch = useFireFetch();
   const { id } = scheduleData;
+
+  const users = fireFetch.bookedUser(scheduleData.id);
+
+  useEffect(() => {
+    setUserLength((prev) => {
+      const copy = [...prev];
+      copy[index] = users.length;
+      return copy;
+    });
+  }, [users]);
+
+  const deleteData = () => {
+    alert(`id: ${id} 가 삭제 되었습니다`);
+
+    const copy = [...scheduleLists];
+    const filtered = copy.filter((v, i) => v.id !== id);
+    setScheduleLists(filtered);
+    fireFetch.deleteById("schedule", id);
+  };
 
   const handleDelete = () => {
     console.log("data", scheduleData);
     console.log("id", id);
     const confirmValue = confirm("정말 삭제하시겠습니까?");
-    confirmValue ? alert(`id: ${id} 가 삭제 되었습니다`) : "";
+    confirmValue ? deleteData() : "";
   };
 
   const handleAllocation = () => {
-    console.log(scheduleData);
-    navigate(`/schedule/assign?id=${id}`);
+    navigate(`/schedule/assign/${id}`);
   };
 
   const handleCancel = () => {
@@ -30,7 +57,7 @@ const ScheduleUtilItem = ({ scheduleData }) => {
         <style.ScheduleUtilBtn>
           <style.DeleteBtn onClick={handleDelete}>삭제</style.DeleteBtn>
           <style.AllocationBtn onClick={handleAllocation}>
-            배정
+            {status === "모집완료" ? "수정" : "배정"}
           </style.AllocationBtn>
         </style.ScheduleUtilBtn>
       ) : (
@@ -41,7 +68,3 @@ const ScheduleUtilItem = ({ scheduleData }) => {
 };
 
 export default ScheduleUtilItem;
-
-ScheduleUtilItem.propTypes = {
-  scheduleData: PropTypes.object,
-};

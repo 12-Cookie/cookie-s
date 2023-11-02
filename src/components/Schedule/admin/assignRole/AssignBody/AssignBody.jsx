@@ -9,10 +9,14 @@ const AssignBody = ({
   isHidden,
   userData,
   config,
+  booking,
+  userId,
   setViewFooter,
   setRoleDate,
   setConfig,
   setIsHidden,
+  setBooking,
+  setLoading,
 }) => {
   const [isConfig, setIsConfig] = useState([]);
 
@@ -23,13 +27,14 @@ const AssignBody = ({
   useEffect(() => {
     if (company) {
       const map = new Map();
-      company.role.forEach((v, i) => {
+      company.roles.forEach((v, i) => {
         map.set(v, []);
       });
 
       setRoleDate(map);
-      setIsConfig(Array(company.role.length).fill(false));
+      setIsConfig(Array(company.roles.length).fill(false));
     }
+    setLoading(false);
   }, [company]);
 
   const handleConfig = (role, i) => {
@@ -55,16 +60,21 @@ const AssignBody = ({
       const mapCopy = new Map(roleData);
       const roleCopy = [...mapCopy.get(config)];
       const i = roleCopy.findIndex((v, i) => v === name);
+
       roleCopy.splice(i, 1);
       mapCopy.set(config, roleCopy);
       setRoleDate(mapCopy);
+
+      const user = userId.find((v, i) => v.name === name);
+      const newArray = booking.filter((v, i) => v.userId !== user.id);
+      setBooking([...newArray]);
     }
   };
 
   return (
     <style.AssignBodyWrap>
       {company
-        ? company.role.map((roleV, i) => {
+        ? company.roles.map((roleV, i) => {
             return (
               <style.Role
                 key={i}
