@@ -1,15 +1,7 @@
 import * as style from "./Info_S.style";
 import { app } from "../../../firebase/firebase";
 import { signOut, getAuth } from "firebase/auth";
-import {
-  Button,
-  Center,
-  Flex,
-  Heading,
-  Spacer,
-  Tag,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Center, Flex, Heading, Spacer, Text } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../../../store/user/useUserStore";
 
