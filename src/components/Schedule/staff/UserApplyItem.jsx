@@ -14,7 +14,7 @@ import styled from "styled-components";
 
 export const ScheduleItems = styled.div`
   width: 100%;
-  height: 100px;
+  height: 50px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 18px 15px;
@@ -37,28 +37,31 @@ const UserApplyItem = ({ scheduleLists, setScheduleLists }) => {
   return (
     <ScheduleItemWrap>
       {setScheduleLists &&
-        scheduleLists.map((scheduleData, index) => (
-          <ScheduleItems key={scheduleData.id}>
-            <ScheduleInfo>
-              <ScheduleDate>
-                {`${scheduleData.date.month}월`}
-                {`${scheduleData.date.day}일`}
-                <ScheduleDay>
-                  ({getDayOfWeekFromDate(scheduleData.date)})
-                </ScheduleDay>
-              </ScheduleDate>
-              <ScheduleTime>
-                {`${scheduleData.time.start} ~ ${scheduleData.time.end}`}
-              </ScheduleTime>
-              <ScheduleStatus>
-                <UserApplyButton scheduleData={scheduleData} />
-              </ScheduleStatus>
-            </ScheduleInfo>
-            <div>
-              <Roles companyId={scheduleData?.companyId} />
-            </div>
-          </ScheduleItems>
-        ))}
+        scheduleLists.map((scheduleData, index) => {
+          console.log(scheduleData.status);
+
+          return (
+            <ScheduleItems key={scheduleData.id}>
+              <ScheduleInfo>
+                <ScheduleDate>
+                  {`${scheduleData.date.month}월`}
+                  {`${scheduleData.date.day}일`}
+                  <ScheduleDay>
+                    ({getDayOfWeekFromDate(scheduleData.date)})
+                  </ScheduleDay>
+                </ScheduleDate>
+                <ScheduleTime>
+                  {`${scheduleData.time.start} ~ ${scheduleData.time.end}`}
+                </ScheduleTime>
+                <ScheduleStatus>
+                  {scheduleData.status !== "모집완료" && (
+                    <UserApplyButton scheduleData={scheduleData} />
+                  )}
+                </ScheduleStatus>
+              </ScheduleInfo>
+            </ScheduleItems>
+          );
+        })}
     </ScheduleItemWrap>
   );
 };

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { Heading, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import Loader from "../../../../components/common/loader/Loader";
 import ScheduleItem from "../../../../components/common/ScheduleItem/ScheduleItem";
 import useUserStore from "../../../../store/user/useUserStore";
 
@@ -10,10 +11,13 @@ const ManageSchedule_S = () => {
   const fireFetch = useFireFetch();
   const { id } = useUserStore((state) => state.userData);
   const [scheduleLists, setScheduleLists] = useState([]);
+  const [fetchBookedShifts, setFetchBookedShifts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       const bookedShiftsRes = await fireFetch.get("bookedShifts", "userId", id);
+      setFetchBookedShifts(bookedShiftsRes);
       for (const v of bookedShiftsRes) {
         const scheduleRes = await fireFetch.get("schedule", "id", v.scheduleId);
         if (!scheduleLists[0]) {
@@ -22,6 +26,12 @@ const ManageSchedule_S = () => {
       }
     };
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const time = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, []);
 
   return (
@@ -44,12 +54,16 @@ const ManageSchedule_S = () => {
           신청 확인
         </Button>
       </div>
-      {scheduleLists[0] && (
-        <ScheduleItem
-          scheduleLists={scheduleLists}
-          setScheduleLists={setScheduleLists}
-        />
-      )}
+      {loading ? <Loader /> : null}
+      <div style={{ display: loading ? "none" : "block" }}>
+        {scheduleLists[0] && (
+          <ScheduleItem
+            scheduleLists={scheduleLists}
+            setScheduleLists={setScheduleLists}
+            fetchBookedShifts={fetchBookedShifts}
+          />
+        )}
+      </div>
     </style.ManageScheduleWrap>
   );
 };
