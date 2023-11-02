@@ -7,7 +7,7 @@ import useUserStore from "../../../store/user/useUserStore";
 const ScheduleUtilItem = ({
   scheduleLists,
   scheduleData,
-  userLength,
+  status,
   index,
   setScheduleLists,
   setUserLength,
@@ -57,7 +57,7 @@ const ScheduleUtilItem = ({
         <style.ScheduleUtilBtn>
           <style.DeleteBtn onClick={handleDelete}>삭제</style.DeleteBtn>
           <style.AllocationBtn onClick={handleAllocation}>
-            배정
+            {status === "모집완료" ? "수정" : "배정"}
           </style.AllocationBtn>
         </style.ScheduleUtilBtn>
       ) : (

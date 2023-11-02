@@ -7,6 +7,7 @@ import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
 
 const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
   const { isAdmin } = useUserStore((state) => state.userData);
+  const [status, setStatus] = useState("");
   const [userLength, setUserLength] = useState(
     scheduleLists && Array(scheduleLists.length).fill(0),
   );
@@ -86,6 +87,7 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
                 setScheduleLists={setScheduleLists}
                 setUserLength={setUserLength}
                 index={index}
+                status={scheduleData.status}
               />
             ) : (
               ""
