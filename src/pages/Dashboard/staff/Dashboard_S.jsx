@@ -97,6 +97,7 @@ const Dashboard_S = () => {
               fetchBookedShifts={fetchBookedShifts}
             />
           )}
+          <style.Title>급여 차트</style.Title>
           <Chart matchingData={confirmedData} />
         </>
       )}
