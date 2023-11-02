@@ -10,10 +10,12 @@ const ManageSchedule_S = () => {
   const fireFetch = useFireFetch();
   const { id } = useUserStore((state) => state.userData);
   const [scheduleLists, setScheduleLists] = useState([]);
+  const [fetchBookedShifts, setFetchBookedShifts] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const bookedShiftsRes = await fireFetch.get("bookedShifts", "userId", id);
+      setFetchBookedShifts(bookedShiftsRes);
       for (const v of bookedShiftsRes) {
         const scheduleRes = await fireFetch.get("schedule", "id", v.scheduleId);
         if (!scheduleLists[0]) {
@@ -48,6 +50,7 @@ const ManageSchedule_S = () => {
         <ScheduleItem
           scheduleLists={scheduleLists}
           setScheduleLists={setScheduleLists}
+          fetchBookedShifts={fetchBookedShifts}
         />
       )}
     </style.ManageScheduleWrap>
