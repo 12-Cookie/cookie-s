@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import * as style from "./SubmitCode.style";
 import {
   collection,
@@ -10,20 +9,13 @@ import {
 } from "firebase/firestore";
 import { app } from "./../../../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import {
-  Heading,
-  PinInput,
-  PinInputField,
-  Button,
-  HStack,
-} from "@chakra-ui/react";
+import { Heading, PinInput, PinInputField, HStack } from "@chakra-ui/react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import useUserStore from "../../../../store/user/useUserStore";
 
 const db = getFirestore(app);
 
 const SubmitCode = () => {
-  // const [pin, setPin] = useState(["", "", "", "", "", ""]); // 초기 상태: 4자리 빈 PIN
   const navigate = useNavigate();
   const { userData, setUserData } = useUserStore();
   const fireFetch = useFireFetch();
