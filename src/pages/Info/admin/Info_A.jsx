@@ -1,7 +1,15 @@
 import * as style from "./Info_A.style";
 import { app } from "../../../firebase/firebase";
 import { signOut, getAuth } from "firebase/auth";
-import { Button, Flex, Heading, Spacer, Text, Tag } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  Heading,
+  Spacer,
+  Text,
+  Tag,
+  Center,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import useUserStore from "../../../store/user/useUserStore";
 import { useFireFetch } from "../../../hooks/useFireFetch";
@@ -31,7 +39,7 @@ const Info_A = () => {
   return (
     <style.InfoWrap>
       <Heading as="h2" size="md" mb="2rem">
-        공지사항
+        회사정보
       </Heading>
       {companyInfo ? (
         <>
@@ -55,7 +63,16 @@ const Info_A = () => {
               ))}
             </Flex>
           </Flex>
-          <Button onClick={handleLogOut}>로그아웃</Button>
+          <Flex>
+            <Heading as="h5" size="sm">
+              주소
+            </Heading>
+            <Spacer />
+            <Text>{companyInfo.address}</Text>
+          </Flex>
+          <Center>
+            <Button onClick={handleLogOut}>로그아웃</Button>
+          </Center>
         </>
       ) : (
         <div>Loading...</div>
