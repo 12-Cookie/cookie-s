@@ -48,9 +48,12 @@ const Chart = ({ matchingData }) => {
   };
 
   const thisMonthData = (data) => {
-    const filteredData = data.filter(
-      (item) =>
-        item.date.month === currentMonth && item.date.year === currentYear,
+    const filteredData = data.filter((item) =>
+      item.date.month === currentMonth &&
+      item.date.year === currentYear &&
+      currentDate <= 7
+        ? item.date.day <= currentDate
+        : item.date.day <= currentDate - 7 && item.date.day >= currentDate,
     );
     return filteredData;
   };
