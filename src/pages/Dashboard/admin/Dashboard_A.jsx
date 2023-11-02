@@ -30,8 +30,6 @@ const Dashboard_A = () => {
       setFetchScheduleData(getScheduleData);
       setFetchUserData(getUserData);
 
-      console.log(fetchScheduleData);
-
       setLoading(false);
     };
     fetchData();

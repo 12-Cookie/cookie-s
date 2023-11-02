@@ -1,6 +1,6 @@
 <p align="center">
   <img width="150" height="180" alt="icon" src="https://github.com/seungsimdang/RSS/assets/93538221/9a1b4ae7-2749-45c5-8e58-156aab6b1b96" />
-  <h2 align="center">📆 알쓰 - 근무 스캐줄링 APP</h2>
+  <h2 align="center">📆 알쓰 - 근무 스케줄링 APP</h2>
 </p>
 
 일정에 맞게 근무 스케줄을 지정하는 웹서비스 <b>"알쓰"</b>입니다.  
