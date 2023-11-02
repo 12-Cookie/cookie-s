@@ -42,14 +42,18 @@ const Dashboard_S = () => {
         }
       });
 
+      
       setFetchNoticeData(getNoticeData);
-      setFetchBookedShifts(getBookedShiftsData);
       setFetchScheduleData(getScheduleData);
       setMatchedData(matchData);
-      setSliceMatchData(matchData.slice(0, 3));
-      console.log(fetchBookedShifts);
+      
+      const sortedSliceMatchData = matchData.sort((a, b) => b.id.localeCompare(a.id));
+      const sortedFetchBookedShifts = getBookedShiftsData.sort((a, b) => b.scheduleId.localeCompare(a.scheduleId));
+      
+      setSliceMatchData(sortedSliceMatchData);
+      setFetchBookedShifts(sortedFetchBookedShifts);
 
-      const dataArr = [];
+      const dataArr = []; 
       const confirmDataArr = [];
 
       for (const item of getBookedShiftsData) {
@@ -63,29 +67,13 @@ const Dashboard_S = () => {
           (item) => scheduleData.id === item.scheduleId,
         );
 
-        if (matchingItem) {
+        if (matchingItem && scheduleData.status === '모집완료') {
           confirmDataArr.push(scheduleData);
         }
       });
 
       setConfirmedData(confirmDataArr);
-
-      // 이상 없으면 제거
-      // for (const secondItem of bookingShiftsData) {
-      //   const scheduleId = secondItem.scheduleId;
-
-      //   const matchingFirstItem = getScheduleData.find(
-      //     (firstItem) => firstItem.id === scheduleId,
-      //   );
-
-      //   if (matchingFirstItem) {
-      //     const newObject = {
-      //       ...matchingFirstItem,
-      //     };
-
-      //     matchingData.push(newObject);
-      //   }
-      // }
+      console.log(confirmedData)
       setLoading(false);
     };
 
