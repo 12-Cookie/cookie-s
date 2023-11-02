@@ -28,8 +28,6 @@ const ScheduleUtilItem = ({
   }, [users]);
 
   const deleteData = () => {
-    alert(`id: ${id} 가 삭제 되었습니다`);
-
     const copy = [...scheduleLists];
     const filtered = copy.filter((v, i) => v.id !== id);
     setScheduleLists(filtered);
