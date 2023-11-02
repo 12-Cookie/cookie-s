@@ -5,12 +5,15 @@ import useUserStore from "../../../store/user/useUserStore";
 import ScheduleRoleItem from "../ScheduleRoleItem/ScheduleRoleItem";
 import ScheduleUtilItem from "../ScheduleUtilItem/ScheduleUtilItem";
 
-const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
+const ScheduleItem = ({
+  scheduleLists,
+  setScheduleLists,
+  fetchBookedShifts,
+}) => {
   const { isAdmin } = useUserStore((state) => state.userData);
   const [userLength, setUserLength] = useState(
     scheduleLists && Array(scheduleLists.length).fill(0),
   );
-
   const getDayOfWeekFromDate = (date) => {
     const { year, month, day } = date;
     const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -39,17 +42,15 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
     }
   };
 
-  const renderStatusToStaff = (scheduleData) => {
+  const renderStatusToStaff = (scheduleData, index, fetchBookedShifts) => {
     const { status } = scheduleData;
-    switch (status) {
-      case "모집중":
-        return <Badge>대기중</Badge>;
-      case "모집완료":
-        return <Badge colorScheme="green">확정</Badge>;
-      case "모집취소":
-        return <Badge colorScheme="red">취소됨</Badge>;
-      default:
-        console.log("일치하는 양식이 없습니다.");
+    const { role } = fetchBookedShifts;
+    if (status === "모집중") {
+      return <Badge>대기중</Badge>;
+    } else if (status === "모집완료" && role === "") {
+      return <Badge colorScheme="red">취소됨</Badge>;
+    } else if (status === "모집완료") {
+      return <Badge colorScheme="green">확정</Badge>;
     }
   };
 
@@ -73,7 +74,11 @@ const ScheduleItem = ({ scheduleLists, setScheduleLists }) => {
                 <div>
                   {isAdmin
                     ? renderStatusToAdmin(scheduleData, index)
-                    : renderStatusToStaff(scheduleData)}
+                    : renderStatusToStaff(
+                        scheduleData,
+                        index,
+                        fetchBookedShifts[index],
+                      )}
                 </div>
               </style.ScheduleStatus>
             </style.ScheduleInfo>
