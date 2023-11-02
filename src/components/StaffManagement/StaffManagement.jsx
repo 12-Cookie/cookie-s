@@ -10,7 +10,7 @@ const StaffManagement = ({ userData }) => {
   };
 
   const renderUserTag = (userData) => {
-    if (userData.gender === "male") {
+    if (userData.gender === "남자") {
       return (
         <Tag variant="solid" colorScheme="teal">
           <TagLabel>{userData.name}</TagLabel>
@@ -27,7 +27,7 @@ const StaffManagement = ({ userData }) => {
 
   return (
     <>
-      <h1 onClick={handleClick}>직원관리</h1>
+      <style.Title onClick={handleClick}>직원관리</style.Title>
       <style.StaffManagementWrap>
         {userData.map((userData) => (
           <li key={userData.id} onClick={() => handleClick(userData)}>
