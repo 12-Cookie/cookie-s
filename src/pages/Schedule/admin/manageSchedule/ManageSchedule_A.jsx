@@ -3,6 +3,7 @@ import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { useEffect, useState } from "react";
 import { Heading, Button } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import Loader from "../../../../components/common/loader/Loader";
 import ScheduleItem from "../../../../components/common/ScheduleItem/ScheduleItem";
 import useUserStore from "../../../../store/user/useUserStore";
 
@@ -10,6 +11,7 @@ const ManageSchedule_A = () => {
   const fireFetch = useFireFetch();
   const { companyId } = useUserStore((state) => state.userData);
   const [scheduleLists, setScheduleLists] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const schedules = fireFetch.getData("schedule", "companyId", companyId);
 
@@ -18,6 +20,12 @@ const ManageSchedule_A = () => {
       setScheduleLists([...schedules]);
     }
   }, [schedules]);
+
+  useEffect(() => {
+    const time = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   return (
     <style.ManageScheduleWrap>
@@ -39,12 +47,15 @@ const ManageSchedule_A = () => {
           스케줄 관리
         </Button>
       </div>
-      {scheduleLists[0] && (
-        <ScheduleItem
-          scheduleLists={scheduleLists}
-          setScheduleLists={setScheduleLists}
-        />
-      )}
+      {loading ? <Loader /> : null}
+      <div style={{ display: loading ? "none" : "block" }}>
+        {scheduleLists[0] && (
+          <ScheduleItem
+            scheduleLists={scheduleLists}
+            setScheduleLists={setScheduleLists}
+          />
+        )}
+      </div>
     </style.ManageScheduleWrap>
   );
 };
