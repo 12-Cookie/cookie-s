@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as style from "./SubmitCode.style";
 import {
   collection,
@@ -15,7 +15,7 @@ import {
   PinInput,
   PinInputField,
   Button,
-  FormControl,
+  HStack,
 } from "@chakra-ui/react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import useUserStore from "../../../../store/user/useUserStore";
@@ -28,22 +28,17 @@ const SubmitCode = () => {
   const { userData, setUserData } = useUserStore();
   const fireFetch = useFireFetch();
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({ mode: "onBlur" });
+  const [pin, setPin] = useState("");
 
-  const onSubmit = (data) => {
-    // firefetch.postData("users", id, data); // id 상태에서 불러오기
-    reset();
+  const handleChange = (value) => {
+    setPin(value);
+  };
+
+  const handleComplete = (value) => {
+    const pinNum = Number(value);
+
     const get = async () => {
-      if (data) {
-        const pinNum = parseInt(
-          `${data.pin1}${data.pin2}${data.pin3}${data.pin4}${data.pin5}${data.pin6}`,
-          10,
-        );
+      if (pinNum) {
         const companiesRef = collection(db, "company");
         const _query = query(companiesRef, where("code", "==", pinNum));
         const querySnapshot = await getDocs(_query);
@@ -70,71 +65,24 @@ const SubmitCode = () => {
 
   return (
     <style.SubmitCodeWrap>
-      <Heading as="h2" size="md" mb="1rem">
+      <Heading as="h2" size="md" mb="5rem">
         필수 정보 입력
       </Heading>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl display="flex" justifyContent="center" mt="6rem">
-          <Controller
-            name="pin1"
-            control={control}
-            render={({ field }) => (
-              <PinInput size="lg">
-                <PinInputField {...field} />
-              </PinInput>
-            )}
-          />
-          <Controller
-            name="pin2"
-            control={control}
-            render={({ field }) => (
-              <PinInput size="lg">
-                <PinInputField {...field} ml="0.5rem" />
-              </PinInput>
-            )}
-          />
-          <Controller
-            name="pin3"
-            control={control}
-            render={({ field }) => (
-              <PinInput size="lg">
-                <PinInputField {...field} ml="0.5rem" />
-              </PinInput>
-            )}
-          />
-          <Controller
-            name="pin4"
-            control={control}
-            render={({ field }) => (
-              <PinInput size="lg">
-                <PinInputField {...field} ml="0.5rem" />
-              </PinInput>
-            )}
-          />
-          <Controller
-            name="pin5"
-            control={control}
-            render={({ field }) => (
-              <PinInput size="lg">
-                <PinInputField {...field} ml="0.5rem" />
-              </PinInput>
-            )}
-          />
-          <Controller
-            name="pin6"
-            control={control}
-            render={({ field }) => (
-              <PinInput size="lg">
-                <PinInputField {...field} ml="0.5rem" />
-              </PinInput>
-            )}
-          />
-        </FormControl>
-
-        <Button type="submit" w="100%" mt="100px" colorScheme="teal" size="md">
-          입력
-        </Button>
-      </form>
+      <HStack>
+        <PinInput
+          size="lg"
+          value={pin}
+          onChange={handleChange}
+          onComplete={handleComplete}
+        >
+          <PinInputField />
+          <PinInputField />
+          <PinInputField />
+          <PinInputField />
+          <PinInputField />
+          <PinInputField />
+        </PinInput>
+      </HStack>
     </style.SubmitCodeWrap>
   );
 };
