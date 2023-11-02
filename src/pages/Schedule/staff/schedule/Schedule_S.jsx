@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import useUserStore from "../../../../store/user/useUserStore";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import moment from "moment";
-import ScheduleItem from "../../../../components/common/ScheduleItem/ScheduleItem.jsx";
 import UserApplyItem from "../../../../components/Schedule/staff/UserApplyItem";
 
 const Schedule_S = () => {
