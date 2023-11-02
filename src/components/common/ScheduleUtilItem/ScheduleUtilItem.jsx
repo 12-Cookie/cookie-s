@@ -56,11 +56,9 @@ const ScheduleUtilItem = ({
       {isAdmin ? (
         <style.ScheduleUtilBtn>
           <style.DeleteBtn onClick={handleDelete}>삭제</style.DeleteBtn>
-          {status !== "모집완료" ? (
-            <style.AllocationBtn onClick={handleAllocation}>
-              배정
-            </style.AllocationBtn>
-          ) : null}
+          <style.AllocationBtn onClick={handleAllocation}>
+            {status === "모집완료" ? "수정" : "배정"}
+          </style.AllocationBtn>
         </style.ScheduleUtilBtn>
       ) : (
         <button onClick={handleCancel}>취소하기</button>
