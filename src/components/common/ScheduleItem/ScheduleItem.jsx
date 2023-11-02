@@ -25,6 +25,7 @@ const ScheduleItem = ({
     return getDay;
   };
 
+
   const renderStatusToAdmin = (scheduleData, index) => {
     const { status, numWorkers } = scheduleData;
     switch (status) {
@@ -45,12 +46,11 @@ const ScheduleItem = ({
 
   const renderStatusToStaff = (scheduleData, index, fetchBookedShifts) => {
     const { status } = scheduleData;
-    const { role } = fetchBookedShifts;
     if (status === "모집중") {
       return <Badge>대기중</Badge>;
-    } else if (status === "모집완료" && role === "") {
+    } else if (status === "모집완료" && !fetchBookedShifts[index].role) {
       return <Badge colorScheme="red">취소됨</Badge>;
-    } else if (status === "모집완료") {
+    } else if (status === "모집완료" && fetchBookedShifts[index].role) {
       return <Badge colorScheme="green">확정</Badge>;
     }
   };
@@ -78,7 +78,7 @@ const ScheduleItem = ({
                     : renderStatusToStaff(
                         scheduleData,
                         index,
-                        fetchBookedShifts[index],
+                        fetchBookedShifts,
                       )}
                 </div>
               </style.ScheduleStatus>
