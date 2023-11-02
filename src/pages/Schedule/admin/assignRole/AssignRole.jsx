@@ -34,12 +34,12 @@ const AssignRole = () => {
       const data = booked.find((v, i) => v.scheduleId === x.scheduleId);
       await fireFetch.update("bookedShifts", data.id, { role: x.role });
 
-      alert("완료");
-
       setLoading(false);
 
       navigate("/schedule/manage");
     }
+
+    alert("완료");
   };
 
   const handleClick = () => {
