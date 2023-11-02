@@ -61,8 +61,10 @@ const SubmitCode = () => {
       }
     };
     get().then((res) => {
-      fireFetch.postData("users", userData.id, res);
-      navigate("/dashboard");
+      if (res) {
+        fireFetch.postData("users", userData.id, res);
+        navigate("/dashboard");
+      }
     });
   };
 
