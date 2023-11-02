@@ -38,8 +38,6 @@ const UserApplyItem = ({ scheduleLists, setScheduleLists }) => {
     <ScheduleItemWrap>
       {setScheduleLists &&
         scheduleLists.map((scheduleData, index) => {
-          console.log(scheduleData.status);
-
           return (
             <ScheduleItems key={scheduleData.id}>
               <ScheduleInfo>

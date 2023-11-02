@@ -25,7 +25,6 @@ const ScheduleItem = ({
     return getDay;
   };
 
-
   const renderStatusToAdmin = (scheduleData, index) => {
     const { status, numWorkers } = scheduleData;
     switch (status) {
