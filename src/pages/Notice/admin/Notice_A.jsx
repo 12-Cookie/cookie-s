@@ -20,7 +20,7 @@ const formatDate = (date) => {
   return `${date.year}-${date.month}-${date.day}`;
 };
 
-const Notice_S = () => {
+const Notice_A = () => {
   const navigate = useNavigate();
   const fetch = useFireFetch();
   const userStore = useUserStore();
@@ -73,4 +73,4 @@ const Notice_S = () => {
   );
 };
 
-export default Notice_S;
+export default Notice_A;
