@@ -12,12 +12,12 @@ import NoData from "./NoData";
 const Dashboard_S = () => {
   const { id, companyId } = useUserStore((state) => state.userData);
   const fetch = useFireFetch();
-  const bookingShiftsData = fetch.getData("bookingShifts", "userId");
   const [fetchNoticeData, setFetchNoticeData] = useState([]);
   const [fetchBookedShifts, setFetchBookedShifts] = useState([]);
   const [fetchScheduleData, setFetchScheduleData] = useState([]);
   const [confirmedData, setConfirmedData] = useState([]);
   const [matchedData, setMatchedData] = useState([]);
+  const [sliceMatchData, setSliceMatchData] = useState([]);
   const matchingData = [];
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -45,7 +45,9 @@ const Dashboard_S = () => {
       setFetchNoticeData(getNoticeData);
       setFetchBookedShifts(getBookedShiftsData);
       setFetchScheduleData(getScheduleData);
-      setMatchedData(matchData.slice(0, 3));
+      setMatchedData(matchData);
+      setSliceMatchData(matchData.slice(0, 3));
+      console.log(fetchBookedShifts);
 
       const dataArr = [];
       const confirmDataArr = [];
@@ -68,22 +70,22 @@ const Dashboard_S = () => {
 
       setConfirmedData(confirmDataArr);
 
-      for (const secondItem of bookingShiftsData) {
-        const scheduleId = secondItem.scheduleId;
+      // 이상 없으면 제거
+      // for (const secondItem of bookingShiftsData) {
+      //   const scheduleId = secondItem.scheduleId;
 
-        const matchingFirstItem = getScheduleData.find(
-          (firstItem) => firstItem.id === scheduleId,
-        );
+      //   const matchingFirstItem = getScheduleData.find(
+      //     (firstItem) => firstItem.id === scheduleId,
+      //   );
 
-        if (matchingFirstItem) {
-          const newObject = {
-            ...matchingFirstItem,
-          };
+      //   if (matchingFirstItem) {
+      //     const newObject = {
+      //       ...matchingFirstItem,
+      //     };
 
-          matchingData.push(newObject);
-        }
-      }
-      console.log(matchedData);
+      //     matchingData.push(newObject);
+      //   }
+      // }
       setLoading(false);
     };
 
@@ -98,12 +100,13 @@ const Dashboard_S = () => {
         <>
           <Notice fetchNoticeData={fetchNoticeData} />
           <style.Title>내 스케줄</style.Title>
-          {matchedData.length === 0 ? (
+          {sliceMatchData.length === 0 ? (
             <NoData />
           ) : (
             <ScheduleItem
-              scheduleLists={matchedData}
+              scheduleLists={sliceMatchData}
               setFetchScheduleData={setFetchScheduleData}
+              fetchBookedShifts={fetchBookedShifts}
             />
           )}
           <Chart matchingData={confirmedData} />
