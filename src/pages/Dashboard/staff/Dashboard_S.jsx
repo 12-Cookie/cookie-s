@@ -47,8 +47,8 @@ const Dashboard_S = () => {
       setFetchScheduleData(getScheduleData);
       setMatchedData(matchData);
       
-      const sortedSliceMatchData = matchData.sort((a, b) => b.id.localeCompare(a.id));
-      const sortedFetchBookedShifts = getBookedShiftsData.sort((a, b) => b.scheduleId.localeCompare(a.scheduleId));
+      const sortedSliceMatchData = matchData.sort((a, b) => b.id.localeCompare(a.id)).slice(0 ,3);
+      const sortedFetchBookedShifts = getBookedShiftsData.sort((a, b) => b.scheduleId.localeCompare(a.scheduleId)).slice(0, 3);
       
       setSliceMatchData(sortedSliceMatchData);
       setFetchBookedShifts(sortedFetchBookedShifts);
