@@ -31,16 +31,27 @@ const InfoForm_A = () => {
     reset,
   } = useForm({ mode: "onBlur" });
 
+  const makeRandomCode = () => {
+    const min = 100000;
+    const max = 999999;
+    const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    return randomNum;
+  };
+
   const onSubmit = async (data) => {
     setRoles([""]);
     reset();
-    await setCompanyData({
-      ...companyData,
+
+    const updatedCompanyData = {
       name: data.name,
       address: data.address,
       roles: data.roles,
-    });
-    await fireFetch.postData("company", companyData.id, companyData);
+      code: Number(makeRandomCode()),
+    };
+
+    await setCompanyData(updatedCompanyData);
+    fireFetch.addData("company", updatedCompanyData);
     navigate("/dashboard");
   };
 
