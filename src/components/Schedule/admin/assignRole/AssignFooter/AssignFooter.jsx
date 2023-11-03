@@ -34,9 +34,6 @@ const AssignFooter = ({
     const copy = [...booking];
     copy.push(data);
     setBooking(copy);
-
-    // console.log(booking);
-    // console.log(schedule);
   };
 
   useEffect(() => {

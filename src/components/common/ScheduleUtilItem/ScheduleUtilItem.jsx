@@ -35,8 +35,6 @@ const ScheduleUtilItem = ({
   };
 
   const handleDelete = () => {
-    console.log("data", scheduleData);
-    console.log("id", id);
     const confirmValue = confirm("정말 삭제하시겠습니까?");
     confirmValue ? deleteData() : "";
   };

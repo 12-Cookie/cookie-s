@@ -5,8 +5,6 @@ import * as style from "./StaffManagement.style";
 const StaffManagement = ({ userData }) => {
   const handleClick = (userData) => {
     const { id, name } = userData;
-    console.log("id", id);
-    console.log("name", name);
   };
 
   const renderUserTag = (userData) => {
