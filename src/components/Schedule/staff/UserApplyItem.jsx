@@ -15,12 +15,13 @@ import styled from "styled-components";
 export const ScheduleItems = styled.div`
   width: 100%;
   height: 50px;
+
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   padding: 18px 15px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 const UserApplyItem = ({ scheduleLists, setScheduleLists }) => {
