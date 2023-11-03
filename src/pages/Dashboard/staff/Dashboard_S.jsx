@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import useUserStore from "../../../store/user/useUserStore";
 import Loader from "../../../components/common/loader/Loader";
 
-import NoData from "./NoData";
+import NoData from "../../../components/Dashboard/NoData";
 
 const Dashboard_S = () => {
   const { id, companyId } = useUserStore((state) => state.userData);
