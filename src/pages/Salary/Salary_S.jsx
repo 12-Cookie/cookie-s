@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useFireFetch } from "../../hooks/useFireFetch";
-import StaffCalendar from "../../components/Schedule/staff/StaffCalendar";
+import SalaryCalendar from "./SalaryCalendar";
 import useUserStore from "../../store/user/useUserStore";
 import * as style from "./Salary_S.style";
 import { Heading, Flex, Text, Spacer } from "@chakra-ui/react";
@@ -87,7 +87,7 @@ const Salary_S = () => {
       <Heading as="h2" size="md" mb="1rem">
         급여 확인
       </Heading>
-      <StaffCalendar
+      <SalaryCalendar
         companyId={companyId}
         value={value}
         onChange={onChange}
