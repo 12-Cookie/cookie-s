@@ -1,7 +1,5 @@
 import styled from "styled-components";
 
-// export const salaryWrap = styled.div``;
-
 export const ScheduleItemWrap = styled.div`
   display: flex;
   flex-direction: column;
