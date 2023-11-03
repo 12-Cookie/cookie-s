@@ -51,7 +51,8 @@ const InfoForm_S = () => {
 
   const onSubmit = async (data) => {
     reset();
-    await setUserData({
+
+    const updatedUserData = {
       ...userData,
       name: data.name,
       phone: data.phone,
@@ -59,8 +60,9 @@ const InfoForm_S = () => {
       payPerHour: data.payPerHour,
       birthDate: data.birthDate,
       address: data.address,
-    });
-    await fireFetch.post("users", userData.id, userData);
+    };
+    await setUserData(updatedUserData);
+    await fireFetch.post("users", userData.id, updatedUserData);
     navigate("/info/code");
   };
 

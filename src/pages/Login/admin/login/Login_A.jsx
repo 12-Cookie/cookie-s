@@ -24,14 +24,19 @@ const Login_A = () => {
         const Ref = collection(db, "users");
         const q = query(Ref, where("id", "==", uid));
         const querySnapshot = await getDocs(q);
+        const updatedUserData = {
+          ...userData,
+          id: uid,
+          isAdmin: true,
+        };
 
         if (querySnapshot.empty) {
-          setUserData({ ...userData, id: uid, isAdmin: false });
-          fireFetch.postData("users", uid, userData);
+          await setUserData(updatedUserData);
+          await fireFetch.postData("users", uid, updatedUserData);
           navigate("/info/admin");
         } else {
-          querySnapshot.forEach((doc) => {
-            setUserData({ ...doc.data() });
+          querySnapshot.forEach(async (doc) => {
+            await setUserData({ ...doc.data() });
             navigate("/dashboard");
           });
         }
