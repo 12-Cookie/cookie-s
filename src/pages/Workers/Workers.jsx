@@ -33,7 +33,8 @@ const Workers = () => {
           <li key={user.id} onClick={() => handleTagClick(user)}>
             <Tag
               variant="solid"
-              colorScheme={user.gender === "male" ? "teal" : "pink"}
+              colorScheme={user.gender === "남자" ? "teal" : "pink"}
+              cursor="pointer"
             >
               <TagLabel>{user.name}</TagLabel>
             </Tag>
