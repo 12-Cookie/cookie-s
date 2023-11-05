@@ -1,3 +1,4 @@
+import NoData from "../../../components/Dashboard/NoData";
 import StaffManagement from "../../../components/StaffManagement/StaffManagement";
 import ScheduleItem from "../../../components/common/ScheduleItem/ScheduleItem";
 import Loader from "../../../components/common/loader/Loader";
@@ -43,10 +44,14 @@ const Dashboard_A = () => {
         <>
           <Notice fetchNoticeData={fetchNoticeData} />
           <style.Title>스케줄 관리</style.Title>
-          <ScheduleItem
-            scheduleLists={filteredScheduleData}
-            setScheduleLists={setFetchScheduleData}
-          />
+          {filteredScheduleData.length === 0 ? (
+            <NoData />
+          ) : (
+            <ScheduleItem
+              scheduleLists={filteredScheduleData}
+              setFetchScheduleData={setFetchScheduleData}
+            />
+          )}
           <style.StaffManagementWrap>
             <StaffManagement userData={fetchUserData} />
           </style.StaffManagementWrap>
