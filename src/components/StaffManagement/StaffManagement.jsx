@@ -5,8 +5,6 @@ import * as style from "./StaffManagement.style";
 const StaffManagement = ({ userData }) => {
   const handleClick = (userData) => {
     const { id, name } = userData;
-    console.log("id", id);
-    console.log("name", name);
   };
 
   const renderUserTag = (userData) => {
@@ -27,7 +25,7 @@ const StaffManagement = ({ userData }) => {
 
   return (
     <>
-      <style.Title onClick={handleClick}>직원관리</style.Title>
+      <style.Title onClick={handleClick}>직원 리스트</style.Title>
       <style.StaffManagementWrap>
         {userData.map((userData) => (
           <li key={userData.id} onClick={() => handleClick(userData)}>

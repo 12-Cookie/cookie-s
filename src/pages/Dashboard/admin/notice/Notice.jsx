@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import NoticeItem from "../../../../components/common/NoticeItem/NoticeItem";
 import * as style from "./Notice.style";
-import PropTypes from "prop-types";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -19,6 +18,8 @@ const Notice = ({ fetchNoticeData }) => {
     slidesToScroll: 1,
     vertical: true,
     verticalSwiping: true,
+    draggable: false,
+    autoplaySpeed: 2000,
   };
 
   const navigate = useNavigate();
@@ -33,8 +34,8 @@ const Notice = ({ fetchNoticeData }) => {
         <h1>공지사항</h1>
         <Badge colorScheme="red">New</Badge>
       </style.NoticeHeader>
-      <style.NoticeWrap>
-        <Slider {...settings} onClick={handleClick}>
+      <style.NoticeWrap onClick={handleClick}>
+        <Slider {...settings}>
           {filteredNoticeData.map((noticeData) => (
             <NoticeItem
               key={noticeData.id}
@@ -49,6 +50,3 @@ const Notice = ({ fetchNoticeData }) => {
 };
 
 export default Notice;
-Notice.propTypes = {
-  noticeData: PropTypes.array,
-};

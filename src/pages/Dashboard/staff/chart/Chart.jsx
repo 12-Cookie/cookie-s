@@ -37,12 +37,12 @@ const Chart = ({ matchingData }) => {
   }, [matchingData]);
 
   const last7daysData = (data) => {
-    const filteredData = data.filter(
-      (item) =>
-        item.date.month === currentMonth &&
-        item.date.year === currentYear &&
-        item.date.day >= currentDate - 7 &&
-        item.date.day < today,
+    const filteredData = data.filter((item) =>
+      item.date.month === currentMonth &&
+      item.date.year === currentYear &&
+      currentDate <= 7
+        ? item.date.day <= currentDate
+        : item.date.day <= currentDate - 7 && item.date.day >= currentDate,
     );
     return filteredData;
   };

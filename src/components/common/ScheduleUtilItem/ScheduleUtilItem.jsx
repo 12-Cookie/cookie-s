@@ -28,8 +28,6 @@ const ScheduleUtilItem = ({
   }, [users]);
 
   const deleteData = () => {
-    alert(`id: ${id} 가 삭제 되었습니다`);
-
     const copy = [...scheduleLists];
     const filtered = copy.filter((v, i) => v.id !== id);
     setScheduleLists(filtered);
@@ -37,8 +35,6 @@ const ScheduleUtilItem = ({
   };
 
   const handleDelete = () => {
-    console.log("data", scheduleData);
-    console.log("id", id);
     const confirmValue = confirm("정말 삭제하시겠습니까?");
     confirmValue ? deleteData() : "";
   };

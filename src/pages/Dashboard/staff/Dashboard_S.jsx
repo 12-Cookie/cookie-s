@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import useUserStore from "../../../store/user/useUserStore";
 import Loader from "../../../components/common/loader/Loader";
 
-import NoData from "./NoData";
+import NoData from "../../../components/Dashboard/NoData";
 
 const Dashboard_S = () => {
   const { id, companyId } = useUserStore((state) => state.userData);
@@ -42,18 +42,21 @@ const Dashboard_S = () => {
         }
       });
 
-      
       setFetchNoticeData(getNoticeData);
       setFetchScheduleData(getScheduleData);
       setMatchedData(matchData);
-      
-      const sortedSliceMatchData = matchData.sort((a, b) => b.id.localeCompare(a.id)).slice(0 ,3);
-      const sortedFetchBookedShifts = getBookedShiftsData.sort((a, b) => b.scheduleId.localeCompare(a.scheduleId)).slice(0, 3);
-      
+
+      const sortedSliceMatchData = matchData
+        .sort((a, b) => b.id.localeCompare(a.id))
+        .slice(0, 3);
+      const sortedFetchBookedShifts = getBookedShiftsData
+        .sort((a, b) => b.scheduleId.localeCompare(a.scheduleId))
+        .slice(0, 3);
+
       setSliceMatchData(sortedSliceMatchData);
       setFetchBookedShifts(sortedFetchBookedShifts);
 
-      const dataArr = []; 
+      const dataArr = [];
       const confirmDataArr = [];
 
       for (const item of getBookedShiftsData) {
@@ -67,13 +70,12 @@ const Dashboard_S = () => {
           (item) => scheduleData.id === item.scheduleId,
         );
 
-        if (matchingItem && scheduleData.status === '모집완료') {
+        if (matchingItem && scheduleData.status === "모집완료") {
           confirmDataArr.push(scheduleData);
         }
       });
 
       setConfirmedData(confirmDataArr);
-      console.log(confirmedData)
       setLoading(false);
     };
 

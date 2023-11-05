@@ -11,7 +11,7 @@ const NoData = () => {
     <style.NoDataWrap>
       <p>데이터가 없습니다</p>
       <Button onClick={goSchedule} colorScheme="teal" size="sm">
-        스케쥴 신청
+        스케줄 신청
       </Button>
     </style.NoDataWrap>
   );
