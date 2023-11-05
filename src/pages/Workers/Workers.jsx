@@ -20,7 +20,6 @@ const Workers = () => {
 
   const handleTagClick = (userData) => {
     setClickedStaff(userData);
-    console.log("clicked : ", userData);
   };
 
   return (

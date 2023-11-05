@@ -64,7 +64,6 @@ const Salary_S = () => {
 
         setViewData(data);
       }
-      console.log("viewData : ", viewData);
     }
   }, [myScheduleInfo, value]);
 

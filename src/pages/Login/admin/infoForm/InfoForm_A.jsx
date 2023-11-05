@@ -5,6 +5,9 @@ import { Button, Heading, Input, Text } from "@chakra-ui/react";
 import { useFireFetch } from "../../../../hooks/useFireFetch";
 import { useNavigate } from "react-router";
 import useCompanyStore from "../../../../store/company/useCompanyStore";
+import useUserStore from "../../../../store/user/useUserStore";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../../firebase/firebase";
 
 const companyName = {
   required: "필수 필드입니다.",
@@ -23,6 +26,8 @@ const InfoForm_A = () => {
   const navigate = useNavigate();
   const [roles, setRoles] = useState([""]);
   const { companyData, setCompanyData } = useCompanyStore();
+  const { userData, setUserData } = useUserStore();
+  // const [companyId, setCompanyId] = useState("");
 
   const {
     register,
@@ -39,6 +44,30 @@ const InfoForm_A = () => {
     return randomNum;
   };
 
+  // companyStore이용해서 companyId 가져오기 -> 실패
+  // fireFetch.get이용해서 companyId 가져오기 -> 실패
+  // addData후 query를 이용해 companyId를 가져오는 방법 -> 실패
+  // 비동기 함수인 updateUserData를 호출해 companyId를 가져오는 방법 -> 성공
+  const updateUserData = async (companyName) => {
+    const Ref = collection(db, "company");
+    const q = query(Ref, where("name", "==", companyName));
+    const querySnapshot = await getDocs(q);
+
+    // if (!querySnapshot.empty) {
+    //   setCompanyId(querySnapshot.docs[0].id);
+    // }
+
+    const id = querySnapshot.docs[0].id;
+
+    const updatedUserData = {
+      ...userData,
+      companyId: id,
+    };
+
+    setUserData(updatedUserData);
+    await fireFetch.update("users", userData.id, updatedUserData);
+  };
+
   const onSubmit = async (data) => {
     setRoles([""]);
     reset();
@@ -50,8 +79,11 @@ const InfoForm_A = () => {
       code: Number(makeRandomCode()),
     };
 
-    await setCompanyData(updatedCompanyData);
+    setCompanyData(updatedCompanyData);
     fireFetch.addData("company", updatedCompanyData);
+
+    await updateUserData(updatedCompanyData.name);
+
     navigate("/dashboard");
   };
 
